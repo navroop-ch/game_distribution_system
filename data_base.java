@@ -48,6 +48,26 @@ public class data_base {
 
 
     }
+
+    public static void removeUserData(String data, String filePath) throws IOException {
+        File inputFile = new File(filePath);
+        File tempFile = new File("myTempFile.txt");
+
+        BufferedReader reader = new BufferedReader(new FileReader(inputFile));
+        BufferedWriter writer = new BufferedWriter(new FileWriter(tempFile));
+
+        String currentLine;
+
+        while((currentLine = reader.readLine()) != null) {
+            String[] tokens = currentLine.split(" ");
+            if(tokens[0].equals(data)) continue;
+            writer.write(currentLine + System.getProperty("line.separator"));
+        }
+        writer.close();
+        reader.close();
+        boolean successful = tempFile.renameTo(inputFile);
+        System.out.println(successful);
+    }
     
 
 
