@@ -6,7 +6,7 @@ public class data_base {
     public static String userData = "userName.txt";
     public static String dailyData = "daily.txt";
 
-    public static void update(String data, String filePath){
+    public static void appendData(String data, String filePath){
 
         try {
             BufferedWriter writer = new BufferedWriter(new FileWriter(filePath, true));
