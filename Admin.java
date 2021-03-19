@@ -57,4 +57,15 @@ public class Admin implements User{
 
     }
 
+    public void deleteUser(String userName) throws IOException {
+
+        if(data_base.ifUserExist(userName, data_base.userData)){
+            System.out.println("In delete user, user exists");
+            String transaction = User.deleteCode+" "+ data_base.getUserData(userName, data_base.userData);
+            data_base.removeUserData(userName,data_base.userData);
+            System.out.println(transaction);
+            data_base.appendData(transaction, data_base.dailyData);
+        }
+    }
+
 }
