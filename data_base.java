@@ -30,6 +30,24 @@ public class data_base {
         reader.close();
         return false;
     }
+
+    public static String getUserData (String userName, String filePath) throws IOException {
+        File inputFile = new File(filePath);
+        BufferedReader reader = new BufferedReader(new FileReader(inputFile));
+        String currentLine;
+
+
+        while((currentLine = reader.readLine()) != null) {
+            String[] tokens = currentLine.split(" ");
+            if(tokens[0].equals(userName)){
+                return currentLine;
+            }
+        }
+        reader.close();
+        return "ERROR: \\<User not found\\>";
+
+
+    }
     
 
 
