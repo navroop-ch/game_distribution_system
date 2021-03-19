@@ -1,3 +1,4 @@
+import java.io.IOException;
 import java.util.ArrayList;
 
 public class Admin implements User{
@@ -42,4 +43,18 @@ public class Admin implements User{
     public void addOwnedGame(String game){
         this.gameOwned.add(game);
     }
+
+    public void createUser(String userName, String type, String credit) throws IOException {
+        if(!data_base.ifUserExist(userName, data_base.userData)) {
+            String userData = userName + " " + type+" "+credit;
+            String transaction = User.createCode + " " + userName + " " + type + " " + credit;
+
+            data_base.appendData(userData, data_base.userData);
+            data_base.appendData(transaction, data_base.dailyData);
+        }else{
+            System.out.println("User exists");
+        }
+
+    }
+
 }
