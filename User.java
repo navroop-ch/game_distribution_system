@@ -9,10 +9,10 @@ public interface User {
 
     public String getUserName();
     public String getType();
-    public String getCredit();
-    public ArrayList<String> getOwnedGame();
+    public double getCredit();
+    public ArrayList <String> getOwnedGame();
 
-    public void setCredit();
-    public void setOwnedGame(ArrayList<String> game);
+    public void addCredit(double credit);
+    public void addOwnedGame(String game);
 
 }
