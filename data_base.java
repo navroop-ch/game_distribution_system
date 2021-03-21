@@ -3,6 +3,9 @@ import java.io.*;
  * An data base class that handles every interaction with the daily.txt or our userName.txt (database)
  *
  */
+
+//Todo:delete this comment
+
 public class data_base {
     public static String userData = "userName.txt";
     public static String dailyData = "daily.txt";
