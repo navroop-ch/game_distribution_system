@@ -76,8 +76,8 @@ public class data_base {
      */
     protected User getUser(String username) {
         User user = null;
-        String[] userData = getUserData(username, this.userData).split(" ");
-        if (userData[0] != ERROR_TOKEN) {
+        String[] userData = getUserData(username, data_base.userData).split(" ");
+        if (!userData[0].equals(ERROR_TOKEN)) {
 
             Double credit = Double.parseDouble(userData[2]);
             ArrayList<String> dummyGamesOwned = new ArrayList<String>();  //Todo: fix this dummy variable!
