@@ -56,7 +56,7 @@ public abstract class User {
         }
         else if(this.credit + cred > MAX_ALLOWED_CREDIT){
             this.credit = MAX_ALLOWED_CREDIT;
-            System.out.println("Warning: Not all credits have been added as your account balance has maxed out.");
+            System.out.println("Warning: Your account balance has maxed out; some credit may not have been added!");
         }
         else {
             this.credit += cred;
