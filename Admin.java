@@ -7,11 +7,10 @@ import java.util.ArrayList;
  *
  */
 
-public class Admin implements User{
-    private String userName;
-    private String type="AA";
-    private double credit;
-    private ArrayList<String> gameOwned;
+public class Admin extends User{
+
+    // Todo: create a Session object and use an instance of that instead of data_base
+    private data_base dataBase;
 
     /**
      * Constructs an Admin that pass in existing admin information
@@ -26,9 +25,18 @@ public class Admin implements User{
      */
     public Admin(String username, double credit, ArrayList <String> gameOwned){
         this.userName = username;
+        this.type = ADMIN_USER_TYPE;
         this.credit = credit;
         this.gameOwned = gameOwned;
 
+    }
+
+    /**
+     * Sets the instance variable for the database
+     * @param dataBase instance of the database object
+     */
+    private void setDataBase(data_base dataBase){
+        this.dataBase = dataBase;
     }
 
     /**
@@ -75,14 +83,16 @@ public class Admin implements User{
     }
 
     /**
-     * @para  the change in the amount of credit.
-     * if the user has their credit reduced, the parameter should be a negative number
-     *
+     * Adds credit to a certain user's account.
+     * @param username username of the account to add credits to
+     * @param credit the amount of credits
      */
-    @Override
-    public void addCredit(double credit){
-        this.credit+=credit;
+    public void addCredit(String username, double credit){
+        User user = dataBase.getUser(username);
+        user.addCredit(credit);
+        //Todo: write to transaction file.
     }
+
 
     /**
      * @para  The name of a new game.
@@ -151,6 +161,26 @@ public class Admin implements User{
     public String getInfo(String userName){
 
         return " ";
+    }
+
+
+    public static void main(String[] args){
+        ArrayList<String> ownedGames = new ArrayList<String>();
+        Admin admin0 = new Admin("George", 999000, ownedGames);
+        System.out.println(admin0);
+
+        admin0.addCredit(400);
+        System.out.println(admin0);
+
+        admin0.addCredit(500);
+        System.out.println(admin0);
+
+        admin0.addCredit(100);
+        System.out.println(admin0);
+
+        admin0.addCredit(100);
+        System.out.println(admin0);
+
     }
 
 }
