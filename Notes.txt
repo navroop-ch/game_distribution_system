@@ -1,0 +1,58 @@
+
+
+>>> Design Patterns
+
+
+    > Model view controller
+
+    This design pattern is entirely made of high level ideas. As it is purely conceptual without any form of
+    implementation, we're going to have to consider integrating other design patterns to make this work.
+
+
+
+    > Todo: Singleton
+
+    Consider using Singleton design pattern for data_base and session instance as we need to make sure there's only one
+    user capable of making changes to file at any one time.
+
+    Implementations:
+
+
+
+    > Todo: Visitor
+
+    Consider using visitor design pattern as we have different types of users with different requirements. Many
+    functions will be common, however, avoiding repetition using Interfaces/abstract classes may not be possible in
+    certain scenarios.
+
+    Implementations:
+
+
+
+    > Todo: Builder/Factory
+
+    Consider using the builder or factory design pattern for creating different user types whenever a new user is
+    created.
+
+
+    Implementations:
+
+
+
+
+    > Todo: Observer
+
+    By far, this pattern will be the most useful design pattern to our assignment. As we're implementing an MVC, we need
+    to have plenty of state changes and those state changes need to be acknowledged by many objects. This will
+    basically be our main form of communication between the model, view and controller objects.
+
+    Implementations:
+
+
+
+
+>>> General Issues/Setbacks:
+
+
+
+
