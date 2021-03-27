@@ -1,4 +1,5 @@
 import java.io.*;
+import java.lang.*;
 import java.util.ArrayList;
 
 /**
@@ -9,10 +10,79 @@ import java.util.ArrayList;
 //Todo: change name of file to DataBase
 public class data_base {
 
-    public final String ERROR_TOKEN = "E";
+    protected final String ERROR_TOKEN = "E";
+    protected static final String SEPARATOR = " ";
+    protected static final Character BLANK_CHAR = ' ';
+    protected static final Character ZERO_CHAR = '0';
+    protected static final int USERNAME_LENGTH = 15;
+    protected static final int TITLE_LENGTH = 19;
+    protected static final int CREDIT_LENGTH = 9;
+    protected static final int DISCOUNT_LENGTH = 5;
+    protected static final int PRICE_LENGTH = 6;
 
     public static String userData = "userName.txt";
     public static String dailyData = "daily.txt";
+
+    protected static final String logInCode = "00";
+    protected static final String createCode = "01";
+    protected static final String deleteCode = "02";
+    protected static final String sellCode = "03";
+    protected static final String buyCode = "04";
+    protected static final String refundCode = "05";
+    protected static final String addCreditCode = "06";
+    protected static final String logOutCode = "10";
+
+    /**
+     * Pads the string input, with the character passed in, so that the string's length is equal to the length passed in
+     *
+     * You can change left and right padding based on the sign of the length integer passed in.
+     *      Right padding: If length > 0.
+     *      Left padding: if length < 0.
+     *
+     * @param input String to pad
+     * @param character character to pad string with
+     * @param length length of the output string after padding
+     */
+    protected static String stringPadding(String input, char character, int length){
+        length = -length;
+        return String.format("%" + length + "s", input).replace(' ', character);
+    }
+
+    protected void writeBasicTransaction(String code, String username, String usertype, Double cred){
+        username = stringPadding(username, ' ', USERNAME_LENGTH);
+        String credit = stringPadding(cred.toString(), ZERO_CHAR, -CREDIT_LENGTH);
+        String message = String.join(SEPARATOR, code, username, usertype, credit);
+        System.out.println(message);
+        appendData(message, dailyData);
+    }
+
+    protected void writeBuyTransaction(String title, String seller, String buyer){
+        seller = stringPadding(seller, BLANK_CHAR, USERNAME_LENGTH);
+        buyer = stringPadding(buyer, BLANK_CHAR, USERNAME_LENGTH);
+        title = stringPadding(title, BLANK_CHAR, TITLE_LENGTH);
+        String message = String.join(SEPARATOR,buyCode, title, seller, buyer);
+        System.out.println(message);
+        appendData(message, dailyData);
+    }
+
+    protected void writeSellTransaction(String title, String seller, Double disc, Double price){
+        title = stringPadding(title, BLANK_CHAR, TITLE_LENGTH);
+        seller = stringPadding(seller, BLANK_CHAR, USERNAME_LENGTH);
+        String discount = stringPadding(disc.toString(), ZERO_CHAR, DISCOUNT_LENGTH);
+        String salePrice = stringPadding(price.toString(), ZERO_CHAR, PRICE_LENGTH);
+        String message = String.join(SEPARATOR, sellCode, title, seller, discount, salePrice);
+        System.out.println(message);
+        appendData(message, dailyData);
+    }
+
+    protected void writeRefundTransaction(String buyer, String seller, Double refundCred){
+        buyer = stringPadding(buyer, BLANK_CHAR, USERNAME_LENGTH);
+        seller = stringPadding(seller, BLANK_CHAR, USERNAME_LENGTH);
+        String refund = stringPadding(refundCred.toString(), ZERO_CHAR, -CREDIT_LENGTH);
+        String message = String.join(SEPARATOR, refundCode, buyer, seller, refund);
+        System.out.println(message);
+        appendData(message, dailyData);
+    }
 
     /**
      * This function will append new data to current existing txt, i.e our database
@@ -35,7 +105,7 @@ public class data_base {
             writer.newLine();
             writer.flush();
             writer.close();
-            System.out.println(filePath);
+            //System.out.println(filePath);
         } catch (IOException e) {
             System.out.println("ERROR: " + e.getMessage());
         }
@@ -58,7 +128,7 @@ public class data_base {
         BufferedReader reader = new BufferedReader(new FileReader(inputFile));
         String currentLine;
         while ((currentLine = reader.readLine()) != null) {
-            String[] tokens = currentLine.split(" ");
+            String[] tokens = currentLine.split(SEPARATOR);
             if (tokens[0].equals(userName)) {
                 return true;
             }
@@ -76,7 +146,7 @@ public class data_base {
      */
     protected User getUser(String username) {
         User user = null;
-        String[] userData = getUserData(username, data_base.userData).split(" ");
+        String[] userData = getUserData(username, data_base.userData).split(SEPARATOR);
         if (!userData[0].equals(ERROR_TOKEN)) {
 
             Double credit = Double.parseDouble(userData[2]);
@@ -125,7 +195,7 @@ public class data_base {
      * @return A line of space splited string with all the information in the format of:
      * "UserName Type Credit GameTheyOwn"
      */
-    public static String getUserData(String userName, String filePath){
+    protected String getUserData(String userName, String filePath){
         try {
             File inputFile = new File(filePath);
             BufferedReader reader = new BufferedReader(new FileReader(inputFile));
@@ -133,7 +203,7 @@ public class data_base {
 
 
             while ((currentLine = reader.readLine()) != null) {
-                String[] tokens = currentLine.split(" ");
+                String[] tokens = currentLine.split(SEPARATOR);
                 if (tokens[0].equals(userName)) {
                     return currentLine;
                 }
@@ -171,7 +241,7 @@ public class data_base {
             String currentLine;
 
             while ((currentLine = reader.readLine()) != null) {
-                String[] tokens = currentLine.split(" ");
+                String[] tokens = currentLine.split(SEPARATOR);
                 if (tokens[0].equals(UserName)) continue;
                 writer.write(currentLine + System.getProperty("line.separator"));
             }
@@ -181,7 +251,25 @@ public class data_base {
             System.out.println(successful);
         }
 
+        public static String
+        rightPadding(String input, char ch, int L)
+        {
 
+            String result = String.format("%" + L + "s", input).replace(' ', ch);
+
+            // Return the resultant string
+            return result;
+        }
+
+    public static void main(String[] args){
+
+            data_base dataBase = new data_base();
+            dataBase.writeBasicTransaction("04", "Kentucky Fried", "AA", 34.02);
+            dataBase.writeBasicTransaction("05", "Kentucky", "AA", 34.02);
+            dataBase.writeBasicTransaction("09", "Kent", "AA", 34.02);
+
+
+    }
 }
 
 
