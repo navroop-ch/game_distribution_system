@@ -5,7 +5,6 @@ public class Seller extends User{
     protected Seller(String username, double credit, ArrayList <String> gameOwned){
         super(username, credit, gameOwned);
         this.type = SELLER_USER_TYPE;
-
     }
 
     @Override
