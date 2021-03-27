@@ -23,11 +23,36 @@ public abstract class User {
     public static final String addCreditCode = "06";
     public static final String logOutCode = "10";
 
-    public abstract String getUserName();
-    public abstract String getType();
-    public abstract double getCredit();
     public abstract ArrayList <String> getOwnedGame();
     public abstract void addOwnedGame(String game);
+
+
+    /**
+     * Returns the current user's username.
+     *
+     * @return userName of this user
+     */
+    public String getUserName(){
+        return this.userName;
+    }
+
+    /**
+     * Returns the current user's type.
+     *
+     * @return String type of user
+     */
+    public String getType(){
+        return this.type;
+    }
+
+    /**
+     * Returns the current user's current credit.
+     *
+     * @return credits
+     */
+    public double getCredit(){
+        return this.credit;
+    }
 
     /** Logs the user into a session
      *
