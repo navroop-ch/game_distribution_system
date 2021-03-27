@@ -24,10 +24,8 @@ public class Admin extends User{
      * @param gameOwned  An ArrayList that store all the game owning by the admin.
      */
     public Admin(String username, double credit, ArrayList <String> gameOwned){
-        this.userName = username;
+        super(username, credit, gameOwned);
         this.type = ADMIN_USER_TYPE;
-        this.credit = credit;
-        this.gameOwned = gameOwned;
 
     }
 
@@ -39,38 +37,6 @@ public class Admin extends User{
         this.dataBase = dataBase;
     }
 
-
-    /**
-     * Returns the current admin's game inventory.
-     *
-     * @return an ArrayList of String for the game name the admin own.
-     */
-    @Override
-    public ArrayList <String> getOwnedGame(){
-        return this.gameOwned;
-    }
-
-    /**
-     * Adds credit to a certain user's account.
-     * @param username username of the account to add credits to
-     * @param credit the amount of credits
-     */
-    public void addCredit(String username, double credit){
-        User user = dataBase.getUser(username);
-        user.addCredit(credit);
-        //Todo: write to transaction file.
-    }
-
-
-    /**
-     * @para  The name of a new game.
-     *
-     * It will add the game to the ArrayList
-     */
-    @Override
-    public void addOwnedGame(String game){
-        this.gameOwned.add(game);
-    }
 
     /**
      * @param userName The front end will ask for the new username
