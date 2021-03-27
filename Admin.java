@@ -9,8 +9,6 @@ import java.util.ArrayList;
 
 public class Admin extends User{
 
-    // Todo: create a Session object and use an instance of that instead of data_base
-    private data_base dataBase;
 
     /**
      * Constructs an Admin that pass in existing admin information
@@ -30,15 +28,6 @@ public class Admin extends User{
     }
 
     /**
-     * Sets the instance variable for the database
-     * @param dataBase instance of the database object
-     */
-    private void setDataBase(data_base dataBase){
-        this.dataBase = dataBase;
-    }
-
-
-    /**
      * @param userName The front end will ask for the new username
      * @param type The front end will ask for the type of user
      *             AA=admin,
@@ -54,13 +43,13 @@ public class Admin extends User{
      *        1. new user name is limited to at most 15 characters
      *        2. maximum credit can be 999,999
      */
-    public void createUser(String userName, String type, String credit) throws IOException {
+    public void createUser(String userName, String type, Double credit) throws IOException {
         if(!data_base.ifUserExist(userName, data_base.userData)) {
-            String userData = userName + " " + type+" "+credit;
-            String transaction = User.createCode + " " + userName + " " + type + " " + credit;
 
+            String userData = userName + " " + type + " " + credit;
             data_base.appendData(userData, data_base.userData);
-            data_base.appendData(transaction, data_base.dailyData);
+
+            dataBase.writeBasicTransaction(data_base.createCode, userName, type, credit);
         }else{
             System.out.println("User exists");
         }
@@ -80,10 +69,15 @@ public class Admin extends User{
     public void deleteUser(String userName) throws IOException {
         if(data_base.ifUserExist(userName, data_base.userData)){
             System.out.println("In delete user, user exists");
-            String transaction = User.deleteCode+" "+ data_base.getUserData(userName, data_base.userData);
+
+            // Writing to daily.txt
+            String[] UserData = dataBase.getUserData(userName,data_base.userData).split(data_base.SEPARATOR);
+            String type = UserData[1];
+            Double credit = Double.parseDouble(UserData[2]);
+            dataBase.writeBasicTransaction(data_base.deleteCode, userName, type, credit);
+
+            // removing from database
             data_base.removeUserData(userName,data_base.userData);
-            System.out.println(transaction);
-            data_base.appendData(transaction, data_base.dailyData);
         }
     }
 
