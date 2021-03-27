@@ -39,38 +39,6 @@ public class Admin extends User{
         this.dataBase = dataBase;
     }
 
-    /**
-     * Returns the current admin's username.
-     *
-     * @return userName of this admin
-     */
-    @Override
-    public String getUserName(){
-        return this.userName;
-    }
-
-
-    /**
-     * Returns the current admin's user type.
-     *
-     * @return "AA" for Admin
-     */
-    @Override
-    public String getType(){
-        return this.type;
-    }
-
-
-    /**
-     * Returns the current admin's current credit.
-     *
-     * @return credits
-     */
-    @Override
-    public double getCredit(){
-        return this.credit;
-    }
-
 
     /**
      * Returns the current admin's game inventory.
