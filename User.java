@@ -17,16 +17,21 @@ public abstract class User {
     protected static final String BUYER_USER_TYPE = "BS";
     protected static final String SELLER_USER_TYPE = "SS";
 
-    protected static final String logInCode = "00";
-    protected static final String createCode = "01";
-    protected static final String deleteCode = "02";
-    protected static final String addCreditCode = "06";
-    protected static final String logOutCode = "10";
+    // Todo: create a Session object and use an instance of that instead of data_base
+    protected data_base dataBase;
 
     protected User(String username, double credit, ArrayList <String> gameOwned){
         this.userName = username;
         this.credit = credit;
         this.gameOwned = gameOwned;
+    }
+
+    /**
+     * Sets the instance variable for the database
+     * @param dataBase instance of the database object
+     */
+    private void setDataBase(data_base dataBase){
+        this.dataBase = dataBase;
     }
 
     /**
@@ -88,7 +93,12 @@ public abstract class User {
         else {
             this.credit += cred;
             this.addedCredit += cred;
+
             System.out.println("Credit added");
+
+            //TODO: update credits in userdata file
+            // write to daily.txt
+            this.dataBase.writeBasicTransaction(data_base.addCreditCode, this.userName, this.type, this.credit);
         }
     }
 
