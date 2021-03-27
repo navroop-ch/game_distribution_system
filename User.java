@@ -11,28 +11,30 @@ public abstract class User {
     protected double addedCredit = 0;  //tracks credit added for each day
 
 
-    public static final double MAX_ALLOWED_CREDIT = 999999;
-    public static final String ADMIN_USER_TYPE = "AA";
-    public static final String FULL_USER_TYPE = "FS";
-    public static final String BUYER_USER_TYPE = "BS";
-    public static final String SELLER_USER_TYPE = "SS";
+    protected static final double MAX_ALLOWED_CREDIT = 999999;
+    protected static final String ADMIN_USER_TYPE = "AA";
+    protected static final String FULL_USER_TYPE = "FS";
+    protected static final String BUYER_USER_TYPE = "BS";
+    protected static final String SELLER_USER_TYPE = "SS";
 
-    public static final String logInCode = "00";
-    public static final String createCode = "01";
-    public static final String deleteCode = "02";
-    public static final String addCreditCode = "06";
-    public static final String logOutCode = "10";
+    protected static final String logInCode = "00";
+    protected static final String createCode = "01";
+    protected static final String deleteCode = "02";
+    protected static final String addCreditCode = "06";
+    protected static final String logOutCode = "10";
 
-    public abstract ArrayList <String> getOwnedGame();
-    public abstract void addOwnedGame(String game);
-
+    protected User(String username, double credit, ArrayList <String> gameOwned){
+        this.userName = username;
+        this.credit = credit;
+        this.gameOwned = gameOwned;
+    }
 
     /**
      * Returns the current user's username.
      *
      * @return userName of this user
      */
-    public String getUserName(){
+    protected String getUserName(){
         return this.userName;
     }
 
@@ -41,7 +43,7 @@ public abstract class User {
      *
      * @return String type of user
      */
-    public String getType(){
+    protected String getType(){
         return this.type;
     }
 
@@ -50,7 +52,7 @@ public abstract class User {
      *
      * @return credits
      */
-    public double getCredit(){
+    protected double getCredit(){
         return this.credit;
     }
 
@@ -88,6 +90,32 @@ public abstract class User {
             this.addedCredit += cred;
             System.out.println("Credit added");
         }
+    }
+
+    /**
+     * Returns the current admin's game inventory.
+     *
+     * @return an ArrayList of String for the game name the admin own.
+     */
+    public ArrayList <String> getOwnedGame(){
+        return this.gameOwned;
+    }
+
+    /**
+     * @para  The name of a new game.
+     *
+     * It will add the game to the ArrayList
+     */
+    public void addOwnedGame(String game){
+        this.gameOwned.add(game);
+    }
+
+    protected void sell(String title, Double price, Double saleDiscount){
+        //Todo: implement this method
+    }
+
+    protected void buy(String title, String sellerName){
+        //Todo: implement this method
     }
 
     /**
