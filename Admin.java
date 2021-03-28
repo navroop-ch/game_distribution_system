@@ -21,10 +21,8 @@ public class Admin extends User{
      *                  logged in
      * @param gameOwned  An ArrayList that store all the game owning by the admin.
      */
-    public Admin(String username, double credit, ArrayList <String> gameOwned){
-        super(username, credit, gameOwned);
-        this.type = ADMIN_USER_TYPE;
-
+    public Admin(String username, double credit, ArrayList<Game> gameOwned){
+        super(username, ADMIN_USER_TYPE, credit, gameOwned);
     }
 
     /**
@@ -44,11 +42,14 @@ public class Admin extends User{
      *        2. maximum credit can be 999,999
      */
     public void createUser(String userName, String type, Double credit) throws IOException {
-        if(!data_base.ifUserExist(userName, data_base.userData)) {
+        if(!data_base.ifUserExist(userName, dataBase.userData)) {
 
-            String userData = userName + " " + type + " " + credit;
-            data_base.appendData(userData, data_base.userData);
+            // Create user object
+            ArrayList<Game> gamesOwned = new ArrayList<>();
+            User user = dataBase.generateUser(userName, type, credit, gamesOwned);
 
+            // Store User object
+            dataBase.writeUser(user);
             dataBase.writeBasicTransaction(data_base.createCode, userName, type, credit);
         }else{
             System.out.println("User exists");
@@ -67,18 +68,29 @@ public class Admin extends User{
      * All constrains will be checked in this method except for further transaction
      */
     public void deleteUser(String userName) throws IOException {
-        if(data_base.ifUserExist(userName, data_base.userData)){
+        if(data_base.ifUserExist(userName, dataBase.userData)){
             System.out.println("In delete user, user exists");
 
             // Writing to daily.txt
-            String[] UserData = dataBase.getUserData(userName,data_base.userData).split(data_base.SEPARATOR);
+            String[] UserData = dataBase.getUserData(userName,dataBase.userData).split(data_base.SEPARATOR);
             String type = UserData[1];
             Double credit = Double.parseDouble(UserData[2]);
             dataBase.writeBasicTransaction(data_base.deleteCode, userName, type, credit);
 
             // removing from database
-            data_base.removeUserData(userName,data_base.userData);
+            data_base.removeUserData(userName,dataBase.userData);
         }
+    }
+
+    /**
+     * Adds credit to a certain user's account.
+     * @param username username of the account to add credits to
+     * @param credit the amount of credits
+     */
+    public void addCredit(String username, double credit){
+        User user = dataBase.getUser(username);
+        user.addCredit(credit);
+        //Todo: write to transaction file.
     }
 
     /**
@@ -93,8 +105,15 @@ public class Admin extends User{
 
 
     public static void main(String[] args){
-        ArrayList<String> ownedGames = new ArrayList<String>();
+        data_base dataBase = new data_base();
+
+        ArrayList<Game> ownedGames = new ArrayList<Game>();
         Admin admin0 = new Admin("George", 999000, ownedGames);
+
+        System.out.println(admin0);
+
+        admin0.login();
+
         System.out.println(admin0);
 
         admin0.addCredit(400);
