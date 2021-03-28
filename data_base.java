@@ -20,8 +20,8 @@ public class data_base {
     protected static final int DISCOUNT_LENGTH = 5;
     protected static final int PRICE_LENGTH = 6;
 
-    public static String userData = "userName.txt";
-    public static String dailyData = "daily.txt";
+    protected String userData = "userName.txt";
+    protected String dailyData = "daily.txt";
 
     protected static final String logInCode = "00";
     protected static final String createCode = "01";
@@ -81,7 +81,14 @@ public class data_base {
         String refund = stringPadding(refundCred.toString(), ZERO_CHAR, -CREDIT_LENGTH);
         String message = String.join(SEPARATOR, refundCode, buyer, seller, refund);
         System.out.println(message);
-        appendData(message, dailyData);
+        appendData(message, this.dailyData);
+    }
+
+    protected void writeUser(User user){
+        String profile = String.join(SEPARATOR, user.getUserName(), user.getType(), user.getCredit().toString());
+        String gamesOwned = user.toStringGamesOwned();
+        String data = String.join(SEPARATOR, profile, gamesOwned);
+        this.appendData(data, this.userData);
     }
 
     /**
@@ -98,7 +105,7 @@ public class data_base {
      *                 and
      *                 appendData("UserName type credit", userData) <- update our user data base
      */
-    public static void appendData(String data, String filePath) {
+    private void appendData(String data, String filePath) {
         try {
             BufferedWriter writer = new BufferedWriter(new FileWriter(filePath, true));
             writer.write(data);
@@ -123,7 +130,7 @@ public class data_base {
      *                 we can call data_base.ifUserExist("UserName", userData)
      *                 or admin can simply call getInfo(String userName) in the Admin class
      */
-    public static boolean ifUserExist(String userName, String filePath) throws IOException {
+    protected static boolean ifUserExist(String userName, String filePath) throws IOException {
         File inputFile = new File(filePath);
         BufferedReader reader = new BufferedReader(new FileReader(inputFile));
         String currentLine;
@@ -146,11 +153,11 @@ public class data_base {
      */
     protected User getUser(String username) {
         User user = null;
-        String[] userData = getUserData(username, data_base.userData).split(SEPARATOR);
+        String[] userData = getUserData(username, this.userData).split(SEPARATOR);
         if (!userData[0].equals(ERROR_TOKEN)) {
 
             Double credit = Double.parseDouble(userData[2]);
-            ArrayList<String> dummyGamesOwned = new ArrayList<String>();  //Todo: fix this dummy variable!
+            ArrayList<Game> dummyGamesOwned = new ArrayList<Game>();  //Todo: fix this dummy variable!
             user = generateUser(userData[0], userData[1], credit, dummyGamesOwned);
         }
         return user;
@@ -165,21 +172,20 @@ public class data_base {
      * @param gamesOwned an ArrayList of the games the user owns.
      * @return a user object
      */
-    protected User generateUser(String username, String type, Double credit, ArrayList<String> gamesOwned) {
-        //Todo: complete this method after the appropriate classes are made
+    protected User generateUser(String username, String type, Double credit, ArrayList<Game> gamesOwned) {
         User user = null;
         switch (type) {
             case User.ADMIN_USER_TYPE:
                 user = new Admin(username, credit, gamesOwned);
                 break;
             case User.FULL_USER_TYPE:
-
+                user = new FullStandardUser(username, credit, gamesOwned);
                 break;
             case User.BUYER_USER_TYPE:
-
+                user = new Buyer(username, credit, gamesOwned);
                 break;
             case User.SELLER_USER_TYPE:
-
+                user = new Seller(username, credit, gamesOwned);
                 break;
         }
         return user;
