@@ -2,9 +2,8 @@ import java.util.ArrayList;
 
 public class Seller extends User{
 
-    protected Seller(String username, double credit, ArrayList <String> gameOwned){
-        super(username, credit, gameOwned);
-        this.type = SELLER_USER_TYPE;
+    protected Seller(String username, double credit, ArrayList<Game> gameOwned){
+        super(username,SELLER_USER_TYPE, credit, gameOwned);
     }
 
     @Override
