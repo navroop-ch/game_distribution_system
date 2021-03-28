@@ -2,14 +2,15 @@ import java.util.ArrayList;
 
 
 public abstract class User {
-    protected String userName;
-    protected String type;
-    protected double credit;
-    protected ArrayList<String> gameOwned;
+    private final String userName;
+    private final String type;
+    private Double credit;
+    private ArrayList<Game> gameOwned;
 
     //Todo: addedCredit needs to be set to 0 at the start(or the end) of each day!
     protected double addedCredit = 0;  //tracks credit added for each day
 
+    protected Boolean loginStatus;
 
     protected static final double MAX_ALLOWED_CREDIT = 999999;
     protected static final String ADMIN_USER_TYPE = "AA";
@@ -17,21 +18,26 @@ public abstract class User {
     protected static final String BUYER_USER_TYPE = "BS";
     protected static final String SELLER_USER_TYPE = "SS";
 
-    // Todo: create a Session object and use an instance of that instead of data_base
+    protected Session session;
     protected data_base dataBase;
 
-    protected User(String username, double credit, ArrayList <String> gameOwned){
+    protected User(String username, String type, double credit, ArrayList<Game> gameOwned){
         this.userName = username;
+        this.type = type;
         this.credit = credit;
         this.gameOwned = gameOwned;
+        this.loginStatus = false;
     }
+
 
     /**
      * Sets the instance variable for the database
-     * @param dataBase instance of the database object
+     * @param session instance of the database object
      */
-    private void setDataBase(data_base dataBase){
-        this.dataBase = dataBase;
+    // Todo: remove this method after implementing login/logout
+    private void setSession(Session session){
+        this.session = session;
+        this.dataBase = session.getDataBase();
     }
 
     /**
@@ -57,22 +63,24 @@ public abstract class User {
      *
      * @return credits
      */
-    protected double getCredit(){
+    protected Double getCredit(){
         return this.credit;
     }
 
     /** Logs the user into a session
      *
      */
-    private void login(){
-
+    protected void login(){
+        this.setSession(Session.getInstance());
+        this.loginStatus = true;
     }
 
     /** Logs the user out of the session logged in
      *
      */
-    private void logout(){
-
+    protected void logout(){
+        this.setSession(null);
+        this.loginStatus = false;
     }
 
     /**
@@ -107,16 +115,25 @@ public abstract class User {
      *
      * @return an ArrayList of String for the game name the admin own.
      */
-    public ArrayList <String> getOwnedGame(){
+    protected ArrayList<Game> getOwnedGame(){
         return this.gameOwned;
     }
 
+    protected String toStringGamesOwned(){
+        StringBuilder gamesString = new StringBuilder();
+        for (Game game : this.gameOwned){
+            gamesString.append(data_base.SEPARATOR).append(game);
+        }
+        return gamesString.toString();
+    }
+
+
     /**
-     * @para  The name of a new game.
+     * @param game  The name of a new game.
      *
      * It will add the game to the ArrayList
      */
-    public void addOwnedGame(String game){
+    public void addOwnedGame(Game game){
         this.gameOwned.add(game);
     }
 
@@ -133,12 +150,12 @@ public abstract class User {
      * @return String generated to represent the user.
      */
     public String toString() {
-
-        //Todo: Improve this method. (Represent games owned)
         return "---------\n" +
                 this.userName + "\n" +
                 "Account type: " + this.type + "\n" +
-                "Credit: " + this.credit +
+                "Credit: " + this.credit + "\n" +
+                "Games: " + this.toStringGamesOwned() + "\n" +
+                "Logged in: " + this.loginStatus.toString() +
                 "\n---------\n";
 
     }
