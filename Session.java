@@ -15,6 +15,7 @@ public class Session {
     private Session(data_base db){
         this.dataBase = db;
         // Todo: load users into userList by creating a method for it in data_base.java
+        this.userList = this.dataBase.loadUsers(db.userData);
 
     }
 
