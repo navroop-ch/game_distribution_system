@@ -124,7 +124,6 @@ public class Admin extends User{
 
         dataBase.writeUser(admin0);
 
-
         admin0.login();
 
         System.out.println(admin0);
