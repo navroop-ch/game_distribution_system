@@ -34,7 +34,6 @@ public abstract class User {
      * Sets the instance variable for the database
      * @param session instance of the database object
      */
-    // Todo: remove this method after implementing login/logout
     private void setSession(Session session){
         this.session = session;
         this.dataBase = session.getDataBase();
@@ -72,7 +71,10 @@ public abstract class User {
      */
     protected void login(){
         this.setSession(Session.getInstance());
+        this.session.login(this);
         this.loginStatus = true;
+
+        this.dataBase.writeBasicTransaction(data_base.logInCode, this.userName, this.type, this.credit);
     }
 
     /** Logs the user out of the session logged in
@@ -81,6 +83,8 @@ public abstract class User {
     protected void logout(){
         this.setSession(null);
         this.loginStatus = false;
+
+        this.dataBase.writeBasicTransaction(data_base.logOutCode, this.userName, this.type, this.credit);
     }
 
     /**
@@ -119,10 +123,11 @@ public abstract class User {
         return this.gameOwned;
     }
 
-    protected String toStringGamesOwned(){
+    protected String gamesOwnedToString(){
         StringBuilder gamesString = new StringBuilder();
-        for (Game game : this.gameOwned){
-            gamesString.append(data_base.SEPARATOR).append(game);
+        gamesString.append(this.gameOwned.get(0));
+        for (int i = 1; i < this.gameOwned.size(); i++){
+            gamesString.append(data_base.GAME_SEPARATOR).append(this.gameOwned.get(i));
         }
         return gamesString.toString();
     }
@@ -154,7 +159,7 @@ public abstract class User {
                 this.userName + "\n" +
                 "Account type: " + this.type + "\n" +
                 "Credit: " + this.credit + "\n" +
-                "Games: " + this.toStringGamesOwned() + "\n" +
+                "Games: " + this.gamesOwnedToString() + "\n" +
                 "Logged in: " + this.loginStatus.toString() +
                 "\n---------\n";
 
