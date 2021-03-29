@@ -1,13 +1,13 @@
 import java.util.ArrayList;
 
 // A session object that controls exchange of data between User objects and the database. A session must be logged into
-// to e able to perform any transactions.
+// for a user to get access to the database to perform any transactions.
 
 public class Session {
 
     private static Session instance = null; // For singleton
 
-    private data_base dataBase;
+    private final data_base dataBase;
     private ArrayList<User> userList;
     private User userLoggedIn = null;
     private boolean loginStatus;
@@ -20,7 +20,7 @@ public class Session {
     }
 
     // Singleton implementation
-    public static Session getInstance() {
+    protected static Session getInstance() {
         // lazy initialization
         if (instance == null) {
             data_base dataBase = new data_base();
@@ -29,11 +29,24 @@ public class Session {
         return instance;
     }
 
-    protected data_base getDataBase(){
-        return this.dataBase;
+    protected data_base getDataBase(User user){
+        if (this.userLoggedIn == user){ return this.dataBase;}
+        else {return null;}
     }
 
-    private void login(User user){
+    protected void sessionLogin(User user){
         this.userLoggedIn = user;
+        this.loginStatus = true;
+    }
+
+    protected void sessionLogout(User user){
+        if (this.userLoggedIn == user){
+            this.userLoggedIn = null;
+            this.loginStatus = false;
+        }
+    }
+
+    protected boolean getLoginStatus(){
+        return loginStatus;
     }
 }

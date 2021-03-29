@@ -10,14 +10,13 @@ public abstract class User {
     //Todo: addedCredit needs to be set to 0 at the start(or the end) of each day!
     protected double addedCredit = 0;  //tracks credit added for each day
 
-    protected Boolean loginStatus;
-
     protected static final double MAX_ALLOWED_CREDIT = 999999;
     protected static final String ADMIN_USER_TYPE = "AA";
     protected static final String FULL_USER_TYPE = "FS";
     protected static final String BUYER_USER_TYPE = "BS";
     protected static final String SELLER_USER_TYPE = "SS";
 
+    protected Boolean loginStatus;
     protected Session session;
     protected data_base dataBase;
 
@@ -27,17 +26,12 @@ public abstract class User {
         this.credit = credit;
         this.gameOwned = gameOwned;
         this.loginStatus = false;
+        this.session = Session.getInstance();
     }
 
 
-    /**
-     * Sets the instance variable for the database
-     * @param session instance of the database object
-     */
-    // Todo: remove this method after implementing login/logout
-    private void setSession(Session session){
-        this.session = session;
-        this.dataBase = session.getDataBase();
+    private void setDataBase(){
+        this.dataBase = this.session.getDataBase(this);
     }
 
     /**
@@ -71,16 +65,36 @@ public abstract class User {
      *
      */
     protected void login(){
-        this.setSession(Session.getInstance());
-        this.loginStatus = true;
+        if (!session.getLoginStatus()){
+            this.session.sessionLogin(this);
+            this.dataBase = this.session.getDataBase(this);
+            this.loginStatus = true;
+            this.dataBase.writeBasicTransaction(data_base.logInCode, this.userName, this.type, this.credit);
+        }
+
+        else {
+            System.out.println("A user is already logged in!");
+        }
+
     }
 
     /** Logs the user out of the session logged in
      *
      */
     protected void logout(){
-        this.setSession(null);
-        this.loginStatus = false;
+        if(loginStatus.equals(true)){
+            this.loginStatus = false;
+            this.session.sessionLogout(this);
+            this.dataBase.writeBasicTransaction(data_base.logOutCode, this.userName, this.type, this.credit);
+
+            this.dataBase = null;
+        }
+
+        else{
+            System.out.println("You have not logged in yet!");
+        }
+
+
     }
 
     /**
@@ -119,10 +133,15 @@ public abstract class User {
         return this.gameOwned;
     }
 
-    protected String toStringGamesOwned(){
+    /**
+     * Returns a string where the game objects are separated using a GAME_SEPARATOR
+     * @return String that represents list of the games owned
+     */
+    protected String gamesOwnedToString(){
         StringBuilder gamesString = new StringBuilder();
-        for (Game game : this.gameOwned){
-            gamesString.append(data_base.SEPARATOR).append(game);
+        gamesString.append(this.gameOwned.get(0));
+        for (int i = 1; i < this.gameOwned.size(); i++){
+            gamesString.append(data_base.GAME_SEPARATOR).append(this.gameOwned.get(i));
         }
         return gamesString.toString();
     }
@@ -227,6 +246,7 @@ public abstract class User {
         return null;
     }
 
+
     /**
      * String representation for the user object
      * @return String generated to represent the user.
@@ -236,7 +256,7 @@ public abstract class User {
                 this.userName + "\n" +
                 "Account type: " + this.type + "\n" +
                 "Credit: " + this.credit + "\n" +
-                "Games: " + this.toStringGamesOwned() + "\n" +
+                "Games: " + this.gamesOwnedToString() + "\n" +
                 "Logged in: " + this.loginStatus.toString() +
                 "\n---------\n";
 

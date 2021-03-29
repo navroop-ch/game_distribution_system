@@ -108,9 +108,21 @@ public class Admin extends User{
         data_base dataBase = new data_base();
 
         ArrayList<Game> ownedGames = new ArrayList<Game>();
-        Admin admin0 = new Admin("George", 999000, ownedGames);
+        ownedGames.add(new Game("Fortnite", 350.34,true));
+        ownedGames.add(new Game("Rsix siege", 550.34,true));
+        ownedGames.add(new Game("Call of duty", 550.34,true));
+        Admin admin0 = new Admin("David", 999000, ownedGames);
+
+        FullStandardUser u = new FullStandardUser("David", 2344.00, ownedGames);
+
+        String[] games = admin0.gamesOwnedToString().split("#");
+        for (String g: games){
+            System.out.println(g);
+        }
 
         System.out.println(admin0);
+
+        dataBase.writeUser(admin0);
 
         admin0.login();
 

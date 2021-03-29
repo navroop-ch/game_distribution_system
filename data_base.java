@@ -12,6 +12,8 @@ public class data_base {
 
     protected final String ERROR_TOKEN = "E";
     protected static final String SEPARATOR = " ";
+    protected static final String GAME_SEPARATOR = "#";
+    protected static final String COMMA_SEPARATOR = ",";
     protected static final Character BLANK_CHAR = ' ';
     protected static final Character ZERO_CHAR = '0';
     protected static final int USERNAME_LENGTH = 15;
@@ -48,14 +50,44 @@ public class data_base {
         return String.format("%" + length + "s", input).replace(' ', character);
     }
 
+    /**
+     * This method writes all basic transactions to daily.txt with the following syntax:
+     *
+     *             XX UUUUUUUUUUUUUUU TT CCCCCCCCC
+     *
+     * Possible transactions: 00-login, 01-create, 02-delete, 06-addCredit, 10-logout
+     *
+     * It ensure the following constraints are met:
+     *          - Username is of the length USERNAME_LENGTH and is padded on the right with BLANK_CHAR(' ')
+     *          - Credit is of the length CREDIT_LENGTH and is padded on the left with ZERO_CHAR('0')
+     *          - All data fields are separated with the SEPARATOR(" ")
+     *          - data is written to dailyData
+     * @param code transaction code
+     * @param username username associated with the transaction
+     * @param usertype  type of account
+     * @param cred credit in account
+     */
     protected void writeBasicTransaction(String code, String username, String usertype, Double cred){
-        username = stringPadding(username, ' ', USERNAME_LENGTH);
+        username = stringPadding(username, BLANK_CHAR, USERNAME_LENGTH);
         String credit = stringPadding(cred.toString(), ZERO_CHAR, -CREDIT_LENGTH);
         String message = String.join(SEPARATOR, code, username, usertype, credit);
         System.out.println(message);
         appendData(message, dailyData);
     }
 
+    /** Writes transaction when a user buys a game
+     *
+     * It ensures the following constraints are met:
+     *          - Title of the game is of length TITLE_LENGTH and is padded on the right with BLANK_CHAR(' ')
+     *          - Usernames are of the length USERNAME_LENGTH and are padded on the right with BLANK_CHAR(' ')
+     *          - All data fields are separated with the SEPARATOR(" ")
+     *          - data is written to dailyData
+     *
+     *
+     * @param title Name of the game
+     * @param seller username of the seller
+     * @param buyer  username of the buyer
+     */
     protected void writeBuyTransaction(String title, String seller, String buyer){
         seller = stringPadding(seller, BLANK_CHAR, USERNAME_LENGTH);
         buyer = stringPadding(buyer, BLANK_CHAR, USERNAME_LENGTH);
@@ -65,6 +97,21 @@ public class data_base {
         appendData(message, dailyData);
     }
 
+    /** Writes sell transaction to daily.txt when a user puts up a game for sale
+     *
+     * It ensures the following constraints are met:
+     *          - Title of the game is of length TITLE_LENGTH and is padded on the right with BLANK_CHAR(' ')
+     *          - Username is of the length USERNAME_LENGTH and is padded on the right with BLANK_CHAR(' ')
+     *          - discount percentage is of the length Discount_LENGTH and is padded on the right with BLANK_CHAR(' ')
+     *          - price is of the length PRICE_LENGTH and is padded on the right with BLANK_CHAR(' ')
+     *          - All data fields are separated with the SEPARATOR(" ")
+     *          - data is written to dailyData
+     *
+     * @param title Name of the game
+     * @param seller username of the seller
+     * @param disc discount percentage
+     * @param price sale price
+     */
     protected void writeSellTransaction(String title, String seller, Double disc, Double price){
         title = stringPadding(title, BLANK_CHAR, TITLE_LENGTH);
         seller = stringPadding(seller, BLANK_CHAR, USERNAME_LENGTH);
@@ -75,6 +122,19 @@ public class data_base {
         appendData(message, dailyData);
     }
 
+    /**
+     * Writes refund transaction to daily.txt when a user gets refunded
+     *
+     * It ensures the following constraints are met:
+     *          - Usernames are of the length USERNAME_LENGTH and are padded on the right with BLANK_CHAR(' ')
+     *          - Amount refunded is of the length CREDIT_LENGTH and is padded on the left with ZERO_CHAR('0')
+     *          - All data fields are separated with the SEPARATOR(" ")
+     *          - data is written to dailyData
+     *
+     * @param buyer username of the buyer
+     * @param seller username of the seller
+     * @param refundCred amount refunded
+     */
     protected void writeRefundTransaction(String buyer, String seller, Double refundCred){
         buyer = stringPadding(buyer, BLANK_CHAR, USERNAME_LENGTH);
         seller = stringPadding(seller, BLANK_CHAR, USERNAME_LENGTH);
@@ -84,54 +144,20 @@ public class data_base {
         appendData(message, this.dailyData);
     }
 
+    /**
+     * Writes the data of a user object to user.txt in the following format:
+     *
+     *          username SEPARATOR type SEPARATOR credit
+     *
+     *          UUUUUUUUUUUUUUU TT CCCCCCCCC COMMA_SEPARATOR IIIIIIIIIIIIIIIIIII PPPPP
+     *
+     * @param user User object
+     */
     protected void writeUser(User user){
         String profile = String.join(SEPARATOR, user.getUserName(), user.getType(), user.getCredit().toString());
-        String gamesOwned = user.toStringGamesOwned();
-        String data = String.join(SEPARATOR, profile, gamesOwned);
+        String gamesOwned = user.gamesOwnedToString();
+        String data = String.join(COMMA_SEPARATOR, profile, gamesOwned);
         this.appendData(data, this.userData);
-    }
-
-    /**
-     * Loads all users from database into an array list.
-     * @param file The file path to userName.txt
-     * @return An array list containing all users
-     */
-    protected ArrayList<User> loadUsers(String file){
-        try {
-            File inputFile = new File(file);
-            BufferedReader reader = new BufferedReader(new FileReader(inputFile));
-            String currentLine;
-
-            ArrayList<User> users = new ArrayList<>();
-            while ((currentLine = reader.readLine()) != null) {
-                //Replace the separators
-                String[] tokens = currentLine.split(",");
-                User tempUser;
-                String username = tokens[0];
-                String type = tokens[1];
-                double credit = Double.parseDouble(tokens[2]);
-                ArrayList<Game> gameOwned = new ArrayList<>();
-
-                // the brackets *
-                String[] gameTokens = tokens[3].split("#");
-                for (int i = 0; i < gameTokens.length; i++) {
-                    String[] temp = gameTokens[i].split(" ");
-                    gameOwned.add(new Game(temp[0], Double.parseDouble(temp[1]), Boolean.parseBoolean(temp[2])));
-                }
-                tempUser = generateUser(username, type, credit, gameOwned);
-                if (tempUser != null) {
-                    users.add(tempUser);
-                }
-            }
-            reader.close();
-            return users;
-        } catch (FileNotFoundException e) {
-            e.printStackTrace();
-            System.out.println("File Not Found error");
-        } catch (IOException e){
-            e.printStackTrace();
-        }
-        return null;
     }
 
     /**
@@ -159,6 +185,48 @@ public class data_base {
         } catch (IOException e) {
             System.out.println("ERROR: " + e.getMessage());
         }
+    }
+
+    /**
+     * Loads all users from database into an array list.
+     * @param file The file path to database.txt
+     * @return An array list containing all users
+     */
+    protected ArrayList<User> loadUsers(String file){
+        try {
+            File inputFile = new File(file);
+            BufferedReader reader = new BufferedReader(new FileReader(inputFile));
+            String currentLine;
+
+            ArrayList<User> users = new ArrayList<>();
+            while ((currentLine = reader.readLine()) != null) {
+                String[] tokens = currentLine.split(COMMA_SEPARATOR);
+                User tempUser;
+                String type = tokens[0];
+                String username = tokens[1];
+                double credit = Double.parseDouble(tokens[2]);
+                ArrayList<Game> gameOwned = new ArrayList<>();
+
+                // not entirely sure how the games toString looks...
+                String[] gameTokens = tokens[3].split(GAME_SEPARATOR);
+                for (int i = 0; i < gameTokens.length; i++) {
+                    String[] temp = gameTokens[i].split(SEPARATOR);
+                    gameOwned.add(new Game(temp[0], Double.parseDouble(temp[1]), Boolean.parseBoolean(temp[2])));
+                }
+                tempUser = generateUser(username, type, credit, gameOwned);
+                if (tempUser != null) {
+                    users.add(tempUser);
+                }
+            }
+            reader.close();
+            return users;
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+            System.out.println("File Not Found error");
+        } catch (IOException e){
+            e.printStackTrace();
+        }
+        return null;
     }
 
     /**
@@ -196,12 +264,21 @@ public class data_base {
      */
     protected User getUser(String username) {
         User user = null;
-        String[] userData = getUserData(username, this.userData).split(SEPARATOR);
-        if (!userData[0].equals(ERROR_TOKEN)) {
+        String[] userData = getUserData(username, this.userData).split(COMMA_SEPARATOR);
+        String[] profile = userData[0].split(SEPARATOR);
+        String[] gamesOwned = userData[1].split(GAME_SEPARATOR);
+        if (!profile[0].equals(ERROR_TOKEN)) {
 
-            Double credit = Double.parseDouble(userData[2]);
-            ArrayList<Game> dummyGamesOwned = new ArrayList<Game>();  //Todo: fix this dummy variable!
-            user = generateUser(userData[0], userData[1], credit, dummyGamesOwned);
+            String userType = profile[1];
+            Double credit = Double.parseDouble(profile[2]);
+
+            // Create games list
+            ArrayList<Game> gamesList = new ArrayList<>();
+            for (String game : gamesOwned){
+                gamesList.add(Game.stringToGame(game));
+            }
+
+            user = generateUser(username, userType, credit, gamesList);
         }
         return user;
     }
@@ -252,7 +329,8 @@ public class data_base {
 
 
             while ((currentLine = reader.readLine()) != null) {
-                String[] tokens = currentLine.split(SEPARATOR);
+                String profile = currentLine.split(",")[0];
+                String[] tokens = profile.split(SEPARATOR);
                 if (tokens[0].equals(userName)) {
                     return currentLine;
                 }
@@ -264,60 +342,52 @@ public class data_base {
         }
     }
 
-        /**
-         * This function will remove all the data of the passed in UserName from our database
-         * and write the record to the daily.txt
-         *
-         *
-         * @param UserName The userName we want to remove from our data base
-         *
-         * @param filePath In our data base, we have two existing filePath. Either userName.txt or
-         *                 daily.txt which has been created as a static String variable in this class.
-         *
-         * Admin will call deleteUser() and the deleteUser() will call this function. This function should not be called directly
-         * since Admin is the only type of user that can perform this action.
-         *
-         *
-         */
+    /**
+     * This function will remove all the data of the passed in UserName from our database
+     * and write the record to the daily.txt
+     *
+     *
+     * @param UserName The userName we want to remove from our data base
+     *
+     * @param filePath In our data base, we have two existing filePath. Either userName.txt or
+     *                 daily.txt which has been created as a static String variable in this class.
+     *
+     * Admin will call deleteUser() and the deleteUser() will call this function. This function should not be called directly
+     * since Admin is the only type of user that can perform this action.
+     *
+     *
+     */
 
-        public static void removeUserData(String UserName, String filePath) throws IOException {
-            File inputFile = new File(filePath);
-            File tempFile = new File("myTempFile.txt");
+    public static void removeUserData(String UserName, String filePath) throws IOException {
+        File inputFile = new File(filePath);
+        File tempFile = new File("myTempFile.txt");
 
-            BufferedReader reader = new BufferedReader(new FileReader(inputFile));
-            BufferedWriter writer = new BufferedWriter(new FileWriter(tempFile));
+        BufferedReader reader = new BufferedReader(new FileReader(inputFile));
+        BufferedWriter writer = new BufferedWriter(new FileWriter(tempFile));
 
-            String currentLine;
+        String currentLine;
 
-            while ((currentLine = reader.readLine()) != null) {
-                String[] tokens = currentLine.split(SEPARATOR);
-                if (tokens[0].equals(UserName)) continue;
-                writer.write(currentLine + System.getProperty("line.separator"));
-            }
-            writer.close();
-            reader.close();
-            boolean successful = tempFile.renameTo(inputFile);
-            System.out.println(successful);
+        while ((currentLine = reader.readLine()) != null) {
+            String[] tokens = currentLine.split(SEPARATOR);
+            if (tokens[0].equals(UserName)) continue;
+            writer.write(currentLine + System.getProperty("line.separator"));
         }
+        writer.close();
+        reader.close();
+        boolean successful = tempFile.renameTo(inputFile);
+        System.out.println(successful);
+    }
 
-        public static String
-        rightPadding(String input, char ch, int L)
-        {
-
-            String result = String.format("%" + L + "s", input).replace(' ', ch);
-
-            // Return the resultant string
-            return result;
-        }
 
     public static void main(String[] args){
-
-            data_base dataBase = new data_base();
+        data_base dataBase = new data_base();
+            /*
             dataBase.writeBasicTransaction("04", "Kentucky Fried", "AA", 34.02);
             dataBase.writeBasicTransaction("05", "Kentucky", "AA", 34.02);
-            dataBase.writeBasicTransaction("09", "Kent", "AA", 34.02);
+            dataBase.writeBasicTransaction("09", "Kent", "AA", 34.02);*/
 
-
+        User user = dataBase.getUser("David");
+        System.out.println(user);
     }
 }
 
