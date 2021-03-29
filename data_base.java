@@ -92,6 +92,48 @@ public class data_base {
     }
 
     /**
+     * Loads all users from database into an array list.
+     * @param file The file path to database.txt
+     * @return An array list containing all users
+     */
+    protected ArrayList<User> loadUsers(String file){
+        try {
+            File inputFile = new File(file);
+            BufferedReader reader = new BufferedReader(new FileReader(inputFile));
+            String currentLine;
+
+            ArrayList<User> users = new ArrayList<>();
+            while ((currentLine = reader.readLine()) != null) {
+                String[] tokens = currentLine.split(",");
+                User tempUser;
+                String type = tokens[0];
+                String username = tokens[1];
+                double credit = Double.parseDouble(tokens[2]);
+                ArrayList<Game> gameOwned = new ArrayList<>();
+
+                // not entirely sure how the games toString looks...
+                String[] gameTokens = tokens[3].split("#");
+                for (int i = 0; i < gameTokens.length; i++) {
+                    String[] temp = gameTokens[i].split(" ");
+                    gameOwned.add(new Game(temp[0], Double.parseDouble(temp[1]), Boolean.parseBoolean(temp[2])));
+                }
+                tempUser = generateUser(username, type, credit, gameOwned);
+                if (tempUser != null) {
+                    users.add(tempUser);
+                }
+            }
+            reader.close();
+            return users;
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+            System.out.println("File Not Found error");
+        } catch (IOException e){
+            e.printStackTrace();
+        }
+        return null;
+    }
+
+    /**
      * This function will append new data to current existing txt, i.e our database
      *
      * @param data     The data to append to the file

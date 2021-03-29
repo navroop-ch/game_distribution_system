@@ -137,12 +137,94 @@ public abstract class User {
         this.gameOwned.add(game);
     }
 
+    /**
+     * Places the game that the user wants to sell for sale.
+     * @param title The title of the game that the user wants to sell
+     * @param price The price of the game the user wants to sell
+     * @param saleDiscount The discount on the game if there's a sale taking place.
+     *                     If there is no sale, then discount is 0.0
+     */
     protected void sell(String title, Double price, Double saleDiscount){
-        //Todo: implement this method
+        // Checks if the game is already in owned games
+        Game game = owned(title);
+        // Creates a new game if the given game doesn't exist in gameOwned,
+        if (game == null) {
+            game = new Game(title, price, true);
+            game.setDiscount(saleDiscount);
+            addOwnedGame(game);
+
+            //Todo: write to daily.txt? here?
+            this.dataBase.writeSellTransaction(title, this.userName, saleDiscount, price);
+        }
+        else {
+            if (!game.isBought()) {
+                game.setForSale(true);
+                game.setDiscount(saleDiscount);
+
+                //Todo: write to daily.txt? here?
+                this.dataBase.writeSellTransaction(title, this.userName, saleDiscount, price);
+            }
+            else {
+                System.out.println("Warning: This game can not be sold.");
+            }
+        }
+
     }
 
+    /**
+     * Buys the game that the user wants to buy from give seller. If the game does not exist, there isn't enough credit
+     * or the user already owns the game, then the transaction does not take place.
+     * @param title The title of the game.
+     * @param sellerName The username of the seller.
+     */
     protected void buy(String title, String sellerName){
-        //Todo: implement this method
+        User seller = this.dataBase.getUser(sellerName); //session?
+        Game game = seller.owned(title);
+        // If seller is selling and buyer doesn't own the game.
+        if (game != null && game.isForSale() && this.owned(title) == null) {
+            double price = game.getPrice() + (game.getPrice() * game.getDiscount());
+            if (canBuy(price)){
+                this.credit -= price;
+                seller.addCredit(price);
+                game.setBought(true);
+                //Todo: write to daily.txt? here?
+                this.dataBase.writeBuyTransaction(title, seller.userName, this.userName);
+            }
+            else {
+                System.out.println("Not enough credit to buy game.");
+            }
+        }
+        else {
+            System.out.println("Game cannot be bought for one of the three reasons;" +
+                    "the game is already owned, not for sale, or does not exist.");
+        }
+
+    }
+
+    /**
+     * Checks if a user can buy a certain game.
+     * @param price The price that is being checked.
+     * @return True if sufficient credit is available to buy, false otherwise
+     */
+    protected boolean canBuy(double price) {
+        if (this.credit - price >= 0.0) {
+            return true;
+        }
+        return false;
+    }
+
+    /**
+     * Checks if the given game title is a game owned by user.
+     * @param title Title of the game
+     * @return The game object corresponding to title if it exists, otherwise null.
+     */
+    protected Game owned(String title){
+        for (Game g: this.gameOwned) {
+            if (g.getTitle().equals(title)) {
+                return g;
+            }
+        }
+        return null;
     }
 
     /**
