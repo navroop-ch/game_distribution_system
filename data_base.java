@@ -189,41 +189,37 @@ public class data_base {
 
     /**
      * Loads all users from database into an array list.
-     * @param file The file path to database.txt
+     * @param filePath The file path to database.
      * @return An array list containing all users
      */
-    protected ArrayList<User> loadUsers(String file){
+    protected ArrayList<User> loadUsers(String filePath){
+        ArrayList<String> usernames = getUserNames(filePath);
+        ArrayList<User> users = new ArrayList<>();
+        for (String user: usernames) {
+            users.add(getUser(user)); // Can't be null
+        }
+        return users;
+    }
+
+    /**
+     * Gets all the usernames in data base and stores them in an array list
+     * @param filePath The file path to data base.
+     * @return The array of all usernames
+     */
+    private ArrayList<String> getUserNames(String filePath) {
         try {
-            File inputFile = new File(file);
+            ArrayList<String> usernames = new ArrayList<>();
+            File inputFile = new File(filePath);
             BufferedReader reader = new BufferedReader(new FileReader(inputFile));
             String currentLine;
-
-            ArrayList<User> users = new ArrayList<>();
             while ((currentLine = reader.readLine()) != null) {
-                String[] tokens = currentLine.split(COMMA_SEPARATOR);
-                User tempUser;
-                String type = tokens[0];
-                String username = tokens[1];
-                double credit = Double.parseDouble(tokens[2]);
-                ArrayList<Game> gameOwned = new ArrayList<>();
-
-                // not entirely sure how the games toString looks...
-                String[] gameTokens = tokens[3].split(GAME_SEPARATOR);
-                for (int i = 0; i < gameTokens.length; i++) {
-                    String[] temp = gameTokens[i].split(SEPARATOR);
-                    gameOwned.add(new Game(temp[0], Double.parseDouble(temp[1]), Boolean.parseBoolean(temp[2])));
-                }
-                tempUser = generateUser(username, type, credit, gameOwned);
-                if (tempUser != null) {
-                    users.add(tempUser);
-                }
+                String[] tokens = currentLine.split(SEPARATOR);
+                usernames.add(tokens[0]);
             }
             reader.close();
-            return users;
-        } catch (FileNotFoundException e) {
-            e.printStackTrace();
-            System.out.println("File Not Found error");
-        } catch (IOException e){
+            return usernames;
+        }
+        catch (IOException e) {
             e.printStackTrace();
         }
         return null;
