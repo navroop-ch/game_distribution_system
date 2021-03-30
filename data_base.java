@@ -7,6 +7,8 @@ public class data_base {
     public static String userData = "userName.txt";
     public static String dailyData = "daily.txt";
 
+    private static data_base instance = null;
+
 
     /**
      * This function will append new data to current existing txt, i.e our database
@@ -23,7 +25,7 @@ public class data_base {
      *                 and
      *                 appendData("UserName type credit", userData) <- update our user data base
      */
-    public static void appendData(String data, String filePath){
+    protected static void appendData(String data, String filePath){
         try {
             BufferedWriter writer = new BufferedWriter(new FileWriter(filePath, true));
             writer.write(data);
@@ -51,7 +53,7 @@ public class data_base {
      *                 we can call data_base.ifUserExist("UserName", userData)
      *                 or admin can simply call getInfo(String userName) in the Admin class
      */
-    public static boolean ifUserExist (String userName, String filePath) throws IOException {
+    protected static boolean ifUserExist (String userName, String filePath) throws IOException {
         File inputFile = new File(filePath);
         BufferedReader reader = new BufferedReader(new FileReader(inputFile));
         String currentLine;
@@ -79,7 +81,7 @@ public class data_base {
      *
      *
      */
-    public static String getUserData (String userName, String filePath) throws IOException {
+    protected static String getUserData (String userName, String filePath) throws IOException {
         File inputFile = new File(filePath);
         BufferedReader reader = new BufferedReader(new FileReader(inputFile));
         String currentLine;
@@ -113,7 +115,7 @@ public class data_base {
      *
      */
 
-    public static void removeUserData(String UserName, String filePath) throws IOException {
+    protected static void removeUserData(String UserName, String filePath) throws IOException {
         File inputFile = new File(filePath);
         File tempFile = new File("myTempFile.txt");
 
