@@ -1,11 +1,12 @@
 import java.io.*;
 public class dataBaseSingleton {
     private static dataBaseSingleton instance = null;
-    public static String userData = "userName.txt";
-    public static String dailyData = "daily.txt";
+    public static String userData;
+    public static String dailyData;
 
     private dataBaseSingleton() {
-
+        this.userData = "userName.txt";
+        this.dailyData = "daily.txt";
     }
 
     public static dataBaseSingleton getInstance() {
