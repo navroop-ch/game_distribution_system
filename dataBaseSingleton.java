@@ -1,8 +1,31 @@
 import java.io.*;
+import java.util.ArrayList;
+
 public class dataBaseSingleton {
     private static dataBaseSingleton instance = null;
     public static String userData;
     public static String dailyData;
+    public final String ERROR_TOKEN = "E";
+    public static final String SEPARATOR = " ";
+    public static final String GAME_SEPARATOR = "#";
+    public static final String COMMA_SEPARATOR = ",";
+    public static final Character BLANK_CHAR = ' ';
+    public static final Character ZERO_CHAR = '0';
+    public static final int USERNAME_LENGTH = 15;
+    public static final int TITLE_LENGTH = 19;
+    public static final int CREDIT_LENGTH = 9;
+    public static final int DISCOUNT_LENGTH = 5;
+    public static final int PRICE_LENGTH = 6;
+
+    public static final String logInCode = "00";
+    public static final String createCode = "01";
+    public static final String deleteCode = "02";
+    public static final String sellCode = "03";
+    public static final String buyCode = "04";
+    public static final String refundCode = "05";
+    public static final String addCreditCode = "06";
+    public static final String logOutCode = "10";
+
 
     private dataBaseSingleton() {
         this.userData = "userName.txt";
@@ -14,6 +37,191 @@ public class dataBaseSingleton {
             instance = new dataBaseSingleton();
 
         return instance;
+    }
+
+
+
+
+    /**
+     * This method writes all basic transactions to daily.txt with the following syntax:
+     *
+     *             XX UUUUUUUUUUUUUUU TT CCCCCCCCC
+     *
+     * Possible transactions: 00-login, 01-create, 02-delete, 06-addCredit, 10-logout
+     *
+     * It ensure the following constraints are met:
+     *          - Username is of the length USERNAME_LENGTH and is padded on the right with BLANK_CHAR(' ')
+     *          - Credit is of the length CREDIT_LENGTH and is padded on the left with ZERO_CHAR('0')
+     *          - All data fields are separated with the SEPARATOR(" ")
+     *          - data is written to dailyData
+     * @param code transaction code
+     * @param username username associated with the transaction
+     * @param usertype  type of account
+     * @param cred credit in account
+     */
+    protected void writeBasicTransaction(String code, String username, String usertype, Double cred){
+        username = stringPadding(username, BLANK_CHAR, USERNAME_LENGTH);
+        String credit = stringPadding(cred.toString(), ZERO_CHAR, -CREDIT_LENGTH);
+        String message = String.join(SEPARATOR, code, username, usertype, credit);
+        System.out.println(message);
+        appendData(message, dailyData);
+    }
+
+    /** Writes transaction when a user buys a game
+     *
+     * It ensures the following constraints are met:
+     *          - Title of the game is of length TITLE_LENGTH and is padded on the right with BLANK_CHAR(' ')
+     *          - Usernames are of the length USERNAME_LENGTH and are padded on the right with BLANK_CHAR(' ')
+     *          - All data fields are separated with the SEPARATOR(" ")
+     *          - data is written to dailyData
+     *
+     *
+     * @param title Name of the game
+     * @param seller username of the seller
+     * @param buyer  username of the buyer
+     */
+    protected void writeBuyTransaction(String title, String seller, String buyer){
+        seller = stringPadding(seller, BLANK_CHAR, USERNAME_LENGTH);
+        buyer = stringPadding(buyer, BLANK_CHAR, USERNAME_LENGTH);
+        title = stringPadding(title, BLANK_CHAR, TITLE_LENGTH);
+        String message = String.join(SEPARATOR,buyCode, title, seller, buyer);
+        System.out.println(message);
+        appendData(message, dailyData);
+    }
+
+    /** Writes sell transaction to daily.txt when a user puts up a game for sale
+     *
+     * It ensures the following constraints are met:
+     *          - Title of the game is of length TITLE_LENGTH and is padded on the right with BLANK_CHAR(' ')
+     *          - Username is of the length USERNAME_LENGTH and is padded on the right with BLANK_CHAR(' ')
+     *          - discount percentage is of the length Discount_LENGTH and is padded on the right with BLANK_CHAR(' ')
+     *          - price is of the length PRICE_LENGTH and is padded on the right with BLANK_CHAR(' ')
+     *          - All data fields are separated with the SEPARATOR(" ")
+     *          - data is written to dailyData
+     *
+     * @param title Name of the game
+     * @param seller username of the seller
+     * @param disc discount percentage
+     * @param price sale price
+     */
+    protected void writeSellTransaction(String title, String seller, Double disc, Double price){
+        title = stringPadding(title, BLANK_CHAR, TITLE_LENGTH);
+        seller = stringPadding(seller, BLANK_CHAR, USERNAME_LENGTH);
+        String discount = stringPadding(disc.toString(), ZERO_CHAR, DISCOUNT_LENGTH);
+        String salePrice = stringPadding(price.toString(), ZERO_CHAR, PRICE_LENGTH);
+        String message = String.join(SEPARATOR, sellCode, title, seller, discount, salePrice);
+        System.out.println(message);
+        appendData(message, dailyData);
+    }
+
+    /**
+     * Writes refund transaction to daily.txt when a user gets refunded
+     *
+     * It ensures the following constraints are met:
+     *          - Usernames are of the length USERNAME_LENGTH and are padded on the right with BLANK_CHAR(' ')
+     *          - Amount refunded is of the length CREDIT_LENGTH and is padded on the left with ZERO_CHAR('0')
+     *          - All data fields are separated with the SEPARATOR(" ")
+     *          - data is written to dailyData
+     *
+     * @param buyer username of the buyer
+     * @param seller username of the seller
+     * @param refundCred amount refunded
+     */
+    protected void writeRefundTransaction(String buyer, String seller, Double refundCred){
+        buyer = stringPadding(buyer, BLANK_CHAR, USERNAME_LENGTH);
+        seller = stringPadding(seller, BLANK_CHAR, USERNAME_LENGTH);
+        String refund = stringPadding(refundCred.toString(), ZERO_CHAR, -CREDIT_LENGTH);
+        String message = String.join(SEPARATOR, refundCode, buyer, seller, refund);
+        System.out.println(message);
+        appendData(message, this.dailyData);
+    }
+
+    /**
+     * Writes the data of a user object to user.txt in the following format:
+     *
+     *          username SEPARATOR type SEPARATOR credit
+     *
+     *          UUUUUUUUUUUUUUU TT CCCCCCCCC COMMA_SEPARATOR IIIIIIIIIIIIIIIIIII PPPPP
+     *
+     * @param user User object
+     */
+    protected void writeUser(User user){
+        String profile = String.join(SEPARATOR, user.getUserName(), user.getType(), user.getCredit().toString());
+        String gamesOwned = user.gamesOwnedToString();
+        String data = String.join(COMMA_SEPARATOR, profile, gamesOwned);
+        this.appendData(data, this.userData);
+    }
+
+    /**
+     * Pads the string input, with the character passed in, so that the string's length is equal to the length passed in
+     *
+     * You can change left and right padding based on the sign of the length integer passed in.
+     *      Right padding: If length > 0.
+     *      Left padding: if length < 0.
+     *
+     * @param input String to pad
+     * @param character character to pad string with
+     * @param length length of the output string after padding
+     */
+    protected static String stringPadding(String input, char character, int length){
+        length = -length;
+        return String.format("%" + length + "s", input).replace(' ', character);
+    }
+
+    /**
+     * This method returns a User object based on the data associated with the given username in the database. It
+     * processes the data from the database and passes it into generateUser.
+     *
+     * @param username username of the account
+     * @return User object if the username exists in database otherwise it's null.
+     */
+    protected User getUser(String username) {
+        User user = null;
+        String[] userData = getUserData(username, this.userData).split(COMMA_SEPARATOR);
+        String[] profile = userData[0].split(SEPARATOR);
+        String[] gamesOwned = userData[1].split(GAME_SEPARATOR);
+        if (!profile[0].equals(ERROR_TOKEN)) {
+
+            String userType = profile[1];
+            Double credit = Double.parseDouble(profile[2]);
+
+            // Create games list
+            ArrayList<Game> gamesList = new ArrayList<>();
+            for (String game : gamesOwned){
+                gamesList.add(Game.stringToGame(game));
+            }
+
+            user = generateUser(username, userType, credit, gamesList);
+        }
+        return user;
+    }
+
+    /**
+     * This method simply forms the appropriate user object based on the type given.
+     *
+     * @param username username of the user
+     * @param type user type
+     * @param credit credits in user's account
+     * @param gamesOwned an ArrayList of the games the user owns.
+     * @return a user object
+     */
+    protected User generateUser(String username, String type, Double credit, ArrayList<Game> gamesOwned) {
+        User user = null;
+        switch (type) {
+            case User.ADMIN_USER_TYPE:
+                user = new Admin(username, credit, gamesOwned);
+                break;
+            case User.FULL_USER_TYPE:
+                user = new FullStandardUser(username, credit, gamesOwned);
+                break;
+            case User.BUYER_USER_TYPE:
+                user = new Buyer(username, credit, gamesOwned);
+                break;
+            case User.SELLER_USER_TYPE:
+                user = new Seller(username, credit, gamesOwned);
+                break;
+        }
+        return user;
     }
 
     /**
