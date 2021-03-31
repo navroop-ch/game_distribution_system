@@ -9,7 +9,7 @@ import java.util.ArrayList;
 
 //Todo: change name of file to DataBase
 public class data_base {
-
+    private static data_base instance = null;
     protected final String ERROR_TOKEN = "E";
     protected static final String SEPARATOR = " ";
     protected static final String GAME_SEPARATOR = "#";
@@ -33,6 +33,18 @@ public class data_base {
     protected static final String refundCode = "05";
     protected static final String addCreditCode = "06";
     protected static final String logOutCode = "10";
+
+    private data_base() {
+        this.userData = "userName.txt";
+        this.dailyData = "daily.txt";
+    }
+
+    public static data_base getInstance() {
+        if (instance == null)
+            instance = new data_base();
+
+        return instance;
+    }
 
     /**
      * Pads the string input, with the character passed in, so that the string's length is equal to the length passed in
