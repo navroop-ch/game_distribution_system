@@ -94,12 +94,14 @@ public class Admin extends User{
     }
 
     /**
-     * Activates the discounts on all games for sale, changing the amount transferred during buy transactions
-     * @param
-     * @param
+     * Activates the discounts on all games for sale
+     * If an auctionsale is already on, this should conclude the auctionsale and disable the discounts
      */
     public void auctionSale(){
-
+        if (Game.getAuctionStatus()){
+            Game.setAutionStatus(false);
+        }
+        Game.setAutionStatus(true);
     }
 
     /**
