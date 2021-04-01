@@ -168,20 +168,21 @@ public abstract class User {
         Game game = owned(title);
         // Creates a new game if the given game doesn't exist in gameOwned,
         if (game == null) {
-            game = new Game(title, price, true);
+            game = new Game(title, price, false);
             game.setDiscount(saleDiscount);
+            game.setSelling(true);
             addOwnedGame(game);
 
             //Todo: write to daily.txt? here?
-            this.dataBase.writeSellTransaction(title, this.userName, saleDiscount, price);
+            // this.dataBase.writeSellTransaction(title, this.userName, saleDiscount, price);
         }
         else {
             if (!game.isBought()) {
-                game.setForSale(true);
+                game.setSelling(true);
                 game.setDiscount(saleDiscount);
 
                 //Todo: write to daily.txt? here?
-                this.dataBase.writeSellTransaction(title, this.userName, saleDiscount, price);
+                // this.dataBase.writeSellTransaction(title, this.userName, saleDiscount, price);
             }
             else {
                 System.out.println("Warning: This game can not be sold.");
@@ -200,14 +201,16 @@ public abstract class User {
         User seller = this.dataBase.getUser(sellerName); //session?
         Game game = seller.owned(title);
         // If seller is selling and buyer doesn't own the game.
-        if (game != null && game.isForSale() && this.owned(title) == null) {
-            double price = game.getPrice() + (game.getPrice() * game.getDiscount());
+        if (game != null && game.getSelling() && this.owned(title) == null) {
+            double price = game.getPrice();
+            if (game.isForSale())
+                price = game.getPrice() + (game.getPrice() * game.getDiscount());
             if (canBuy(price)){
                 this.credit -= price;
                 seller.addCredit(price);
                 game.setBought(true);
                 //Todo: write to daily.txt? here?
-                this.dataBase.writeBuyTransaction(title, seller.userName, this.userName);
+                //this.dataBase.writeBuyTransaction(title, seller.userName, this.userName);
             }
             else {
                 System.out.println("Not enough credit to buy game.");
