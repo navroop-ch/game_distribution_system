@@ -170,7 +170,7 @@ public abstract class User {
         if (game == null) {
             game = new Game(title, price, false);
             game.setDiscount(saleDiscount);
-            game.setSelling(true);
+            game.setForSale(true);
             addOwnedGame(game);
 
             //Todo: write to daily.txt? here?
@@ -178,7 +178,7 @@ public abstract class User {
         }
         else {
             if (!game.isBought()) {
-                game.setSelling(true);
+                game.setForSale(true);
                 game.setDiscount(saleDiscount);
 
                 //Todo: write to daily.txt? here?
@@ -201,9 +201,9 @@ public abstract class User {
         User seller = this.dataBase.getUser(sellerName); //session?
         Game game = seller.owned(title);
         // If seller is selling and buyer doesn't own the game.
-        if (game != null && game.getSelling() && this.owned(title) == null) {
+        if (game != null && game.isForSale() && this.owned(title) == null) {
             double price = game.getPrice();
-            if (game.isForSale())
+            if (game.getAuctionStatus())
                 price = game.getPrice() + (game.getPrice() * game.getDiscount());
             if (canBuy(price)){
                 this.credit -= price;
