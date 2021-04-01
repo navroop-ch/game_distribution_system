@@ -2,6 +2,7 @@ public class Game {
     private final String title;
     private Double price = 0.00;
     private Boolean forSale = false;
+    private boolean selling;
     private boolean bought;
     private double discount;
 
@@ -23,6 +24,7 @@ public class Game {
         this(title);
         this.price = price;
         this.forSale = forSale;
+        this.selling = false;
         this.bought = false;
         this.discount = 0.0;
     }
@@ -38,6 +40,9 @@ public class Game {
 
     protected void setDiscount(double discount){this.discount = discount;}
     protected double getDiscount(){return this.discount;}
+
+    protected void setSelling(boolean selling){this.selling = selling;}
+    protected boolean getSelling(){return this.selling;}
 
 
     /**
