@@ -94,6 +94,15 @@ public class Admin extends User{
     }
 
     /**
+     * Activates the discounts on all games for sale, changing the amount transferred during buy transactions
+     * @param
+     * @param
+     */
+    public void auctionSale(){
+
+    }
+
+    /**
      * @param userName The front end will ask for the new username
      *
      * Since the admin can get info of different users. This function will provide all the info of the user.
