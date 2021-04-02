@@ -1,5 +1,5 @@
 import java.util.ArrayList;
-//cc
+
 
 public class Buyer extends User{
 
