@@ -116,8 +116,7 @@ public class Admin extends User{
 
 
     public static void main(String[] args){
-        data_base dataBase = new data_base();
-
+        
         ArrayList<Game> ownedGames = new ArrayList<Game>();
         ownedGames.add(new Game("Fortnite", 350.34,true));
         ownedGames.add(new Game("Rsix siege", 550.34,true));

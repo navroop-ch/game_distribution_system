@@ -46,7 +46,6 @@ public class Game {
     protected double getDiscount(){return this.discount;}
 
 
-
     /**
      * Takes a string of the format below a returns a game object based on that string
      *
