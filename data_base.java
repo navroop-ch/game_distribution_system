@@ -16,11 +16,14 @@ public class data_base{
     protected static final String COMMA_SEPARATOR = ",";
     protected static final Character BLANK_CHAR = ' ';
     protected static final Character ZERO_CHAR = '0';
+
     protected static final int USERNAME_LENGTH = 15;
     protected static final int TITLE_LENGTH = 19;
     protected static final int CREDIT_LENGTH = 9;
     protected static final int DISCOUNT_LENGTH = 5;
     protected static final int PRICE_LENGTH = 6;
+    protected static final int CODE_LENGTH = 2;
+    protected static final int TYPE_LENGTH = 2;
 
     protected String userData;
     protected String dailyData;
@@ -280,7 +283,7 @@ public class data_base{
      */
     protected User getUser(String username) {
         User user = null;
-        String[] userData = getUserData(username, this.userData).split(COMMA_SEPARATOR);
+        String[] userData = getUserData(username).split(COMMA_SEPARATOR);
         String[] profile = userData[0].split(SEPARATOR);
         String[] gamesOwned = userData[1].split(GAME_SEPARATOR);
         if (!profile[0].equals(ERROR_TOKEN)) {
@@ -298,6 +301,7 @@ public class data_base{
         }
         return user;
     }
+
 
     /**
      * This method simply forms the appropriate user object based on the type given.
@@ -332,12 +336,60 @@ public class data_base{
      * This function will get all the information we have in our database about the passed in userName
      *
      * @param userName The userName we want to get
-     * @param filePath In our data base, we have two existing filePath. Either userName.txt or
-     *                 daily.txt which has been created as a static String variable in this class.
      * @return A line of space splited string with all the information in the format of:
      * "UserName Type Credit GameTheyOwn"
      */
-    protected String getUserData(String userName, String filePath){
+    protected String getUserData(String userName){
+        ArrayList<String> lines = readFile(userData);
+
+        for (String line : lines) {
+            String profile = line.split(",")[0];
+            String[] tokens = profile.split(SEPARATOR);
+            if (tokens[0].equals(userName)) {
+                return line;
+            }
+        }
+        return "Error: \\<user not found>\\";
+    }
+
+    protected ArrayList<Transaction> getTransactions(){
+        ArrayList<String> stringTransactions = readFile(dailyData);
+
+        ArrayList<Transaction> transactions = new ArrayList<>();
+        for (String stringTransaction : stringTransactions){
+            String[] tokens = stringTransaction.split(SEPARATOR);
+            switch (tokens[0]){
+                case logInCode:
+                case logOutCode:
+                case createCode:
+                case deleteCode:
+                case addCreditCode:
+                    if (tokens.length == Transaction.BASIC_TRANSACTION_PARAM){
+                        transactions.add(new BasicTransaction(tokens[0], tokens[1], tokens[2], tokens[3]));
+                    }
+                    break;
+                case buyCode:
+                    if (tokens.length == Transaction.BUY_TRANSACTION_PARAM){
+                        transactions.add(new BuyTransaction(tokens[0], tokens[1], tokens[2], tokens[3]));
+                    }
+                    break;
+                case sellCode:
+                    if (tokens.length == Transaction.SELL_TRANSACTION_PARAM){
+                        transactions.add(new SellTransaction(tokens[0], tokens[1], tokens[2], tokens[3], tokens[4]));
+                    }
+                    break;
+                case refundCode:
+                    if (tokens.length == Transaction.REFUND_TRANSACTION_PARAM){
+                        transactions.add(new RefundTransaction(tokens[0], tokens[1], tokens[2], tokens[3]));
+                    }
+                    break;
+            }
+        }
+        return transactions;
+    }
+
+    protected ArrayList<String> readFile(String filePath){
+        ArrayList<String> lines = new ArrayList<>();
         try {
             File inputFile = new File(filePath);
             BufferedReader reader = new BufferedReader(new FileReader(inputFile));
@@ -345,17 +397,14 @@ public class data_base{
 
 
             while ((currentLine = reader.readLine()) != null) {
-                String profile = currentLine.split(",")[0];
-                String[] tokens = profile.split(SEPARATOR);
-                if (tokens[0].equals(userName)) {
-                    return currentLine;
-                }
+                lines.add(currentLine);
             }
             reader.close();
-            return "E ERROR: \\<User not found\\>";
         }catch (IOException e){
-            return "E Error: \\<reading file>\\";
+            //Todo: review this error display part
+            System.out.println("Error: \\<reading file>\\");
         }
+        return lines;
     }
 
     /**
@@ -397,15 +446,18 @@ public class data_base{
 
     public static void main(String[] args){
         data_base dataBase = new data_base();
-            /*
-            dataBase.writeBasicTransaction("04", "Kentucky Fried", "AA", 34.02);
-            dataBase.writeBasicTransaction("05", "Kentucky", "AA", 34.02);
-            dataBase.writeBasicTransaction("09", "Kent", "AA", 34.02);*/
+
+        /*dataBase.writeBasicTransaction("04", "Kentucky Fried", "AA", 34.02);
+        dataBase.writeBasicTransaction("05", "Kentucky", "AA", 34.02);
+        dataBase.writeBasicTransaction("09", "Kent", "AA", 34.02);*/
 
         User user = dataBase.getUser("David");
         System.out.println(user);
+
+        dataBase.getTransactions();
+
+        String a = "00";
+        String b = "02";
+
     }
 }
-
-
-
