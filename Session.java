@@ -7,7 +7,7 @@ public class Session {
 
     private static Session instance = null; // For singleton
 
-    private final data_base dataBase;
+    //private final data_base dataBase;
     private ArrayList<User> userList;
     private User userLoggedIn = null;
     private boolean loginStatus;
