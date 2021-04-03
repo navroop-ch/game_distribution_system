@@ -4,7 +4,7 @@ public class SellTransaction extends Transaction{
     protected Double discount;
     protected Double salePrice;
 
-    protected SellTransaction(String code, String username, String gameTitle, String discount, String sale) {
+    protected SellTransaction(String code, String gameTitle, String username, String discount, String sale) {
         super(username);
         if (transactionValidate(username, code, gameTitle, discount, sale)){
             this.transactionCode = code;
@@ -26,7 +26,8 @@ public class SellTransaction extends Transaction{
     }
 
     @Override
-    protected Boolean execute() {
+    protected Boolean execute(Session session) {
+        User user = session.getUser(this.transactionUsername);
         return null;
     }
 }
