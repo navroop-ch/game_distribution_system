@@ -25,6 +25,7 @@ public class data_base {
     protected String userData = "userName.txt";
     protected String dailyData = "daily.txt";
 
+    //TODO: Add code for auction sale (07) - same format as login/logout
     protected static final String logInCode = "00";
     protected static final String createCode = "01";
     protected static final String deleteCode = "02";

@@ -105,6 +105,38 @@ public class Admin extends User{
     }
 
     /**
+     * Issue a credit from the buyer's account to the seller's account
+     * @param buy_username username of the account to add transfer_amt to
+     * @param sell_username username of the account to remove transer_amt from
+     * @param transfer_amt the amount to be refunded
+     */
+    protected void refund(String buy_username, String sell_username, double transfer_amt){
+        User buyer = dataBase.getUser(buy_username);
+        User seller = dataBase.getUser(sell_username);
+        if (transfer_amt < 0.0){
+            System.out.println("Amount to be refunded cannot be negative!")
+        }
+        else if (seller.credit < transfer_amt){
+            System.out.println("Seller doesn't have enough credit. Refund Failed!")
+        }
+        else if (buyer.credit + transfer_amt > MAX_ALLOWED_CREDIT){
+            System.out.println("The maximum credit has been exceeded. Refund Failed!")
+        }
+       // Check if they are current users, i.e. they exist in the users' list
+        else if (!data_base.ifUserExist(buy_username, buyer.dataBase.userData) || !data_base.ifUserExist(sell_username,
+                seller.dataBase.userData)){
+            System.out.println("Not a current user. Refund Failed!")
+        }
+        else {
+            seller.credit -= transfer_amt;
+            buyer.credit += transfer_amt; // there's no refund limit
+            //TODO: write to daily.txt
+            System.out.println("Refund completed.")
+        }
+
+    }
+
+    /**
      * @param userName The front end will ask for the new username
      *
      * Since the admin can get info of different users. This function will provide all the info of the user.

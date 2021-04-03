@@ -36,7 +36,7 @@ public class Game {
     protected Double getPrice(){return this.price;}
     protected Boolean isForSale(){return this.forSale;}
 
-    protected void setAutionStatus(Boolean autionStatus){this.auctionStatus = autionStatus;}
+    protected void setAutionStatus(Boolean autionStatus){auctionStatus = auctionStatus;}
     protected Boolean getAuctionStatus(){return auctionStatus;}
 
     protected void setBought(boolean bought){this.bought = bought;}
