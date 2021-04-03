@@ -52,7 +52,7 @@ public class Session {
         return instance;
     }
 
-    protected void setAutionStatus(Boolean autionStatus){this.auctionStatus = autionStatus;}
+    protected void setAutionStatus(Boolean autionStatus){auctionStatus = auctionStatus;}
     protected Boolean getAuctionStatus(){return auctionStatus;}
 
     protected data_base getDataBase(User user) {
