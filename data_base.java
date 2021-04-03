@@ -36,6 +36,7 @@ public class data_base{
     protected static final String refundCode = "05";
     protected static final String addCreditCode = "06";
     protected static final String logOutCode = "10";
+    protected static final String giftCode = "09";
 
     private data_base() {
         this.userData = "userName.txt";
@@ -118,6 +119,10 @@ public class data_base{
         String message = String.join(SEPARATOR,buyCode, title, seller, buyer);
         System.out.println(message);
         appendData(message, dailyData);
+    }
+
+    protected void writeGiftTransaction(String gameN, String gameReceiver, String gameOwner ){
+
     }
 
     /** Writes sell transaction to daily.txt when a user puts up a game for sale
@@ -363,6 +368,7 @@ public class data_base{
                 case logOutCode:
                 case createCode:
                 case deleteCode:
+                case giftCode:
                 case addCreditCode:
                     if (tokens.length == Transaction.BASIC_TRANSACTION_PARAM){
                         transactions.add(new BasicTransaction(tokens[0], tokens[1], tokens[2], tokens[3]));
