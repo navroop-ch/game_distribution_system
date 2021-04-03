@@ -4,7 +4,7 @@ public class SellTransaction extends Transaction{
     protected Double discount;
     protected Double salePrice;
 
-    protected SellTransaction(String code, String username, String gameTitle, String discount, String sale) {
+    protected SellTransaction(String code, String gameTitle, String username, String discount, String sale) {
         super(username);
         if (transactionValidate(username, code, gameTitle, discount, sale)){
             this.transactionCode = code;
@@ -26,7 +26,17 @@ public class SellTransaction extends Transaction{
     }
 
     @Override
-    protected Boolean execute() {
-        return null;
+    protected Boolean execute(Session session) {
+        User user = session.getUser(this.transactionUsername);
+
+        if (user != null) {
+            user.sell(this.gameTitle, this.salePrice, this.discount);
+            return true;
+        }
+        else {
+            //System.out.println("Error: The user does not exist");
+            return false;
+        }
+
     }
 }
