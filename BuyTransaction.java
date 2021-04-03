@@ -24,6 +24,13 @@ public class BuyTransaction extends Transaction{
 
     @Override
     protected Boolean execute(Session session) {
-        return null;
+        User user = session.getUser(this.transactionUsername);
+        if (user != null) {
+            user.buy(this.gameTitle, this.sellerUsername);
+            return true;
+        }
+        else {
+            return false;
+        }
     }
 }

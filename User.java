@@ -18,7 +18,7 @@ public abstract class User {
 
     protected Boolean loginStatus;
     protected Session session;
-    protected data_base dataBase; // Why do we need this if session has access to data base.
+    protected data_base dataBase;
 
     protected User(String username, String type, double credit, ArrayList<Game> gameOwned){
         this.userName = username;
@@ -118,9 +118,6 @@ public abstract class User {
 
             System.out.println("Credit added");
 
-            //TODO: update credits in userdata file
-            // write to daily.txt
-            // this.dataBase.writeBasicTransaction(data_base.addCreditCode, this.userName, this.type, this.credit);
         }
     }
 
@@ -194,14 +191,14 @@ public abstract class User {
      * @param sellerName The username of the seller.
      */
     protected void buy(String title, String sellerName){
-        User seller = data_base.findUser(sellerName); //session.getDataBase().findUser(sellerName)
+        User seller = session.getUser(sellerName);
         Game game = seller.owned(title);
         // If seller is selling and buyer doesn't own the game.
         if (game != null && game.isForSale() && this.owned(title) == null) {
             double price = game.getPrice();
             if (game.getAuctionStatus())
                 price = game.getPrice() + (game.getPrice() * game.getDiscount());
-            if (canBuy(price)){
+            if (canBuy(price)) {
                 this.credit -= price;
                 seller.addCredit(price);
                 game.setBought(true);

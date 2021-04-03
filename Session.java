@@ -13,12 +13,16 @@ public class Session {
     private static byte[] dataBaseKey;
     private static final SecureRandom random = new SecureRandom();
     private static data_base dataBase;
-    private ArrayList<User> userList;
+    private static ArrayList<User> userList; // static so that all sessions have the same userList?
     private User userLoggedIn = null;
     private boolean loginStatus;
 
     private Session() {
         // Todo: load users into userList by creating a method for it in data_base.java
+        // Loads users into session object only once. If users
+        if (userList == null) {
+            userList = dataBase.loadUsers(dataBase.userData);
+        }
     }
 
     private static void generateKey() {
@@ -78,6 +82,9 @@ public class Session {
         return null;
     }
 
+    protected ArrayList<User> getUserList(){
+        return userList;
+    }
 
 
     protected boolean getLoginStatus() {
@@ -99,6 +106,7 @@ public class Session {
         }
 
         // Todo: call method to save data to database
+        dataBase.updateDataBase();
 
     }
 

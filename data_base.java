@@ -47,8 +47,6 @@ public class data_base{
     private data_base(String userPath, String dailyPath){
         this.userData = userPath;
         this.dailyData = dailyPath;
-        // loads all users from data base.
-        userList = loadUsers(this.userData);
     }
 
     protected static data_base getInstance(byte[] key) {
@@ -214,24 +212,11 @@ public class data_base{
         }
     }
 
-    /**
-     * Returns the user with the corresponding username
-     * @param username The user's name
-     * @return The user with username or null if they don't exist.
-     */
-    public static User findUser(String username) {
-        for (User user: userList) {
-            if (user.getUserName().equals(username)) {
-                return user;
-            }
-        }
-        return null;
-    }
 
     /**
      * Updates the data base file with the updated users. Preferably use at the end of the day.
      */
-    protected void updateDataBase() throws IOException {
+    protected void updateDataBase(){
         clear(userData);
         for (User user: userList) {
             writeUser(user);
@@ -242,8 +227,12 @@ public class data_base{
      * Clears the file given from filePath
      * @param filePath the path to the file.
      */
-    private void clear(String filePath) throws IOException {
-        new FileOutputStream(filePath).close();
+    private void clear(String filePath) {
+        try {
+            new FileOutputStream(filePath).close();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
     /**

@@ -28,6 +28,15 @@ public class SellTransaction extends Transaction{
     @Override
     protected Boolean execute(Session session) {
         User user = session.getUser(this.transactionUsername);
-        return null;
+
+        if (user != null) {
+            user.sell(this.gameTitle, this.salePrice, this.discount);
+            return true;
+        }
+        else {
+            //System.out.println("Error: The user does not exist");
+            return false;
+        }
+
     }
 }

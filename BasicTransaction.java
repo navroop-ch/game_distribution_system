@@ -89,6 +89,7 @@ public class BasicTransaction extends Transaction{
             Admin admin = (Admin) session.getUser(this.transactionUsername);
 
             // Todo: admin.createUser(); Where is the new user data!?
+            // just call admin.createUser() and the user data is stored in session (userList).
 
             return true;
         }

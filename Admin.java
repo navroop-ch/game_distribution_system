@@ -42,17 +42,14 @@ public class Admin extends User{
      *        2. maximum credit can be 999,999
      */
     public void createUser(String userName, String type, Double credit) {
-        if (data_base.findUser(userName) == null) {
+        if (session.getUser(userName) == null) {
 
             // Create user object
             ArrayList<Game> gamesOwned = new ArrayList<>();
             User user = dataBase.generateUser(userName, type, credit, gamesOwned);
+            session.getUserList().add(user);
 
-            // Add user to userList
-            //session.getDataBase(this).userList.add(user);
-            data_base.userList.add(user);
-
-        }else{
+        } else{
             System.out.println("User exists");
         }
     }
@@ -68,15 +65,11 @@ public class Admin extends User{
      *
      * All constrains will be checked in this method except for further transaction
      */
-    public void deleteUser(String userName) throws IOException {
-        if (data_base.findUser(userName) != null) {
+    public void deleteUser(String userName) {
+        if (session.getUser(userName) != null) {
             System.out.println("In delete user, user exists"); // ?
 
-
-            // Not sure which one to use
-            // session.getDataBase().userList.remove(... etc)
-            data_base.userList.remove(data_base.findUser(userName));
-
+            session.getUserList().remove(session.getUser(userName));
 
         }else {
             System.out.println("User does not exist");
@@ -89,9 +82,8 @@ public class Admin extends User{
      * @param credit the amount of credits
      */
     public void addCredit(String username, double credit){
-        User user = dataBase.getUser(username);
-        // User user = dataBase.findUser(username);
-        user.addCredit(credit); // This doesn't update the user's credit in data_base nor session.userList. use above ^^
+        User user = session.getUser(username);
+        user.addCredit(credit);
     }
 
     /**
