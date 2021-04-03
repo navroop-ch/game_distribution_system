@@ -45,6 +45,14 @@ public class Session {
         }
         return instance;
     }
+    protected User getUser(String username) {
+        for (User user : this.userList) {
+            if (user.getUserName().equals(username)) {
+                return user;
+            }
+        }
+        return null;
+    }
 
     protected data_base getDataBase(User user){
         if (this.userLoggedIn == user){ return dataBase;}

@@ -19,10 +19,7 @@ public abstract class Transaction{
         }
         else this.validTransaction = false;
     }
-
-
-
-    protected abstract Boolean execute();
+    protected abstract Boolean execute(Session session);
 
 
     protected boolean usernameValidation(String username){
