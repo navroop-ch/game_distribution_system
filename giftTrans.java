@@ -1,11 +1,12 @@
 import java.util.ArrayList;
 
-public class gift extends Transaction{
+public class giftTrans extends Transaction{
     protected User gameOwner;
     protected User gameReceiver;
     protected Game gameGift;
 
-    protected gift(String code, Game giftGame, User gameReceiver, User gameOwner){
+    protected giftTrans(String code, Game giftGame, User gameReceiver, User gameOwner){
+        super(Session.getInstance().getLoggedInUserName());
         this.gameOwner= gameOwner;
         this.gameReceiver=gameReceiver;
         this.gameGift= giftGame;
@@ -14,18 +15,14 @@ public class gift extends Transaction{
     }
     @Override
     protected Boolean execute() {
-        if(gameOwner.getUserName().equalsIgnoreCase(Session.getInstance().getLoggedInUserName())){
-
+        if(gameGift.equals(gameOwner.owned(gameGift.getTitle()))) {
+            gameOwner.removeGame(gameGift);
+            gameReceiver.addOwnedGame(gameGift);
+            return true;
         }
 
-        return null;
+        return false;
     }
 
-    protected void removeGame(Game game, User user){
 
-    }
-
-    protected void addGame(Game game, User user){
-        user.addOwnedGame(game);
-    }
 }
