@@ -72,7 +72,7 @@ public class Admin extends User{
             System.out.println("In delete user, user exists");
 
             // Writing to daily.txt
-            String[] UserData = dataBase.getUserData(userName,dataBase.userData).split(data_base.SEPARATOR);
+            String[] UserData = dataBase.getUserData(userName).split(data_base.SEPARATOR);
             String type = UserData[1];
             Double credit = Double.parseDouble(UserData[2]);
             dataBase.writeBasicTransaction(data_base.deleteCode, userName, type, credit);
@@ -105,7 +105,7 @@ public class Admin extends User{
 
 
     public static void main(String[] args){
-        
+
         ArrayList<Game> ownedGames = new ArrayList<Game>();
         ownedGames.add(new Game("Fortnite", 350.34,true));
         ownedGames.add(new Game("Rsix siege", 550.34,true));
