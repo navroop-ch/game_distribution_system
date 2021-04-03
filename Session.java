@@ -13,7 +13,7 @@ public class Session {
     private static byte[] dataBaseKey;
     private static SecureRandom random = new SecureRandom();
     private static data_base dataBase;
-    private ArrayList<User> userList;
+    // private ArrayList<User> userList;
     private User userLoggedIn = null;
     private boolean loginStatus;
 
