@@ -89,8 +89,7 @@ public class Admin extends User{
     public void addCredit(String username, double credit){
         User user = dataBase.getUser(username);
         // User user = dataBase.findUser(username);
-        user.addCredit(credit);
-        // This doesn't update the user's credit in data_base nor session.userList. use above ^^
+        user.addCredit(credit); // This doesn't update the user's credit in data_base nor session.userList. use above ^^
     }
 
     /**

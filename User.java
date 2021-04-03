@@ -18,7 +18,7 @@ public abstract class User {
 
     protected Boolean loginStatus;
     protected Session session;
-    protected data_base dataBase;
+    protected data_base dataBase; // Why do we need this if session has access to data base.
 
     protected User(String username, String type, double credit, ArrayList<Game> gameOwned){
         this.userName = username;
@@ -120,7 +120,7 @@ public abstract class User {
 
             //TODO: update credits in userdata file
             // write to daily.txt
-            this.dataBase.writeBasicTransaction(data_base.addCreditCode, this.userName, this.type, this.credit);
+            // this.dataBase.writeBasicTransaction(data_base.addCreditCode, this.userName, this.type, this.credit);
         }
     }
 
@@ -173,16 +173,12 @@ public abstract class User {
             game.setForSale(true);
             addOwnedGame(game);
 
-            //Todo: write to daily.txt? here?
-            // this.dataBase.writeSellTransaction(title, this.userName, saleDiscount, price);
         }
         else {
             if (!game.isBought()) {
                 game.setForSale(true);
                 game.setDiscount(saleDiscount);
 
-                //Todo: write to daily.txt? here?
-                // this.dataBase.writeSellTransaction(title, this.userName, saleDiscount, price);
             }
             else {
                 System.out.println("Warning: This game can not be sold.");
@@ -198,7 +194,7 @@ public abstract class User {
      * @param sellerName The username of the seller.
      */
     protected void buy(String title, String sellerName){
-        User seller = this.dataBase.getUser(sellerName); //session?
+        User seller = data_base.findUser(sellerName); //session.getDataBase().findUser(sellerName)
         Game game = seller.owned(title);
         // If seller is selling and buyer doesn't own the game.
         if (game != null && game.isForSale() && this.owned(title) == null) {
@@ -209,8 +205,6 @@ public abstract class User {
                 this.credit -= price;
                 seller.addCredit(price);
                 game.setBought(true);
-                //Todo: write to daily.txt? here?
-                //this.dataBase.writeBuyTransaction(title, seller.userName, this.userName);
             }
             else {
                 System.out.println("Not enough credit to buy game.");
