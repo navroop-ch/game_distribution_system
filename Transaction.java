@@ -3,6 +3,11 @@ import java.util.List;
 
 public abstract class Transaction{
 
+    protected static final int BASIC_TRANSACTION_PARAM = 4;
+    protected static final int SELL_TRANSACTION_PARAM = 5;
+    protected static final int BUY_TRANSACTION_PARAM = 4;
+    protected static final int REFUND_TRANSACTION_PARAM = 4;
+
     protected String transactionCode;
     protected String transactionUsername;
     protected boolean validTransaction;
@@ -14,13 +19,14 @@ public abstract class Transaction{
         // checks code length and username length
         if (usernameValidation(username)){
             this.transactionUsername = username;
+            this.validTransaction = true;
         }
         else this.validTransaction = false;
     }
 
 
 
-    protected abstract Boolean execute();
+    protected abstract Boolean execute(Session session);
 
 
     protected boolean usernameValidation(String username){
@@ -52,8 +58,6 @@ public abstract class Transaction{
         return price.length() == data_base.PRICE_LENGTH && doubleValidation(price);
     }
 
-
-
     protected boolean integerValidation(String strInt){
         try {
             Integer.parseInt(strInt);
@@ -73,5 +77,3 @@ public abstract class Transaction{
     }
 
 }
-
-

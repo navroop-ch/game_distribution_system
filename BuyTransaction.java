@@ -3,7 +3,7 @@ public class BuyTransaction extends Transaction{
     protected String sellerUsername;
     protected String gameTitle;
 
-    protected BuyTransaction(String code, String buyerUsername, String sellerUsername, String gameTitle) {
+    protected BuyTransaction(String code, String gameTitle,String sellerUsername, String buyerUsername) {
         super(buyerUsername);
         if (transactionValidate(code, sellerUsername, gameTitle)){
             this.transactionCode = code;
@@ -23,7 +23,7 @@ public class BuyTransaction extends Transaction{
     }
 
     @Override
-    protected Boolean execute() {
+    protected Boolean execute(Session session) {
         return null;
     }
 }

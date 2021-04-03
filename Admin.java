@@ -72,9 +72,11 @@ public class Admin extends User{
         if (data_base.findUser(userName) != null) {
             System.out.println("In delete user, user exists"); // ?
 
+
             // Not sure which one to use
             // session.getDataBase().userList.remove(... etc)
             data_base.userList.remove(data_base.findUser(userName));
+
 
         }else {
             System.out.println("User does not exist");
@@ -115,7 +117,7 @@ public class Admin extends User{
 
 
     public static void main(String[] args){
-        
+
         ArrayList<Game> ownedGames = new ArrayList<Game>();
         ownedGames.add(new Game("Fortnite", 350.34,true));
         ownedGames.add(new Game("Rsix siege", 550.34,true));
