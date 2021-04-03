@@ -28,7 +28,79 @@ public class BasicTransaction extends Transaction{
 
 
     @Override
-    protected Boolean execute() {
+    protected Boolean execute(Session session) {
+        switch (this.transactionCode){
+
+            case data_base.logInCode:
+                return executeLogin(session);
+            case data_base.logOutCode:
+                break;
+
+        }
+        return false;
+    }
+
+
+    private Boolean executeLogin(Session session) {
+        User user = session.getUser(this.transactionUsername);
+        if (user != null){
+            user.login();
+            return true;
+        }
+        else {
+            //Todo: figure out appropriate error return
+            System.out.println("Error: User does not exist");
+            return false;
+        }
+    }
+
+    private Boolean executeLogout(Session session){
+        User user = session.getUser(this.transactionUsername);
+        if (user != null){
+            user.logout();
+            return true;
+        }
+        else {
+            //Todo: figure out appropriate error return
+            //System.out.println("Error: User does not exist");
+            return false;
+        }
+    }
+
+    private Boolean executeAddCredit(Session session){
+
+        if(!validTransaction){return false;}
+
+        User user = session.getUser(this.transactionUsername);
+        if (user != null){
+            user.addCredit(this.credit);
+            return true;
+        }
+        else {
+            //Todo: figure out appropriate error return
+            //System.out.println("Error: User does not exist");
+            return false;
+        }
+    }
+
+    private Boolean executeCreateUser(Session session){
+        User user = session.getUser(this.transactionUsername);
+        if (user != null && user.getType().equals(User.ADMIN_USER_TYPE)){
+            Admin admin = (Admin) session.getUser(this.transactionUsername);
+
+            // Todo: admin.createUser(); Where is the new user data!?
+
+            return true;
+        }
+        else {
+            //Todo: figure out appropriate error return
+            //System.out.println("Error: User does not exist");
+            return false;
+        }
+    }
+
+    private Boolean executeDeleteUser(){
+        // Todo: implement this
         return null;
     }
 
