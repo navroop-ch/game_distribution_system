@@ -68,4 +68,8 @@ public class Session {
     protected boolean getLoginStatus(){
         return loginStatus;
     }
+
+    protected String getLoggedInUserName(){
+        return this.userLoggedIn.getUserName();
+    }
 }
