@@ -25,6 +25,12 @@ public class RefundTransaction extends Transaction{
 
     @Override
     protected Boolean execute(Session session) {
-        return null;
+        Admin user = (Admin)session.getUserLoggedIn();
+        if (user != null && user.getType().equals("AA")) {
+            user.refund(this.transactionUsername, this.sellerUsername, this.refundCredit);
+            return true;
+        } else {
+            return false;
+        }
     }
 }
