@@ -41,16 +41,17 @@ public class Admin extends User{
      *        1. new user name is limited to at most 15 characters
      *        2. maximum credit can be 999,999
      */
-    public void createUser(String userName, String type, Double credit) throws IOException {
-        if(!data_base.ifUserExist(userName, dataBase.userData)) {
+    public void createUser(String userName, String type, Double credit) {
+        if (data_base.findUser(userName) == null) {
 
             // Create user object
             ArrayList<Game> gamesOwned = new ArrayList<>();
             User user = dataBase.generateUser(userName, type, credit, gamesOwned);
 
-            // Store User object
-            dataBase.writeUser(user);
-            dataBase.writeBasicTransaction(data_base.createCode, userName, type, credit);
+            // Add user to userList
+            //session.getDataBase(this).userList.add(user);
+            data_base.userList.add(user);
+
         }else{
             System.out.println("User exists");
         }
@@ -68,17 +69,15 @@ public class Admin extends User{
      * All constrains will be checked in this method except for further transaction
      */
     public void deleteUser(String userName) throws IOException {
-        if(data_base.ifUserExist(userName, dataBase.userData)){
-            System.out.println("In delete user, user exists");
+        if (data_base.findUser(userName) != null) {
+            System.out.println("In delete user, user exists"); // ?
 
-            // Writing to daily.txt
-            String[] UserData = dataBase.getUserData(userName,dataBase.userData).split(data_base.SEPARATOR);
-            String type = UserData[1];
-            Double credit = Double.parseDouble(UserData[2]);
-            dataBase.writeBasicTransaction(data_base.deleteCode, userName, type, credit);
+            // Not sure which one to use
+            // session.getDataBase().userList.remove(... etc)
+            data_base.userList.remove(data_base.findUser(userName));
 
-            // removing from database
-            data_base.removeUserData(userName,dataBase.userData);
+        }else {
+            System.out.println("User does not exist");
         }
     }
 
@@ -89,8 +88,9 @@ public class Admin extends User{
      */
     public void addCredit(String username, double credit){
         User user = dataBase.getUser(username);
+        // User user = dataBase.findUser(username);
         user.addCredit(credit);
-        //Todo: write to transaction file.
+        // This doesn't update the user's credit in data_base nor session.userList. use above ^^
     }
 
     /**
@@ -132,7 +132,7 @@ public class Admin extends User{
 
         System.out.println(admin0);
 
-        dataBase.writeUser(admin0);
+        //dataBase.writeUser(admin0);
 
         admin0.login();
 
