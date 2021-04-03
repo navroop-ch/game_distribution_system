@@ -17,7 +17,7 @@ public class Session {
     private User userLoggedIn = null;
     private boolean loginStatus;
     static boolean auctionStatus = false;
-    static Statistics stats = new Statistics(userList);
+    //static Statistics stats = new Statistics(userList);
 
     private Session() {
         // Todo: load users into userList by creating a method for it in data_base.java
@@ -43,17 +43,16 @@ public class Session {
     // Singleton implementation
     protected static Session getInstance() {
         if (instance == null) {
-            instance = new Session();
-
             // Authentication: generates a new key, stores it, and then passes it for authentication
             generateKey();
             data_base dataBase = data_base.getInstance(dataBaseKey);
             setDataBase(dataBase);
+            instance = new Session();
         }
         return instance;
     }
     
-    protected void setAutionStatus(Boolean autionStatus){auctionStatus = autionStatus;}
+    protected void setAuctionStatus(Boolean autionStatus){auctionStatus = autionStatus;}
 
     protected Boolean getAuctionStatus(){return auctionStatus;}
 
@@ -80,7 +79,7 @@ public class Session {
     }
 
     protected User getUser(String username) {
-        for (User user : this.userList) {
+        for (User user : userList) {
             if (user.getUserName().equals(username)) {
                 return user;
             }
@@ -97,7 +96,7 @@ public class Session {
         return loginStatus;
     }
 
-    private void executeBackend() {
+    protected void executeBackend() {
 
         //Get transaction objects from daily.txt
         ArrayList<Transaction> transactions = dataBase.getTransactions();
@@ -105,7 +104,7 @@ public class Session {
         int transIndex = 0;
 
         while (transIndex < transactions.size()) {
-            // Look for a login transaction and login a user
+            // Look for a login transaction and logs in a user
             transIndex = logUserIn(transactions, transIndex);
 
             // Go through valid transactions until the user logs out

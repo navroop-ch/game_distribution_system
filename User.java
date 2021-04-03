@@ -238,10 +238,7 @@ public abstract class User {
      * @return True if sufficient credit is available to buy, false otherwise
      */
     protected boolean canBuy(double price) {
-        if (this.credit - price >= 0.0) {
-            return true;
-        }
-        return false;
+        return this.credit - price >= 0.0;
     }
 
     /**

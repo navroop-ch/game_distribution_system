@@ -218,8 +218,10 @@ public class data_base{
      */
     protected void updateDataBase(){
         clear(userData);
-        for (User user: userList) {
-            writeUser(user);
+        if (userList != null) {
+            for (User user : userList) {
+                writeUser(user);
+            }
         }
     }
 
@@ -242,6 +244,7 @@ public class data_base{
      */
     protected ArrayList<User> loadUsers(String filePath){
         ArrayList<String> usernames = getUserNames(filePath);
+        System.out.println(usernames.size());
         ArrayList<User> users = new ArrayList<>();
         if (usernames != null) {
             for (String user: usernames) {
@@ -264,7 +267,9 @@ public class data_base{
             String currentLine;
             while ((currentLine = reader.readLine()) != null) {
                 String[] tokens = currentLine.split(SEPARATOR);
-                usernames.add(tokens[0]);
+                if (tokens.length>2 && tokens[0].length() > 1) {
+                    usernames.add(tokens[0]);
+                }
             }
             reader.close();
             return usernames;
@@ -371,7 +376,7 @@ public class data_base{
         ArrayList<String> lines = readFile(userData);
 
         for (String line : lines) {
-            String profile = line.split(",")[0];
+            String profile = line.split(COMMA_SEPARATOR)[0];
             String[] tokens = profile.split(SEPARATOR);
             if (tokens[0].equals(userName)) {
                 return line;
