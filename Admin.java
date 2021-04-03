@@ -91,10 +91,11 @@ public class Admin extends User{
      * If an auctionsale is already on, this should conclude the auctionsale and disable the discounts
      */
     public void auctionSale(){
-        if (Game.getAuctionStatus()){
-            Game.setAutionStatus(false);
+        if (session.getAuctionStatus()){
+            session.setAutionStatus(false);
+        }else {
+            session.setAutionStatus(true);
         }
-        Game.setAutionStatus(true);
     }
 
     /**

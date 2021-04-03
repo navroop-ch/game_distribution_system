@@ -196,7 +196,7 @@ public abstract class User {
         // If seller is selling and buyer doesn't own the game.
         if (game != null && game.isForSale() && this.owned(title) == null) {
             double price = game.getPrice();
-            if (game.getAuctionStatus())
+            if (session.getAuctionStatus())
                 price = game.getPrice() + (game.getPrice() * game.getDiscount());
             if (canBuy(price)) {
                 this.credit -= price;

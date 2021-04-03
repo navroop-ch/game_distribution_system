@@ -16,6 +16,7 @@ public class Session {
     private static ArrayList<User> userList; // static so that all sessions have the same userList?
     private User userLoggedIn = null;
     private boolean loginStatus;
+    static boolean auctionStatus = false;
 
     private Session() {
         // Todo: load users into userList by creating a method for it in data_base.java
@@ -50,6 +51,9 @@ public class Session {
         }
         return instance;
     }
+
+    protected void setAutionStatus(Boolean autionStatus){this.auctionStatus = autionStatus;}
+    protected Boolean getAuctionStatus(){return auctionStatus;}
 
     protected data_base getDataBase(User user) {
         if (this.userLoggedIn == user) {

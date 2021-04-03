@@ -4,7 +4,6 @@ public class Game {
     private Boolean forSale = false;
     private boolean bought;
     private double discount;
-    static boolean auctionStatus = false;
 
     /**
      * Constructor class that instantiates a Game using the title only
@@ -26,7 +25,6 @@ public class Game {
         this.forSale = forSale;
         this.bought = false;
         this.discount = 0.0;
-        this.auctionStatus = false;
     }
 
     protected void setPrice(Double price){ this.price = price;}
@@ -35,9 +33,6 @@ public class Game {
     protected String getTitle(){return this.title;}
     protected Double getPrice(){return this.price;}
     protected Boolean isForSale(){return this.forSale;}
-
-    protected void setAutionStatus(Boolean autionStatus){this.auctionStatus = autionStatus;}
-    protected Boolean getAuctionStatus(){return auctionStatus;}
 
     protected void setBought(boolean bought){this.bought = bought;}
     protected boolean isBought(){return this.bought;}
