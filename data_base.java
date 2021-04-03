@@ -37,6 +37,8 @@ public class data_base{
     protected static final String addCreditCode = "06";
     protected static final String logOutCode = "10";
 
+    public static ArrayList<User> userList;
+
     private data_base() {
         this.userData = "userName.txt";
         this.dailyData = "daily.txt";
@@ -45,6 +47,8 @@ public class data_base{
     private data_base(String userPath, String dailyPath){
         this.userData = userPath;
         this.dailyData = dailyPath;
+        // loads all users from data base.
+        userList = loadUsers(this.userData);
     }
 
     protected static data_base getInstance(byte[] key) {
@@ -211,6 +215,38 @@ public class data_base{
     }
 
     /**
+     * Returns the user with the corresponding username
+     * @param username The user's name
+     * @return The user with username or null if they don't exist.
+     */
+    public static User findUser(String username) {
+        for (User user: userList) {
+            if (user.getUserName().equals(username)) {
+                return user;
+            }
+        }
+        return null;
+    }
+
+    /**
+     * Updates the data base file with the updated users. Preferably use at the end of the day.
+     */
+    protected void updateDataBase() throws IOException {
+        clear(userData);
+        for (User user: userList) {
+            writeUser(user);
+        }
+    }
+
+    /**
+     * Clears the file given from filePath
+     * @param filePath the path to the file.
+     */
+    private void clear(String filePath) throws IOException {
+        new FileOutputStream(filePath).close();
+    }
+
+    /**
      * Loads all users from database into an array list.
      * @param filePath The file path to database.
      * @return An array list containing all users
@@ -218,8 +254,10 @@ public class data_base{
     protected ArrayList<User> loadUsers(String filePath){
         ArrayList<String> usernames = getUserNames(filePath);
         ArrayList<User> users = new ArrayList<>();
-        for (String user: usernames) {
-            users.add(getUser(user)); // Can't be null
+        if (usernames != null) {
+            for (String user: usernames) {
+                users.add(getUser(user)); // Can't be null
+            }
         }
         return users;
     }
@@ -247,6 +285,7 @@ public class data_base{
         }
         return null;
     }
+
 
     /**
      * This function will check if the passed in userName already exist in our user database
@@ -446,18 +485,17 @@ public class data_base{
 
     public static void main(String[] args){
         data_base dataBase = new data_base();
-
-        /*dataBase.writeBasicTransaction("04", "Kentucky Fried", "AA", 34.02);
+        /*
+        dataBase.writeBasicTransaction("04", "Kentucky Fried", "AA", 34.02);
         dataBase.writeBasicTransaction("05", "Kentucky", "AA", 34.02);
         dataBase.writeBasicTransaction("09", "Kent", "AA", 34.02);*/
 
-        User user = dataBase.getUser("David");
-        System.out.println(user);
-
-        dataBase.getTransactions();
+        // User user = dataBase.getUser("David");
+        // System.out.println(user);
 
         String a = "00";
         String b = "02";
+
 
     }
 }
