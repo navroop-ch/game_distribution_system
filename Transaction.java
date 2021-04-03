@@ -10,6 +10,8 @@ public abstract class Transaction{
             User.ADMIN_USER_TYPE, User.BUYER_USER_TYPE, User.FULL_USER_TYPE, User.SELLER_USER_TYPE);
 
 
+    // reading daily.txt
+
     protected Transaction(String username){
         // checks code length and username length
         if (usernameValidation(username)){
