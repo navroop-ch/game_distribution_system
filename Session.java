@@ -52,8 +52,9 @@ public class Session {
         }
         return instance;
     }
-
+    
     protected void setAutionStatus(Boolean autionStatus){auctionStatus = autionStatus;}
+
     protected Boolean getAuctionStatus(){return auctionStatus;}
 
     protected data_base getDataBase(User user) {
@@ -148,4 +149,3 @@ public class Session {
         return this.userLoggedIn;
     }
 }
-

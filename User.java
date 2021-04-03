@@ -122,6 +122,24 @@ public abstract class User {
     }
 
     /**
+     * Adds or Removes credit from the user object
+     * @param credit amount of credit
+     * @param change string for adding or subtracting the credit
+     */
+    protected void changeCredit(double credit, String change){
+        if (change.equals("add")){
+            this.credit += credit;
+        }
+        else if (change.equals("sub")){
+            this.credit -= credit;
+        }
+        else {
+            System.out.println("Invalid input!");
+        }
+    }
+
+
+    /**
      * Returns the current admin's game inventory.
      *
      * @return an ArrayList of String for the game name the admin own.
