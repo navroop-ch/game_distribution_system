@@ -17,6 +17,7 @@ public class Session {
     private User userLoggedIn = null;
     private boolean loginStatus;
     static boolean auctionStatus = false;
+    static Statistics stats = new Statistics(userList);
 
     private Session() {
         // Todo: load users into userList by creating a method for it in data_base.java
@@ -52,7 +53,7 @@ public class Session {
         return instance;
     }
 
-    protected void setAutionStatus(Boolean autionStatus){this.auctionStatus = autionStatus;}
+    protected void setAutionStatus(Boolean autionStatus){auctionStatus = autionStatus;}
     protected Boolean getAuctionStatus(){return auctionStatus;}
 
     protected data_base getDataBase(User user) {
@@ -99,6 +100,7 @@ public class Session {
 
         //Get transaction objects from daily.txt
         ArrayList<Transaction> transactions = dataBase.getTransactions();
+
         int transIndex = 0;
 
         while (transIndex < transactions.size()) {
@@ -140,6 +142,10 @@ public class Session {
             transIndex++;
         }
         return transIndex;
+    }
+
+    public User getUserLoggedIn() {
+        return this.userLoggedIn;
     }
 }
 
