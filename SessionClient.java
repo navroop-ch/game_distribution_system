@@ -14,11 +14,11 @@ public class SessionClient {
         FullStandardUser u = new FullStandardUser("David", 999000.0, ownedGames);
 
 
-        admin0.login();
+        /*admin0.login();
         data_base dataBase = session.getDataBase(admin0);
         dataBase.writeUser(admin0);
         dataBase.writeUser(u);
-        admin0.logout();
+        admin0.logout();*/
 
         session.executeBackend();
     }

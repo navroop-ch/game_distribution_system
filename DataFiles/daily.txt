@@ -3,3 +3,9 @@
 10 David           FS 0999000.0
 00 Fred            AA 0999000.0
 01 Johnny Bravo 54 SS 0001100.0
+10 Fred            AA 0000000.0
+00 Johnny Bravo 54 SS 0001100.0
+06 Johnny Bravo 54 SS 0010000.0
+10 Johnny Bravo 54 SS 0010000.0
+00 Fred            AA 0999000.0
+02 Johnny Bravo 54 SS 0000000.0

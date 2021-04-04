@@ -3,6 +3,7 @@ import java.util.List;
 
 public class BasicTransaction extends Transaction{
 
+    public static final String ERROR_INCONSISTENT_DATA = "Error: Data in transaction does not match data in user database.";
     protected final List<String> BasicTransactionCodes= Arrays.asList(
             data_base.addCreditCode, data_base.logInCode, data_base.logOutCode, data_base.createCode,
             data_base.deleteCode);
@@ -66,7 +67,6 @@ public class BasicTransaction extends Transaction{
             return true;
         }
         else {
-            //Todo: figure out appropriate error return
             //System.out.println("Error: User does not exist");
             return false;
         }
@@ -89,6 +89,7 @@ public class BasicTransaction extends Transaction{
     }
 
     private Boolean executeCreateUser(Session session){
+        System.out.println("\nRead here: \n");
         User toBeCreated = session.getUser(this.transactionUsername);
         User LoggedInUser = session.getUserLoggedIn();
         if(toBeCreated==null && LoggedInUser != null && LoggedInUser.getType().equals(User.ADMIN_USER_TYPE)){
@@ -98,7 +99,6 @@ public class BasicTransaction extends Transaction{
             return true;
         }
         else {
-
             System.out.println("Error: User already exist");
             return false;
         }
@@ -121,7 +121,11 @@ public class BasicTransaction extends Transaction{
         return typeValidation(type) && creditValidation(credit) && basicCodeValidation(code);
     }
 
-    private boolean dataSatisfiesDatabase(User databaseUser){
-        return databaseUser.getCredit().equals(this.credit) && databaseUser.getType().equals(this.type);
+    private boolean dataSatisfiesDatabase(User databaseUser){ //Todo: record errors
+        if (!(databaseUser.getCredit().equals(this.credit) && databaseUser.getType().equals(this.type))){
+            System.out.println(ERROR_INCONSISTENT_DATA);
+            return false;
+        }
+        return true;
     }
 }

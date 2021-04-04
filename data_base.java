@@ -18,7 +18,6 @@ public class data_base{
     protected static final String COMMA_SEPARATOR = ",";
     protected static final Character BLANK_CHAR = ' ';
     protected static final Character ZERO_CHAR = '0';
-    private static DecimalFormat TWO_DECIMAL = new DecimalFormat("#.##");
 
     protected static final int USERNAME_LENGTH = 15;
     protected static final int TITLE_LENGTH = 19;
@@ -207,7 +206,7 @@ public class data_base{
      */
     protected void writeUser(User user){
         String profile = String.join(SEPARATOR, stringPadding(user.getUserName(),' ', USERNAME_LENGTH),
-                user.getType(), stringPadding(user.getCredit().toString(),' ', CREDIT_LENGTH));
+                user.getType(), stringPadding(user.getCredit().toString(),'0', -CREDIT_LENGTH));
         String gamesOwned = user.gamesOwnedToString();
         String data = String.join(COMMA_SEPARATOR, profile, gamesOwned);
         this.appendData(data, this.userData);
@@ -281,25 +280,27 @@ public class data_base{
         return users;
     }
 
-    /**
-     * Separates a line into an array of strings with username, type, credit and profile
-     * @param line the current line
-     * @return an array of strings
-     */
-
     private String[] userSubString(String line){
 
         String[] profile = line.split(COMMA_SEPARATOR);
         try {
             int start = USERNAME_LENGTH + SEPARATOR.length();
             int mid = start + CODE_LENGTH + SEPARATOR.length();
-            int end = mid + CREDIT_LENGTH + SEPARATOR.length();
+            int end = start + CREDIT_LENGTH + SEPARATOR.length();
             String username = profile[0].substring(0, start).strip();
             String type = profile[0].substring(start, mid).strip();
             String credit = profile[0].substring(mid, end).strip();
 
-            return new String[]{username, type, credit, profile[1]};
+            String games;
+            if (profile.length==1){
+                games = null;}
+            else {
+                games= profile[1];
+            }
+
+            return new String[]{username, type, credit, games};
         }catch (Exception e){
+            System.out.println(e.getMessage());
             return null;
         }
 
@@ -341,19 +342,18 @@ public class data_base{
     protected User getUser(String line) {
         User user = null;
         String[] profile = userSubString(line);
-
         if (profile!=null) {
-            String[] gamesOwned = profile[3].split(GAME_SEPARATOR);
             String username = profile[0];
             String userType = profile[1];
             Double credit = Double.parseDouble(profile[2]);
-
-            // Create games list
             ArrayList<Game> gamesList = new ArrayList<>();
-            for (String game : gamesOwned){
-                gamesList.add(Game.stringToGame(game));
+            if (profile[3]!= null) {
+                String[] gamesOwned = profile[3].split(GAME_SEPARATOR);
+                // Create games list
+                for (String game : gamesOwned) {
+                    gamesList.add(Game.stringToGame(game));
+                }
             }
-
             user = generateUser(username, userType, credit, gamesList);
         }
         return user;
@@ -441,11 +441,6 @@ public class data_base{
         return transactions;
     }
 
-    /**
-     * Makes a list of strings that contains username, type and credit from a line.
-     * @param line the current line
-     * @return an array of strings
-     */
     private String[] basicTransactionSubstring(String line){
         int start = CODE_LENGTH + SEPARATOR.length();
         int mid = start + USERNAME_LENGTH + SEPARATOR.length();
@@ -457,12 +452,6 @@ public class data_base{
         return new String[] {username, type, credit};
     }
 
-    /**
-     * Returns a list of strings that contains game's name, seller's username and buyer's username
-     * from a line in buy transaction.
-     * @param line the current line
-     * @return an array of strings
-     */
     private String[] buyTransactionSubString(String line){
         int start = CODE_LENGTH + SEPARATOR.length();
         int mid = start + TITLE_LENGTH + SEPARATOR.length();
@@ -474,12 +463,6 @@ public class data_base{
         return new String[] {title, seller, buyer};
     }
 
-    /**
-     * Returns a list of strings that contains game's name, seller's username, discount on the game and price of the
-     * game in a line in sell transaction.
-     * @param line the current line
-     * @return an array of strings
-     */
     private String[] sellTransactionSubString(String line){
         int start = CODE_LENGTH + SEPARATOR.length();
         int mid1 = start + TITLE_LENGTH + SEPARATOR.length();
@@ -493,13 +476,6 @@ public class data_base{
         return new String[] {title, seller, discount, price};
     }
 
-    /**
-     * Returns a list of strings that contains buyer's username, seller's username and the refund amount
-     * in a line in refund transaction.
-     * @param line the current line
-     * @return an array of strings
-     */
-
     private String[] refundTransactionSubString(String line){
         int start = CODE_LENGTH + SEPARATOR.length();
         int mid1 = start + USERNAME_LENGTH + SEPARATOR.length();
@@ -512,12 +488,6 @@ public class data_base{
     }
 
 
-    /**
-     * Returns a list of strings that contains game's name, buyer's username, seller's username for remove game and
-     * gift transactions
-     * @param line the current line
-     * @return an array of strings
-     */
     private String[] extraTransactionSubstring(String line){
         int start = CODE_LENGTH + SEPARATOR.length();
         int mid1 = start + TITLE_LENGTH + SEPARATOR.length();
@@ -528,12 +498,6 @@ public class data_base{
 
         return new String[] {title, owner, receiver};
     }
-
-    /**
-     * Reads lines from the given filepath
-     * @param filePath the filepath to read from
-     * @return an array of strings
-     */
 
     protected ArrayList<String> readFile(String filePath){
         ArrayList<String> lines = new ArrayList<>();
