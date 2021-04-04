@@ -21,7 +21,7 @@ public class data_base{
     private static DecimalFormat TWO_DECIMAL = new DecimalFormat("#.##");
 
     protected static final int USERNAME_LENGTH = 15;
-    protected static final int TITLE_LENGTH = 19;
+    protected static final int TITLE_LENGTH = 25;
     protected static final int CREDIT_LENGTH = 9;
     protected static final int DISCOUNT_LENGTH = 5;
     protected static final int PRICE_LENGTH = 6;
