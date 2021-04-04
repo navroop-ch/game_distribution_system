@@ -281,13 +281,19 @@ public class data_base{
         return users;
     }
 
+    /**
+     * Separates a line into an array of strings with username, type, credit and profile
+     * @param line the current line
+     * @return an array of strings
+     */
+
     private String[] userSubString(String line){
 
         String[] profile = line.split(COMMA_SEPARATOR);
         try {
             int start = USERNAME_LENGTH + SEPARATOR.length();
             int mid = start + CODE_LENGTH + SEPARATOR.length();
-            int end = start + CREDIT_LENGTH + SEPARATOR.length();
+            int end = mid + CREDIT_LENGTH + SEPARATOR.length();
             String username = profile[0].substring(0, start).strip();
             String type = profile[0].substring(start, mid).strip();
             String credit = profile[0].substring(mid, end).strip();
@@ -435,6 +441,11 @@ public class data_base{
         return transactions;
     }
 
+    /**
+     * Makes a list of strings that contains username, type and credit from a line.
+     * @param line the current line
+     * @return an array of strings
+     */
     private String[] basicTransactionSubstring(String line){
         int start = CODE_LENGTH + SEPARATOR.length();
         int mid = start + USERNAME_LENGTH + SEPARATOR.length();
@@ -446,6 +457,12 @@ public class data_base{
         return new String[] {username, type, credit};
     }
 
+    /**
+     * Returns a list of strings that contains game's name, seller's username and buyer's username
+     * from a line in buy transaction.
+     * @param line the current line
+     * @return an array of strings
+     */
     private String[] buyTransactionSubString(String line){
         int start = CODE_LENGTH + SEPARATOR.length();
         int mid = start + TITLE_LENGTH + SEPARATOR.length();
@@ -457,6 +474,12 @@ public class data_base{
         return new String[] {title, seller, buyer};
     }
 
+    /**
+     * Returns a list of strings that contains game's name, seller's username, discount on the game and price of the
+     * game in a line in sell transaction.
+     * @param line the current line
+     * @return an array of strings
+     */
     private String[] sellTransactionSubString(String line){
         int start = CODE_LENGTH + SEPARATOR.length();
         int mid1 = start + TITLE_LENGTH + SEPARATOR.length();
@@ -470,6 +493,13 @@ public class data_base{
         return new String[] {title, seller, discount, price};
     }
 
+    /**
+     * Returns a list of strings that contains buyer's username, seller's username and the refund amount
+     * in a line in refund transaction.
+     * @param line the current line
+     * @return an array of strings
+     */
+
     private String[] refundTransactionSubString(String line){
         int start = CODE_LENGTH + SEPARATOR.length();
         int mid1 = start + USERNAME_LENGTH + SEPARATOR.length();
@@ -482,6 +512,12 @@ public class data_base{
     }
 
 
+    /**
+     * Returns a list of strings that contains game's name, buyer's username, seller's username for remove game and
+     * gift transactions
+     * @param line the current line
+     * @return an array of strings
+     */
     private String[] extraTransactionSubstring(String line){
         int start = CODE_LENGTH + SEPARATOR.length();
         int mid1 = start + TITLE_LENGTH + SEPARATOR.length();
@@ -492,6 +528,12 @@ public class data_base{
 
         return new String[] {title, owner, receiver};
     }
+
+    /**
+     * Reads lines from the given filepath
+     * @param filePath the filepath to read from
+     * @return an array of strings
+     */
 
     protected ArrayList<String> readFile(String filePath){
         ArrayList<String> lines = new ArrayList<>();
