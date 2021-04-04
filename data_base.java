@@ -123,7 +123,13 @@ public class data_base{
         appendData(message, dailyData);
     }
 
-    /** Writes transactions when
+    /** Writes transactions when a user is gifting a game
+     *
+     * It ensures the following constraints are met:
+     *          - Title of the game is of length TITLE_LENGTH and is padded on the right with BLANK_CHAR(' ')
+     *          - Usernames are of the length USERNAME_LENGTH and are padded on the right with BLANK_CHAR(' ')
+     *          - All data fields are separated with the SEPARATOR(" ")
+     *          - data is written to dailyData
      *
      * @param gameN name of the game
      * @param gameReceiver username of receiver of the game
@@ -131,8 +137,12 @@ public class data_base{
      */
 
     protected void writeGiftTransaction(String gameN, String gameReceiver, String gameOwner ){
-
-
+        gameN = stringPadding(gameN, BLANK_CHAR, TITLE_LENGTH);
+        gameReceiver = stringPadding(gameReceiver, BLANK_CHAR, USERNAME_LENGTH);
+        gameOwner = stringPadding(gameOwner, BLANK_CHAR, USERNAME_LENGTH);
+        String message = String.join(SEPARATOR, giftCode, gameN, gameReceiver, gameOwner);
+        System.out.println(message);
+        appendData(message, dailyData);
     }
 
 
