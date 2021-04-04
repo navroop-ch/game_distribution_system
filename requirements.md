@@ -81,6 +81,7 @@
 
 **gift** - give a user a game from another user
 
+-   Admin can gift any game to a user 
 - semi-privileged transaction - Non-admins can only gift their own games to another.
 - Admins can gift from one user to another.
 - game must be in the owner's inventory/forSale
