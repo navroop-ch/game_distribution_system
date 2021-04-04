@@ -1,5 +1,6 @@
 import java.io.*;
 import java.lang.*;
+import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.Locale;
 
@@ -17,6 +18,7 @@ public class data_base{
     protected static final String COMMA_SEPARATOR = ",";
     protected static final Character BLANK_CHAR = ' ';
     protected static final Character ZERO_CHAR = '0';
+    private static DecimalFormat TWO_DECIMAL = new DecimalFormat("#.##");
 
     protected static final int USERNAME_LENGTH = 15;
     protected static final int TITLE_LENGTH = 19;
@@ -217,6 +219,17 @@ public class data_base{
         }
     }
 
+    private void appendData2(String data, String filepath){
+        try (FileWriter f = new FileWriter(filepath, true);
+             BufferedWriter b = new BufferedWriter(f);
+             PrintWriter p = new PrintWriter(b)) {
+            p.println(data);
+        }
+        catch (IOException i) {
+            i.printStackTrace();
+        }
+    }
+
 
     /**
      * Updates the data base file with the updated users. Preferably use at the end of the day.
@@ -249,7 +262,6 @@ public class data_base{
      */
     protected ArrayList<User> loadUsers(String filePath){
         ArrayList<String> usernames = getUserNames(filePath);
-        System.out.println(usernames.size());
         ArrayList<User> users = new ArrayList<>();
         if (usernames != null) {
             for (String user: usernames) {
@@ -417,7 +429,7 @@ public class data_base{
         int start = CODE_LENGTH + SEPARATOR.length();
         int mid = start + USERNAME_LENGTH + SEPARATOR.length();
         int end = mid + TYPE_LENGTH + SEPARATOR.length();
-        String username = line.substring(start, start + USERNAME_LENGTH).strip();
+        String username = line.substring(start, start + USERNAME_LENGTH);
         String type = line.substring(mid, mid + TYPE_LENGTH);
         String credit = line.substring(end, end + CREDIT_LENGTH);
 

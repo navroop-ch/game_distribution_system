@@ -13,7 +13,7 @@ public class BasicTransaction extends Transaction{
     protected BasicTransaction(String code, String username, String type, String credit) {
         super(username);
 
-        if (transactionValidate(code, type, credit)){
+        if (transactionValidate(code, type, credit) && validTransaction){
             this.transactionCode = code;
             this.credit = Double.parseDouble(credit);
             this.type = type;
@@ -35,7 +35,13 @@ public class BasicTransaction extends Transaction{
             case data_base.logInCode:
                 return executeLogin(session);
             case data_base.logOutCode:
-                break;
+                return executeLogout(session);
+            case data_base.createCode:
+                return executeCreateUser(session);
+            case data_base.deleteCode:
+                return executeDeleteUser(session);
+            case data_base.addCreditCode:
+                return executeAddCredit(session);
 
         }
         return false;
@@ -74,6 +80,7 @@ public class BasicTransaction extends Transaction{
 
         User user = session.getUser(this.transactionUsername);
         if (user != null){
+            System.out.printf("Execute add credit method: %s + %s \n", this.credit, user.getCredit());
             user.addCredit(this.credit);
             return true;
         }

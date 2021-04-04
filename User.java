@@ -70,13 +70,13 @@ public abstract class User {
             this.session.sessionLogin(this);
             this.dataBase = this.session.getDataBase(this);
             this.loginStatus = true;
-            this.dataBase.writeBasicTransaction(data_base.logInCode, this.userName, this.type, this.credit);
-            String message = this.userName; // Todo: Complete functions.
+            String message = this.userName + ": logged in!"; // Todo: Complete functions.
             System.out.println(message);
         }
 
         else {
-            System.out.println("A user is already logged in!");
+            String message = this.userName + ": A user is already logged in!";
+            System.out.println(message);
         }
 
     }
@@ -89,9 +89,9 @@ public abstract class User {
         if(loginStatus.equals(true)){
             this.loginStatus = false;
             this.session.sessionLogout(this);
-            this.dataBase.writeBasicTransaction(data_base.logOutCode, this.userName, this.type, this.credit);
-
             this.dataBase = null;
+            String message = this.userName + ": logged out!"; // Todo: Complete functions.
+            System.out.println(message);
         }
 
         else{
@@ -115,6 +115,7 @@ public abstract class User {
         else if(this.credit + cred > MAX_ALLOWED_CREDIT){
             this.credit = MAX_ALLOWED_CREDIT;
             System.out.println("Warning: Your account balance has maxed out; some credit may not have been added!");
+            System.out.printf("%s: your account balance is %s%n", this.userName ,this.credit);
         }
         else {
             this.credit += cred;

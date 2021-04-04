@@ -5,11 +5,10 @@ public class BuyTransaction extends Transaction{
 
     protected BuyTransaction(String code, String gameTitle,String sellerUsername, String buyerUsername) {
         super(buyerUsername);
-        if (transactionValidate(code, sellerUsername, gameTitle)){
+        if (transactionValidate(code, sellerUsername, gameTitle) && validTransaction){
             this.transactionCode = code;
             this.sellerUsername = sellerUsername;
             this.gameTitle = gameTitle;
-            this.validTransaction = true;
         }
         else this.validTransaction = false;
     }
