@@ -250,43 +250,36 @@ public class data_base{
      * @return An array list containing all users
      */
     protected ArrayList<User> loadUsers(String filePath){
-        ArrayList<String> usernames = getUserNames(filePath);
-        System.out.println(usernames.size());
         ArrayList<User> users = new ArrayList<>();
-        if (usernames != null) {
-            for (String user: usernames) {
-                users.add(getUser(user)); // Can't be null
-            }
-        }
-        return users;
-    }
-
-    /**
-     * Gets all the usernames in data base and stores them in an array list
-     * @param filePath The file path to data base.
-     * @return The array of all usernames
-     */
-    private ArrayList<String> getUserNames(String filePath) {
         try {
-            ArrayList<String> usernames = new ArrayList<>();
             File inputFile = new File(filePath);
             BufferedReader reader = new BufferedReader(new FileReader(inputFile));
             String currentLine;
             while ((currentLine = reader.readLine()) != null) {
-                String[] tokens = currentLine.split(SEPARATOR); //Todo: Manually split
-                if (tokens.length>2 && tokens[0].length() > 1) {
-                    usernames.add(tokens[0]);
+                User user = getUser(currentLine);
+                if (user!= null) {
+                    users.add(user);
                 }
             }
-            reader.close();
-            return usernames;
-        }
-        catch (IOException e) {
+            return users;
+        } catch (IOException e) {
             e.printStackTrace();
         }
         return null;
     }
 
+
+    private String[] userSubString(String line){
+        String[] profile = line.split(COMMA_SEPARATOR);
+        int start = USERNAME_LENGTH + SEPARATOR.length();
+        int mid = start + CODE_LENGTH + SEPARATOR.length();
+        int end = start + CREDIT_LENGTH + SEPARATOR.length();
+        String username = profile[0].substring(0, start).strip();
+        String type = profile[0].substring(start, mid).strip();
+        String credit = profile[0].substring(mid, end).strip();
+
+        return new String[] {username, type, credit, profile[1]};
+    }
 
     /**
      * This function will check if the passed in userName already exist in our user database
@@ -315,19 +308,18 @@ public class data_base{
     }
 
     /**
-     * This method returns a User object based on the data associated with the given username in the database. It
+     * This method returns a User object based on the data associated with the given line in the database. It
      * processes the data from the database and passes it into generateUser.
      *
-     * @param username username of the account
+     * @param line The current line.
      * @return User object if the username exists in database otherwise it's null.
      */
-    protected User getUser(String username) {
+    protected User getUser(String line) {
         User user = null;
-        String[] userData = getUserData(username).split(COMMA_SEPARATOR);
-        String[] profile = userData[0].split(SEPARATOR);   //Todo: manually split
-        String[] gamesOwned = userData[1].split(GAME_SEPARATOR);
+        String[] profile = userSubString(line);
+        String[] gamesOwned = profile[3].split(GAME_SEPARATOR);
         if (!profile[0].equals(ERROR_TOKEN)) {
-
+            String username = profile[0];
             String userType = profile[1];
             Double credit = Double.parseDouble(profile[2]);
 
@@ -515,7 +507,7 @@ public class data_base{
     }
 
 
-    public static void main(String[] args){
+    public static void main(String[] args) throws IOException {
         data_base dataBase = new data_base();
         /*
         dataBase.writeBasicTransaction("04", "Kentucky Fried", "AA", 34.02);
@@ -528,6 +520,12 @@ public class data_base{
         String a = "00";
         String b = "02";
 
+
+        ArrayList<User> arrayList = dataBase.loadUsers("daily.txt");
+
+        for (User u: arrayList) {
+            System.out.println(u.getUserName());
+        }
 
     }
 }

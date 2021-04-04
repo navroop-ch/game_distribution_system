@@ -50,14 +50,7 @@ public class Session {
         }
         return instance;
     }
-    protected User getUser(String username) {
-        for (User user : this.userList) {
-            if (user.getUserName().equals(username)) {
-                return user;
-            }
-        }
-        return null;
-    }
+
 
     protected void setAuctionStatus(Boolean autionStatus){auctionStatus = autionStatus;}
 
@@ -124,6 +117,11 @@ public class Session {
 
     }
 
+    protected void addUserList(User user){
+        userList.add(user);
+    }
+
+
     private int executeUserTransactions(ArrayList<Transaction> transactions, int transIndex) {
         while (transIndex < transactions.size() && loginStatus) {
 
@@ -154,13 +152,17 @@ public class Session {
         return transIndex;
     }
 
-    public User getUserLoggedIn() {
-        return this.userLoggedIn;
-    }
-}
 
     protected String getLoggedInUserName(){
         return this.userLoggedIn.getUserName();
+    }
+
+    protected User getUserLoggedIn(){
+        return this.userLoggedIn;
+    }
+
+    protected void removeFromUserList(User user) {
+        userList.add(user);
     }
 }
 
