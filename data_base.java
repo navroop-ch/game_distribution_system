@@ -38,7 +38,6 @@ public class data_base{
     protected static final String addCreditCode = "06";
     protected static final String logOutCode = "10";
     protected static final String giftCode = "09";
-    protected static final String removeGameCode = "08";
 
 
     private data_base() {
@@ -124,7 +123,15 @@ public class data_base{
         appendData(message, dailyData);
     }
 
+    /** Writes transactions when
+     *
+     * @param gameN name of the game
+     * @param gameReceiver username of receiver of the game
+     * @param gameOwner username of owner of the game
+     */
+
     protected void writeGiftTransaction(String gameN, String gameReceiver, String gameOwner ){
+
 
     }
 
