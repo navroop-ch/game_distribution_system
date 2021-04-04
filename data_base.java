@@ -38,6 +38,7 @@ public class data_base{
     protected static final String addCreditCode = "06";
     protected static final String logOutCode = "10";
     protected static final String giftCode = "09";
+    protected static final String removeGameCode = "08";
 
 
     private data_base() {
@@ -467,6 +468,30 @@ public class data_base{
         String price = line.substring(end, end + PRICE_LENGTH);
 
         return new String[] {title, seller, discount, price};
+    }
+
+    private String[] refundTransactionSubString(String line){
+        int start = CODE_LENGTH + SEPARATOR.length();
+        int mid1 = start + USERNAME_LENGTH + SEPARATOR.length();
+        int end = mid1 + USERNAME_LENGTH + SEPARATOR.length();
+        String buyer = line.substring(start, start + USERNAME_LENGTH);
+        String seller = line.substring(mid1, mid1 + USERNAME_LENGTH);
+        String credit = line.substring(end, end + CREDIT_LENGTH);
+
+        return new String[] {buyer, seller, credit};
+    }
+
+    //private String[] giftTransactionSubString(String line){}
+
+    private String[] removeGameTransactionSubstring(String line){
+        int start = CODE_LENGTH + SEPARATOR.length();
+        int mid1 = start + TITLE_LENGTH + SEPARATOR.length();
+        int end = mid1 + USERNAME_LENGTH + SEPARATOR.length();
+        String title = line.substring(start, start + TITLE_LENGTH);
+        String owner = line.substring(mid1, mid1 + USERNAME_LENGTH);
+        String receiver = line.substring(end, end + USERNAME_LENGTH);
+
+        return new String[] {title, owner, receiver};
     }
 
     protected ArrayList<String> readFile(String filePath){
