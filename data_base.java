@@ -274,6 +274,7 @@ public class data_base{
         ArrayList<String> lines = readFile(filePath);
         for (String currentLine : lines) {
             User user = getUser(currentLine);
+            System.out.println(user);
             if (user != null) {
                 users.add(user);
             }
@@ -335,7 +336,7 @@ public class data_base{
     protected User getUser(String line) {
         User user = null;
         String[] profile = userSubString(line);
-        //System.out.println("profile.length: "+profile.length);
+
         if (profile!=null) {
             String[] gamesOwned = profile[3].split(GAME_SEPARATOR);
             String username = profile[0];

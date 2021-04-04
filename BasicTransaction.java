@@ -46,6 +46,7 @@ public class BasicTransaction extends Transaction{
     }
 
     private Boolean executeLogin(Session session) {
+
         User user = session.getUser(this.transactionUsername);
         if (user != null && dataSatisfiesDatabase(user)){
             user.login();
@@ -77,7 +78,6 @@ public class BasicTransaction extends Transaction{
 
         User user = session.getUser(this.transactionUsername);
         if (user != null){
-            System.out.printf("Execute add credit method: %s + %s \n", this.credit, user.getCredit());
             user.addCredit(this.credit);
             return true;
         }

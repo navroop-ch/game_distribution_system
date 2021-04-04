@@ -113,7 +113,7 @@ public class Session {
         }
 
         // Todo: call method to save data to database
-        dataBase.updateDataBase(userList);
+        //dataBase.updateDataBase(userList);
 
     }
 
