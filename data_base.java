@@ -44,8 +44,8 @@ public class data_base{
 
 
     private data_base() {
-        this.userData = "userName.txt";
-        this.dailyData = "daily.txt";
+        this.userData = "a2-a-2-g-a-n-g" + File.separator + "DataFiles" + File.separator + "userName.txt";
+        this.dailyData = "a2-a-2-g-a-n-g" + File.separator + "DataFiles" + File.separator + "daily.txt";
     }
 
     private data_base(String userPath, String dailyPath){
@@ -507,6 +507,7 @@ public class data_base{
             reader.close();
         }catch (IOException e){
             //Todo: review this error display part
+            System.out.println(e.getMessage());
             System.out.println("Error: \\<reading file>\\");
         }
         return lines;
@@ -568,6 +569,5 @@ public class data_base{
         for (User u: arrayList) {
             System.out.println(u.getUserName());
         }
-
     }
 }

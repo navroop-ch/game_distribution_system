@@ -11,7 +11,7 @@ public class SessionClient {
         ownedGames.add(new Game("Call of duty", 550.34,true));
         Admin admin0 = new Admin("Fred", 999000, ownedGames);
 
-        FullStandardUser u = new FullStandardUser("David", 2344.55, ownedGames);
+        FullStandardUser u = new FullStandardUser("David", 999000.0, ownedGames);
 
 
         admin0.login();
