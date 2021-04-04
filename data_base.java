@@ -1,5 +1,6 @@
 import java.io.*;
 import java.lang.*;
+import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.Locale;
 
@@ -17,6 +18,7 @@ public class data_base{
     protected static final String COMMA_SEPARATOR = ",";
     protected static final Character BLANK_CHAR = ' ';
     protected static final Character ZERO_CHAR = '0';
+    private static DecimalFormat TWO_DECIMAL = new DecimalFormat("#.##");
 
     protected static final int USERNAME_LENGTH = 15;
     protected static final int TITLE_LENGTH = 19;
@@ -238,7 +240,6 @@ public class data_base{
         }
     }
 
-
     /**
      * Updates the data base file with the updated users. Preferably use at the end of the day.
      */
@@ -268,25 +269,17 @@ public class data_base{
      * @param filePath The file path to database.
      * @return An array list containing all users
      */
-    protected ArrayList<User> loadUsers(String filePath){
+    protected ArrayList<User> loadUsers(String filePath) {
         ArrayList<User> users = new ArrayList<>();
-        try {
-            File inputFile = new File(filePath);
-            BufferedReader reader = new BufferedReader(new FileReader(inputFile));
-            String currentLine;
-            while ((currentLine = reader.readLine()) != null) {
-                User user = getUser(currentLine);
-                if (user!= null) {
-                    users.add(user);
-                }
+        ArrayList<String> lines = readFile(filePath);
+        for (String currentLine : lines) {
+            User user = getUser(currentLine);
+            if (user != null) {
+                users.add(user);
             }
-            return users;
-        } catch (IOException e) {
-            e.printStackTrace();
         }
-        return null;
+        return users;
     }
-
 
     private String[] userSubString(String line){
         String[] profile = line.split(COMMA_SEPARATOR);
@@ -439,7 +432,7 @@ public class data_base{
         int start = CODE_LENGTH + SEPARATOR.length();
         int mid = start + USERNAME_LENGTH + SEPARATOR.length();
         int end = mid + TYPE_LENGTH + SEPARATOR.length();
-        String username = line.substring(start, start + USERNAME_LENGTH).strip();
+        String username = line.substring(start, start + USERNAME_LENGTH);
         String type = line.substring(mid, mid + TYPE_LENGTH);
         String credit = line.substring(end, end + CREDIT_LENGTH);
 

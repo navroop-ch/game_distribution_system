@@ -20,7 +20,7 @@ public abstract class Transaction{
     protected Transaction(String username){
         // checks code length and username length
         if (usernameValidation(username)){
-            this.transactionUsername = username;
+            this.transactionUsername = username.strip(); // Todo:   REMOVE EXTRA SPACES IN TRANSACTION OBJECTS
             this.validTransaction = true;
         }
         else this.validTransaction = false;
@@ -39,7 +39,7 @@ public abstract class Transaction{
 
     protected boolean typeValidation(String type){
         // Check length and valid type
-        return type.length() == data_base.TYPE_LENGTH && TYPES.contains(type);
+        return type.length() == data_base.TYPE_LENGTH && TYPES.contains(type) ;
     }
 
     protected boolean creditValidation(String credit){

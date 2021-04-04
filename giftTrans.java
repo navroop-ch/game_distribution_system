@@ -6,12 +6,14 @@ public class giftTrans extends Transaction{
     protected String gameGift;
 
     protected giftTrans(String code, String giftGame, String gameReceiver, String gameOwner){
-        super(Session.getInstance().getLoggedInUserName());
-        this.gameOwner= gameOwner;
-        this.gameReceiver=gameReceiver;
-        this.gameGift= giftGame;
+        super(gameOwner);
 
-
+        if (transactionValidate(code, gameGift, gameReceiver, gameOwner) && validTransaction) {
+            this.gameOwner = gameOwner;
+            this.gameReceiver = gameReceiver;
+            this.gameGift = giftGame;
+        }
+        else this.validTransaction = false;
     }
     @Override
     protected Boolean execute(Session session) {
@@ -35,8 +37,9 @@ public class giftTrans extends Transaction{
     }
 
     //check format and correct trans code
-    protected Boolean transactionValidate(String code, String type, String credit) {
-        return typeValidation(type) && creditValidation(credit) && code.equals(data_base.giftCode);
+    protected Boolean transactionValidate(String code, String gameGift, String gameReceiver, String gameOwner) {
+        return gameTitleValidation(gameGift) && usernameValidation(gameReceiver) && code.equals(data_base.giftCode);
+
     }
 
 
