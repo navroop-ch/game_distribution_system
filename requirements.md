@@ -34,6 +34,7 @@
 -   user should be removed from data base
 
 **sell** – put up a game for sale
+-   Sellers have unlimited copies of a game to sell
 -   Semi-privileged transaction - only accepted when logged in any type of account except standard-buy
 -   a game that was just put up for sale cannot be purchased until the following day.
 
@@ -58,6 +59,7 @@
 
 **auctionsale** - change the prices of all games for sale to incorporate a seasonal discount (privileged transaction)
 
+-   the discount is percent off
 -   privileged transaction - only accepted when logged in as admin user
 -   can be switched on and off. Affects buy and sell.
 
