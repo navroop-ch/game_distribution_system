@@ -31,16 +31,18 @@ public class ExtraTransaction extends Transaction {
     }
 
     private Boolean executeRemoveGame(Session session) {
+        Admin loggedIn = (Admin)session.getUserLoggedIn();
         User owner = session.getUser(this.gameOwner);
-        User seller = session.getUser(this.gameReceiver);
-        if (owner != null && seller != null) {
-            if (gameGift.equals(owner.owned(gameGift).getTitle())) {
-                Game game = owner.owned(gameGift);
-                // ToDo: Are these implemented yet?
-                owner.removeGame(game);
-                seller.removeGame(game);
+        Game game = owner.owned(this.gameGift);
+
+        if (loggedIn.getType().equals(User.ADMIN_USER_TYPE)) {
+            if (this.gameGift.equals(owner.owned(this.gameGift).getTitle())) {
+
+                loggedIn.removeGame(this.gameGift, this.gameOwner, this.gameReceiver);
                 return true;
             }
+        } else if (owner != null && owner.owned(gameGift).getTitle().equals(gameGift)){
+            owner.removeGame(game);
         }
         // Todo: Appropriate error return statement
         return false;
