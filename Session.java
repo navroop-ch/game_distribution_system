@@ -50,6 +50,14 @@ public class Session {
         }
         return instance;
     }
+    protected User getUser(String username) {
+        for (User user : this.userList) {
+            if (user.getUserName().equals(username)) {
+                return user;
+            }
+        }
+        return null;
+    }
 
     protected void setAuctionStatus(Boolean autionStatus){auctionStatus = autionStatus;}
 
@@ -94,6 +102,7 @@ public class Session {
     protected boolean getLoginStatus() {
         return loginStatus;
     }
+
 
     protected void executeBackend() {
 
@@ -149,3 +158,9 @@ public class Session {
         return this.userLoggedIn;
     }
 }
+
+    protected String getLoggedInUserName(){
+        return this.userLoggedIn.getUserName();
+    }
+}
+

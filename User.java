@@ -175,6 +175,14 @@ public abstract class User {
         this.gameOwned.add(game);
     }
 
+    public void removeGame(Game game){
+        this.gameOwned.remove(game);
+    }
+
+    public Game getGame(String game){
+
+    }
+
     /**
      * Places the game that the user wants to sell for sale.
      * @param title The title of the game that the user wants to sell

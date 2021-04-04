@@ -22,6 +22,7 @@ public class BasicTransaction extends Transaction{
         else this.validTransaction = false;
     }
 
+    // check formatting
     private boolean basicCodeValidation(String code){
         return codeValidation(code) && BasicTransactionCodes.contains(code);
     }
