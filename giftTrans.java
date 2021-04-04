@@ -39,6 +39,7 @@ public class giftTrans extends Transaction{
     //check format and correct trans code
     protected Boolean transactionValidate(String code, String gameGift, String gameReceiver, String gameOwner) {
         return gameTitleValidation(gameGift) && usernameValidation(gameReceiver) && code.equals(data_base.giftCode);
+
     }
 
 

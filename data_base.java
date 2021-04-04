@@ -125,9 +125,28 @@ public class data_base{
         appendData(message, dailyData);
     }
 
-    protected void writeGiftTransaction(String gameN, String gameReceiver, String gameOwner ){
+    /** Writes transactions when a user is gifting a game
+     *
+     * It ensures the following constraints are met:
+     *          - Title of the game is of length TITLE_LENGTH and is padded on the right with BLANK_CHAR(' ')
+     *          - Usernames are of the length USERNAME_LENGTH and are padded on the right with BLANK_CHAR(' ')
+     *          - All data fields are separated with the SEPARATOR(" ")
+     *          - data is written to dailyData
+     *
+     * @param gameN name of the game
+     * @param gameReceiver username of receiver of the game
+     * @param gameOwner username of owner of the game
+     */
 
+    protected void writeGiftTransaction(String gameN, String gameReceiver, String gameOwner ){
+        gameN = stringPadding(gameN, BLANK_CHAR, TITLE_LENGTH);
+        gameReceiver = stringPadding(gameReceiver, BLANK_CHAR, USERNAME_LENGTH);
+        gameOwner = stringPadding(gameOwner, BLANK_CHAR, USERNAME_LENGTH);
+        String message = String.join(SEPARATOR, giftCode, gameN, gameReceiver, gameOwner);
+        System.out.println(message);
+        appendData(message, dailyData);
     }
+
 
     /** Writes sell transaction to daily.txt when a user puts up a game for sale
      *
@@ -186,7 +205,8 @@ public class data_base{
      * @param user User object
      */
     protected void writeUser(User user){
-        String profile = String.join(SEPARATOR, user.getUserName(), user.getType(), user.getCredit().toString());
+        String profile = String.join(SEPARATOR, stringPadding(user.getUserName(),' ', USERNAME_LENGTH),
+                user.getType(), stringPadding(user.getCredit().toString(),' ', CREDIT_LENGTH));
         String gamesOwned = user.gamesOwnedToString();
         String data = String.join(COMMA_SEPARATOR, profile, gamesOwned);
         this.appendData(data, this.userData);
@@ -219,18 +239,6 @@ public class data_base{
         }
     }
 
-    private void appendData2(String data, String filepath){
-        try (FileWriter f = new FileWriter(filepath, true);
-             BufferedWriter b = new BufferedWriter(f);
-             PrintWriter p = new PrintWriter(b)) {
-            p.println(data);
-        }
-        catch (IOException i) {
-            i.printStackTrace();
-        }
-    }
-
-
     /**
      * Updates the data base file with the updated users. Preferably use at the end of the day.
      */
@@ -260,34 +268,29 @@ public class data_base{
      * @param filePath The file path to database.
      * @return An array list containing all users
      */
-    protected ArrayList<User> loadUsers(String filePath){
-        ArrayList<String> usernames = getUserNames(filePath);
+    protected ArrayList<User> loadUsers(String filePath) {
         ArrayList<User> users = new ArrayList<>();
-        if (usernames != null) {
-            for (String user: usernames) {
-                users.add(getUser(user)); // Can't be null
+        ArrayList<String> lines = readFile(filePath);
+        for (String currentLine : lines) {
+            User user = getUser(currentLine);
+            if (user != null) {
+                users.add(user);
             }
         }
         return users;
     }
 
-    /**
-     * Gets all the usernames in data base and stores them in an array list
-     * @param filePath The file path to data base.
-     * @return The array of all usernames
-     */
-    private ArrayList<String> getUserNames(String filePath) {
-        ArrayList<String> usernames = new ArrayList<>();
-        ArrayList<String> lines = readFile(filePath);
-        for (String currentLine : lines){
-            String[] tokens = currentLine.split(SEPARATOR);
-            if (tokens.length>2 && tokens[0].length() > 1) {
-                usernames.add(tokens[0]);
-                }
-            }
-        return usernames;
-    }
+    private String[] userSubString(String line){
+        String[] profile = line.split(COMMA_SEPARATOR);
+        int start = USERNAME_LENGTH + SEPARATOR.length();
+        int mid = start + CODE_LENGTH + SEPARATOR.length();
+        int end = start + CREDIT_LENGTH + SEPARATOR.length();
+        String username = profile[0].substring(0, start).strip();
+        String type = profile[0].substring(start, mid).strip();
+        String credit = profile[0].substring(mid, end).strip();
 
+        return new String[] {username, type, credit, profile[1]};
+    }
 
     /**
      * This function will check if the passed in userName already exist in our user database
@@ -316,19 +319,18 @@ public class data_base{
     }
 
     /**
-     * This method returns a User object based on the data associated with the given username in the database. It
+     * This method returns a User object based on the data associated with the given line in the database. It
      * processes the data from the database and passes it into generateUser.
      *
-     * @param username username of the account
+     * @param line The current line.
      * @return User object if the username exists in database otherwise it's null.
      */
-    protected User getUser(String username) {
+    protected User getUser(String line) {
         User user = null;
-        String[] userData = getUserData(username).split(COMMA_SEPARATOR);
-        String[] profile = userData[0].split(SEPARATOR);   //Todo: manually split
-        String[] gamesOwned = userData[1].split(GAME_SEPARATOR);
+        String[] profile = userSubString(line);
+        String[] gamesOwned = profile[3].split(GAME_SEPARATOR);
         if (!profile[0].equals(ERROR_TOKEN)) {
-
+            String username = profile[0];
             String userType = profile[1];
             Double credit = Double.parseDouble(profile[2]);
 
@@ -516,7 +518,7 @@ public class data_base{
     }
 
 
-    public static void main(String[] args){
+    public static void main(String[] args) throws IOException {
         data_base dataBase = new data_base();
         /*
         dataBase.writeBasicTransaction("04", "Kentucky Fried", "AA", 34.02);
@@ -529,6 +531,12 @@ public class data_base{
         String a = "00";
         String b = "02";
 
+
+        ArrayList<User> arrayList = dataBase.loadUsers("daily.txt");
+
+        for (User u: arrayList) {
+            System.out.println(u.getUserName());
+        }
 
     }
 }
