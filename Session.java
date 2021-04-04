@@ -111,9 +111,9 @@ public class Session {
             // Go through valid transactions until the user logs out
             transIndex = executeUserTransactions(transactions, transIndex);
         }
-
         // Todo: call method to save data to database
-        //dataBase.updateDataBase(userList);
+        System.out.println(userList);
+        dataBase.updateDataBase(userList);
 
     }
 

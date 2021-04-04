@@ -1,16 +1,2 @@
-Fred            AA 999000.0 ,Fortnite            350.34 true#R six siege         550.34 true#Call of duty        550.34 true
-David           FS 999000.0 ,Fortnite            350.34 true#R six siege         550.34 true#Call of duty        550.34 true
-Fred            AA 999000.0 ,Fortnite            350.34 true#R six siege         550.34 true#Call of duty        550.34 true
-David           FS 999000.0 ,Fortnite            350.34 true#R six siege         550.34 true#Call of duty        550.34 true
-Fred            AA 999000.0 ,Fortnite            350.34 true#R six siege         550.34 true#Call of duty        550.34 true
-David           FS 999000.0 ,Fortnite            350.34 true#R six siege         550.34 true#Call of duty        550.34 true
-Fred            AA 999000.0 ,Fortnite            350.34 true#R six siege         550.34 true#Call of duty        550.34 true
-David           FS 999000.0 ,Fortnite            350.34 true#R six siege         550.34 true#Call of duty        550.34 true
-Fred            AA 999000.0 ,Fortnite            350.34 true#R six siege         550.34 true#Call of duty        550.34 true
-David           FS 999000.0 ,Fortnite            350.34 true#R six siege         550.34 true#Call of duty        550.34 true
-Fred            AA 999000.0 ,Fortnite            350.34 true#R six siege         550.34 true#Call of duty        550.34 true
-David           FS 999000.0 ,Fortnite            350.34 true#R six siege         550.34 true#Call of duty        550.34 true
-Fred            AA 999000.0 ,Fortnite            350.34 true#R six siege         550.34 true#Call of duty        550.34 true
-David           FS 999000.0 ,Fortnite            350.34 true#R six siege         550.34 true#Call of duty        550.34 true
-Fred            AA 999000.0 ,Fortnite            350.34 true#R six siege         550.34 true#Call of duty        550.34 true
-David           FS 999000.0 ,Fortnite            350.34 true#R six siege         550.34 true#Call of duty        550.34 true
+Fred            AA 0999000.0,Fortnite            350.34 true#R six siege         550.34 true#Call of duty        550.34 true
+David           FS 0999000.0,Fortnite            350.34 true#R six siege         550.34 true#Call of duty        550.34 true

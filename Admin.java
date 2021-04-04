@@ -1,3 +1,4 @@
+import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 
@@ -48,6 +49,7 @@ public class Admin extends User{
             ArrayList<Game> gamesOwned = new ArrayList<>();
             User user = dataBase.generateUser(userName, type, credit, gamesOwned);
             session.getUserList().add(user);
+            System.out.printf("%s: Created new user %s! \n", this.getUserName(), user.getUserName());
 
         } else{
             System.out.println("User exists");
@@ -67,9 +69,8 @@ public class Admin extends User{
      */
     public void deleteUser(String userName) {
         if (session.getUser(userName) != null) {
-            System.out.println("In delete user, user exists"); // ?
-
             session.getUserList().remove(session.getUser(userName));
+            System.out.printf("%s: Deleted user %s! \n", this.getUserName(), userName);
 
         }else {
             System.out.println("User does not exist");
@@ -107,16 +108,16 @@ public class Admin extends User{
         double sell_crd = seller.getCredit();
 
         if (transfer_amt < 0.0){
-            System.out.println("Error: Amount to be refunded cannot be negative!");
+            System.out.println("Amount to be refunded cannot be negative!");
         }
         else if (sell_crd < transfer_amt){
-            System.out.println("Error: Seller doesn't have enough credit. Refund Failed!");
+            System.out.println("Seller doesn't have enough credit. Refund Failed!");
         }
         else if (buy_crd + transfer_amt > MAX_ALLOWED_CREDIT){
-            System.out.println("Error: The maximum credit has been exceeded. Refund Failed!");
+            System.out.println("The maximum credit has been exceeded. Refund Failed!");
         }
         else if (!session.getUserList().contains(buyer) || !session.getUserList().contains(seller)){
-            System.out.println("Error: Not a current user. Refund Failed!");
+            System.out.println("Not a current user. Refund Failed!");
         }
         else {
             seller.changeCredit(transfer_amt, "sub");
@@ -126,19 +127,12 @@ public class Admin extends User{
 
     }
 
-    /**
-     * In Admin mode removes a game from owner's and receiver's inventory
-     * @param title name of the game
-     * @param owner username of game's owner
-     * @param receiver username of game's receiver
-     */
-
     protected void removeGame(String title, String owner, String receiver) {
         User buyer = session.getUser(owner);
         User seller = session.getUser(receiver);
         Game game = buyer.owned(title);
 
-        if (seller != null && buyer != null && game != null && seller.owned(title).isForSale() && !game.isBought()) {
+        if (seller != null && buyer != null && game != null && seller.owned(title).isForSale()) {
             buyer.removeGame(game);
             seller.removeGame(game);
         }
@@ -147,13 +141,6 @@ public class Admin extends User{
         }
 
     }
-
-    /**
-     * In Admin mode gifts a game titled 'title' from owner_name to receiver_name
-     * @param title name of the game
-     * @param owner_name username of the game's owner
-     * @param receiver_name username of the game's receiver
-     */
 
     protected void giftGame(String title, String owner_name, String receiver_name){
         User owner = session.getUser(owner_name);

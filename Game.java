@@ -37,7 +37,7 @@ public class Game {
     protected void setBought(boolean bought){this.bought = bought;}
     protected boolean isBought(){return this.bought;}
 
-    protected void setDiscount(double discount){this.discount = discount / 100;}
+    protected void setDiscount(double discount){this.discount = discount;}
     protected double getDiscount(){return this.discount;}
 
 
@@ -52,6 +52,7 @@ public class Game {
      */
     protected static Game stringToGame(String gameString){
 
+        if (gameString.equals("null")){ return null;}
         String[] gameData = gameString.split(data_base.SEPARATOR);
 
         int titleIndexStart = 0;

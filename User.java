@@ -95,7 +95,7 @@ public abstract class User {
         }
 
         else{
-            System.out.println("You have not logged in yet!");
+            System.out.printf("%s: You have not logged in yet!", this.getUserName());
         }
 
 
@@ -158,6 +158,7 @@ public abstract class User {
      * @return String that represents list of the games owned
      */
     protected String gamesOwnedToString(){
+        if(this.gameOwned.isEmpty()){return "";}
         StringBuilder gamesString = new StringBuilder();
         gamesString.append(this.gameOwned.get(0));
         for (int i = 1; i < this.gameOwned.size(); i++){

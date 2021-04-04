@@ -8,7 +8,7 @@ public class ExtraTransaction extends Transaction {
     protected String gameReceiver;
     protected String gameGift;
 
-    protected ExtraTransaction(String code, String gameGift, String gameOwner, String gameReceiver) {
+    protected ExtraTransaction(String code, String gameGift, String gameReceiver, String gameOwner) {
         super(gameOwner);
 
         if (transactionValidate(code, gameGift, gameReceiver, gameOwner) && validTransaction) {
@@ -31,14 +31,14 @@ public class ExtraTransaction extends Transaction {
     }
 
     private Boolean executeRemoveGame(Session session) {
-        User loggedIn =  session.getUserLoggedIn();
+        Admin loggedIn = (Admin)session.getUserLoggedIn();
         User owner = session.getUser(this.gameOwner);
         Game game = owner.owned(this.gameGift);
 
         if (loggedIn.getType().equals(User.ADMIN_USER_TYPE)) {
             if (this.gameGift.equals(owner.owned(this.gameGift).getTitle())) {
-                Admin admin = (Admin)loggedIn;
-                admin.removeGame(this.gameGift, this.gameOwner, this.gameReceiver);
+
+                loggedIn.removeGame(this.gameGift, this.gameOwner, this.gameReceiver);
                 return true;
             }
         } else if (owner != null && owner.owned(gameGift).getTitle().equals(gameGift)){
@@ -49,28 +49,23 @@ public class ExtraTransaction extends Transaction {
     }
 
     protected Boolean executeGift(Session session) {
-        User loggedIn =  session.getUserLoggedIn();
         User owner = session.getUser(this.gameOwner);
-        // User receiver = session.getUser(this.gameReceiver);
-        if (loggedIn.getType().equals(User.ADMIN_USER_TYPE)) {
-            Admin admin = (Admin)loggedIn;
-            if (this.gameGift.equals(owner.owned(this.gameGift).getTitle())) {
-
-                admin.giftGame(this.gameGift, this.gameOwner, this.gameReceiver);
-                return true;
-            }
-        }
-        else if (owner != null){
+        User receiver = session.getUser(this.gameReceiver);
+        if (owner != null && receiver!= null){
             if (gameGift.equals(owner.owned(gameGift).getTitle())) {
-                // Game game = owner.owned(gameGift);
-                loggedIn.giftGame(gameGift, this.gameOwner);
+                Game game = owner.owned(gameGift);
+                owner.removeGame(game);
+                receiver.addOwnedGame(game);
                 return true;
             }
             return true;
         }
-        //Todo: figure out appropriate error return
-        System.out.println("Error: User does not exist");
-        return false;
+        else {
+            //Todo: figure out appropriate error return
+            System.out.println("Error: User does not exist");
+            return false;
+        }
+
     }
 
     //check format and correct trans code
