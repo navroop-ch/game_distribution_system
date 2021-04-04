@@ -126,6 +126,21 @@ public class Admin extends User{
 
     }
 
+    protected void removeGame(String title, String owner, String receiver) {
+        User buyer = session.getUser(owner);
+        User seller = session.getUser(receiver);
+        Game game = buyer.owned(title);
+
+        if (seller != null && buyer != null && game != null && seller.owned(title).isForSale()) {
+            buyer.removeGame(game);
+            seller.removeGame(game);
+        }
+        else {
+            System.out.println("Error: Could not remove the game");
+        }
+
+    }
+
     /**
      * @param userName The front end will ask for the new username
      *
