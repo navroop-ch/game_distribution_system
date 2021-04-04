@@ -112,7 +112,6 @@ public class Session {
             transIndex = executeUserTransactions(transactions, transIndex);
         }
         // Todo: call method to save data to database
-        System.out.println(userList);
         dataBase.updateDataBase(userList);
 
     }

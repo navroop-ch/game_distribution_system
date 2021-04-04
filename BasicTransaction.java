@@ -89,7 +89,6 @@ public class BasicTransaction extends Transaction{
     }
 
     private Boolean executeCreateUser(Session session){
-        System.out.println("\nRead here: \n");
         User toBeCreated = session.getUser(this.transactionUsername);
         User LoggedInUser = session.getUserLoggedIn();
         if(toBeCreated==null && LoggedInUser != null && LoggedInUser.getType().equals(User.ADMIN_USER_TYPE)){
