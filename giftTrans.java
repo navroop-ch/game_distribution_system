@@ -38,7 +38,7 @@ public class giftTrans extends Transaction{
 
     //check format and correct trans code
     protected Boolean transactionValidate(String code, String type, String credit) {
-        return typeValidation(type) && creditValidation(credit) && code==data_base.giftCode;
+        return typeValidation(type) && creditValidation(credit) && code.equals(data_base.giftCode);
     }
 
 

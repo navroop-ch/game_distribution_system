@@ -38,6 +38,7 @@ public class data_base{
     protected static final String addCreditCode = "06";
     protected static final String logOutCode = "10";
     protected static final String giftCode = "09";
+    protected static final String removeGameCode = "08";
 
 
     private data_base() {
@@ -126,6 +127,7 @@ public class data_base{
     protected void writeGiftTransaction(String gameN, String gameReceiver, String gameOwner ){
 
     }
+
 
     /** Writes sell transaction to daily.txt when a user puts up a game for sale
      *
