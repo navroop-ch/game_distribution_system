@@ -18,7 +18,12 @@ public class giftTrans extends Transaction{
         User owner = session.getUser(this.gameOwner);
         User receiver = session.getUser(this.gameReceiver);
         if (owner != null && receiver!= null){
-
+            if (gameGift.equals(owner.owned(gameGift).getTitle())) {
+                Game game = owner.owned(gameGift);
+                owner.removeGame(game);
+                receiver.addOwnedGame(game);
+                return true;
+            }
             return true;
         }
         else {
@@ -26,14 +31,7 @@ public class giftTrans extends Transaction{
             System.out.println("Error: User does not exist");
             return false;
         }
-        if (gameGift.equals(owner.owned(gameGift).getTitle())) {
-            Game game = owner.owned(gameGift);
-            owner.removeGame(game);
-            receiver.addOwnedGame(game);
-            return true;
-        }
-
-        return false;
+        
     }
 
     //check format and correct trans code
