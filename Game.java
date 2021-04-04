@@ -37,7 +37,7 @@ public class Game {
     protected void setBought(boolean bought){this.bought = bought;}
     protected boolean isBought(){return this.bought;}
 
-    protected void setDiscount(double discount){this.discount = discount;}
+    protected void setDiscount(double discount){this.discount = discount / 100;}
     protected double getDiscount(){return this.discount;}
 
 
