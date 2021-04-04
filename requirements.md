@@ -34,12 +34,15 @@
 -   user should be removed from data base
 
 **sell** – put up a game for sale
+
+-   sell transaction introduces a new game in the system
 -   Sellers have unlimited copies of a game to sell
 -   Semi-privileged transaction - only accepted when logged in any type of account except standard-buy
 -   a game that was just put up for sale cannot be purchased until the following day.
 
 **buy** – purchase an available game for sale
 
+-   Admin can't buy a game from a user
 -   The game should be added to the buyer's inventory
 -   Semi-privileged transaction - only accepted when logged in any type of account except standard-sell.
 -   game name must be an existing game in the seller's inventory that is available for sale
@@ -54,11 +57,13 @@
 
 **addcredit** - add credit into the system for the purchase of accounts
 
+-   Sell only account can add credit
 -   The username has to be an existing username (Admin).
 -   A maximum of $1000.00 can be added to an account in a given day.
 
 **auctionsale** - change the prices of all games for sale to incorporate a seasonal discount (privileged transaction)
 
+-   the code is 07
 -   the discount is percent off
 -   privileged transaction - only accepted when logged in as admin user
 -   can be switched on and off. Affects buy and sell.
