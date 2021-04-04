@@ -107,16 +107,16 @@ public class Admin extends User{
         double sell_crd = seller.getCredit();
 
         if (transfer_amt < 0.0){
-            System.out.println("Amount to be refunded cannot be negative!");
+            System.out.println("Error: Amount to be refunded cannot be negative!");
         }
         else if (sell_crd < transfer_amt){
-            System.out.println("Seller doesn't have enough credit. Refund Failed!");
+            System.out.println("Error: Seller doesn't have enough credit. Refund Failed!");
         }
         else if (buy_crd + transfer_amt > MAX_ALLOWED_CREDIT){
-            System.out.println("The maximum credit has been exceeded. Refund Failed!");
+            System.out.println("Error: The maximum credit has been exceeded. Refund Failed!");
         }
         else if (!session.getUserList().contains(buyer) || !session.getUserList().contains(seller)){
-            System.out.println("Not a current user. Refund Failed!");
+            System.out.println("Error: Not a current user. Refund Failed!");
         }
         else {
             seller.changeCredit(transfer_amt, "sub");
