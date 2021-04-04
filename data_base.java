@@ -193,7 +193,8 @@ public class data_base{
      * @param user User object
      */
     protected void writeUser(User user){
-        String profile = String.join(SEPARATOR, user.getUserName(), user.getType(), user.getCredit().toString());
+        String profile = String.join(SEPARATOR, stringPadding(user.getUserName(),' ', USERNAME_LENGTH),
+                user.getType(), stringPadding(user.getCredit().toString(),' ', CREDIT_LENGTH));
         String gamesOwned = user.gamesOwnedToString();
         String data = String.join(COMMA_SEPARATOR, profile, gamesOwned);
         this.appendData(data, this.userData);
