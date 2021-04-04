@@ -481,9 +481,8 @@ public class data_base{
         return new String[] {buyer, seller, credit};
     }
 
-    //private String[] giftTransactionSubString(String line){}
 
-    private String[] removeGameTransactionSubstring(String line){
+    private String[] extraTransactionSubstring(String line){
         int start = CODE_LENGTH + SEPARATOR.length();
         int mid1 = start + TITLE_LENGTH + SEPARATOR.length();
         int end = mid1 + USERNAME_LENGTH + SEPARATOR.length();
