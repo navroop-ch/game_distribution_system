@@ -180,6 +180,25 @@ public abstract class User {
         this.gameOwned.remove(game);
     }
 
+    /**
+     * Gifts a game to another user from user's own inventory.
+     *
+     * @param title name of the game
+     * @param receiver_uname username of the game's receiver
+     */
+    protected void giftGame(String title, String receiver_uname){
+
+        Game game1 = owned(title);
+        User receiver = session.getUser(receiver_uname);
+        Game game2 = receiver.owned(title);
+
+        if (this.gameOwned.contains(game1) && game1.getTitle().equals(game2.getTitle())){
+            this.gameOwned.remove(game1);
+            receiver.gameOwned.add(game1);
+        }
+        else {System.out.println("Can't gift the game!");}
+
+    }
 
     /**
      * Places the game that the user wants to sell for sale.
