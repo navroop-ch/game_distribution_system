@@ -9,6 +9,7 @@
 -   Game Title: At most 25/19? characters, can not have the same game name twice
 -   Game Price: At most 999.99
 -   Game Discount: At most 90%
+-   not unique to sellers
 
 ### Txt File Clarifications
 -   usernames.txt is the database that contains all users
@@ -52,11 +53,13 @@
 
 **refund** - issue a credit to a buyer’s account from a seller’s account (privileged transaction)
 
+-   seller's balance > refund amount
 -   The specified amount of credit should be transferred from the seller’s credit balance to the buyer’s credit balance.
 -   Buyer and seller both must be current users
 
 **addcredit** - add credit into the system for the purchase of accounts
 
+-   add credit till the balance of the user maxes out, give warning if the addedcredit > max_user credit
 -   Sell only account can add credit
 -   The username has to be an existing username (Admin).
 -   A maximum of $1000.00 can be added to an account in a given day.
