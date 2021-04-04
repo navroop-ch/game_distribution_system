@@ -274,7 +274,6 @@ public class data_base{
         ArrayList<String> lines = readFile(filePath);
         for (String currentLine : lines) {
             User user = getUser(currentLine);
-            System.out.println(user);
             if (user != null) {
                 users.add(user);
             }
