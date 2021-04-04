@@ -127,6 +127,12 @@ public class Admin extends User{
 
     }
 
+    /**
+     * In Admin mode removes a game from owner's and receiver's inventory
+     * @param title name of the game
+     * @param owner username of game's owner
+     * @param receiver username of game's receiver
+     */
     protected void removeGame(String title, String owner, String receiver) {
         User buyer = session.getUser(owner);
         User seller = session.getUser(receiver);
@@ -141,6 +147,13 @@ public class Admin extends User{
         }
 
     }
+
+    /**
+     * In Admin mode gifts a game titled 'title' from owner_name to receiver_name
+     * @param title name of the game
+     * @param owner_name username of the game's owner
+     * @param receiver_name username of the game's receiver
+     */
 
     protected void giftGame(String title, String owner_name, String receiver_name){
         User owner = session.getUser(owner_name);
