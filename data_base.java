@@ -40,6 +40,7 @@ public class data_base{
     protected static final String addCreditCode = "06";
     protected static final String logOutCode = "10";
     protected static final String giftCode = "09";
+    protected static final String removeGameCode = "08";
 
 
     private data_base() {
@@ -281,15 +282,21 @@ public class data_base{
     }
 
     private String[] userSubString(String line){
-        String[] profile = line.split(COMMA_SEPARATOR);
-        int start = USERNAME_LENGTH + SEPARATOR.length();
-        int mid = start + CODE_LENGTH + SEPARATOR.length();
-        int end = start + CREDIT_LENGTH + SEPARATOR.length();
-        String username = profile[0].substring(0, start).strip();
-        String type = profile[0].substring(start, mid).strip();
-        String credit = profile[0].substring(mid, end).strip();
 
-        return new String[] {username, type, credit, profile[1]};
+        String[] profile = line.split(COMMA_SEPARATOR);
+        try {
+            int start = USERNAME_LENGTH + SEPARATOR.length();
+            int mid = start + CODE_LENGTH + SEPARATOR.length();
+            int end = start + CREDIT_LENGTH + SEPARATOR.length();
+            String username = profile[0].substring(0, start).strip();
+            String type = profile[0].substring(start, mid).strip();
+            String credit = profile[0].substring(mid, end).strip();
+
+            return new String[]{username, type, credit, profile[1]};
+        }catch (Exception e){
+            return null;
+        }
+
     }
 
     /**
@@ -328,8 +335,9 @@ public class data_base{
     protected User getUser(String line) {
         User user = null;
         String[] profile = userSubString(line);
-        String[] gamesOwned = profile[3].split(GAME_SEPARATOR);
-        if (!profile[0].equals(ERROR_TOKEN)) {
+        //System.out.println("profile.length: "+profile.length);
+        if (profile!=null) {
+            String[] gamesOwned = profile[3].split(GAME_SEPARATOR);
             String username = profile[0];
             String userType = profile[1];
             Double credit = Double.parseDouble(profile[2]);
