@@ -131,7 +131,7 @@ public class Admin extends User{
         User seller = session.getUser(receiver);
         Game game = buyer.owned(title);
 
-        if (seller != null && buyer != null && game != null && seller.owned(title).isForSale()) {
+        if (seller != null && buyer != null && game != null && seller.owned(title).isForSale() && !game.isBought()) {
             buyer.removeGame(game);
             seller.removeGame(game);
         }
@@ -139,23 +139,6 @@ public class Admin extends User{
             System.out.println("Error: Could not remove the game");
         }
 
-    }
-
-    protected void giftGame(String title, String owner_name, String receiver_name){
-        User owner = session.getUser(owner_name);
-        User receiver = session.getUser(receiver_name);
-        Game game1 = owner.owned(title);
-        Game game2 = receiver.owned(title);
-
-
-
-        if (owner != null && receiver != null && game1 != null && !game1.getTitle().equals(game2.getTitle())){
-            owner.removeGame(game1);
-            receiver.addOwnedGame(game1);
-        }
-        else {
-            System.out.println("Error: Couldn't gift the game");
-        }
     }
 
     /**
