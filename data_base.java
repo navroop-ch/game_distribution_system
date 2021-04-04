@@ -1,6 +1,7 @@
 import java.io.*;
 import java.lang.*;
 import java.util.ArrayList;
+import java.util.Locale;
 
 /**
  * An data base class that handles every interaction with the daily.txt or our userName.txt (database)
@@ -36,8 +37,8 @@ public class data_base{
     protected static final String refundCode = "05";
     protected static final String addCreditCode = "06";
     protected static final String logOutCode = "10";
+    protected static final String giftCode = "09";
 
-    public static ArrayList<User> userList;
 
     private data_base() {
         this.userData = "userName.txt";
@@ -120,6 +121,10 @@ public class data_base{
         String message = String.join(SEPARATOR,buyCode, title, seller, buyer);
         System.out.println(message);
         appendData(message, dailyData);
+    }
+
+    protected void writeGiftTransaction(String gameN, String gameReceiver, String gameOwner ){
+
     }
 
     /** Writes sell transaction to daily.txt when a user puts up a game for sale
@@ -216,10 +221,12 @@ public class data_base{
     /**
      * Updates the data base file with the updated users. Preferably use at the end of the day.
      */
-    protected void updateDataBase(){
+    protected void updateDataBase(ArrayList<User> userList){
         clear(userData);
-        for (User user: userList) {
-            writeUser(user);
+        if (userList != null) {
+            for (User user : userList) {
+                writeUser(user);
+            }
         }
     }
 
@@ -242,6 +249,7 @@ public class data_base{
      */
     protected ArrayList<User> loadUsers(String filePath){
         ArrayList<String> usernames = getUserNames(filePath);
+        System.out.println(usernames.size());
         ArrayList<User> users = new ArrayList<>();
         if (usernames != null) {
             for (String user: usernames) {
@@ -263,8 +271,10 @@ public class data_base{
             BufferedReader reader = new BufferedReader(new FileReader(inputFile));
             String currentLine;
             while ((currentLine = reader.readLine()) != null) {
-                String[] tokens = currentLine.split(SEPARATOR);
-                usernames.add(tokens[0]);
+                String[] tokens = currentLine.split(SEPARATOR); //Todo: Manually split
+                if (tokens.length>2 && tokens[0].length() > 1) {
+                    usernames.add(tokens[0]);
+                }
             }
             reader.close();
             return usernames;
@@ -312,7 +322,7 @@ public class data_base{
     protected User getUser(String username) {
         User user = null;
         String[] userData = getUserData(username).split(COMMA_SEPARATOR);
-        String[] profile = userData[0].split(SEPARATOR);
+        String[] profile = userData[0].split(SEPARATOR);   //Todo: manually split
         String[] gamesOwned = userData[1].split(GAME_SEPARATOR);
         if (!profile[0].equals(ERROR_TOKEN)) {
 
@@ -371,7 +381,7 @@ public class data_base{
         ArrayList<String> lines = readFile(userData);
 
         for (String line : lines) {
-            String profile = line.split(",")[0];
+            String profile = line.split(COMMA_SEPARATOR)[0];
             String[] tokens = profile.split(SEPARATOR);
             if (tokens[0].equals(userName)) {
                 return line;
@@ -382,7 +392,6 @@ public class data_base{
 
     protected ArrayList<Transaction> getTransactions(){
         ArrayList<String> stringTransactions = readFile(dailyData);
-
         ArrayList<Transaction> transactions = new ArrayList<>();
         for (String stringTransaction : stringTransactions){
             String[] tokens = stringTransaction.split(SEPARATOR);
@@ -391,29 +400,61 @@ public class data_base{
                 case logOutCode:
                 case createCode:
                 case deleteCode:
+                case giftCode:
                 case addCreditCode:
-                    if (tokens.length == Transaction.BASIC_TRANSACTION_PARAM){
-                        transactions.add(new BasicTransaction(tokens[0], tokens[1], tokens[2], tokens[3]));
-                    }
+                    String[] subStrings = basicTransactionSubstring(stringTransaction);
+                    transactions.add(new BasicTransaction(tokens[0], subStrings[0], subStrings[1], subStrings[2]));
                     break;
                 case buyCode:
-                    if (tokens.length == Transaction.BUY_TRANSACTION_PARAM){
-                        transactions.add(new BuyTransaction(tokens[0], tokens[1], tokens[2], tokens[3]));
-                    }
+                    String[] buySubStrings = buyTransactionSubString(stringTransaction);
+                    transactions.add(new BuyTransaction(tokens[0], buySubStrings[0], buySubStrings[1], buySubStrings[2]));
                     break;
                 case sellCode:
-                    if (tokens.length == Transaction.SELL_TRANSACTION_PARAM){
-                        transactions.add(new SellTransaction(tokens[0], tokens[1], tokens[2], tokens[3], tokens[4]));
-                    }
+                    String[] sellSubStrings = sellTransactionSubString(stringTransaction);
+                    transactions.add(new SellTransaction(tokens[0], sellSubStrings[0],
+                            sellSubStrings[1], sellSubStrings[2], sellSubStrings[3]));
                     break;
                 case refundCode:
-                    if (tokens.length == Transaction.REFUND_TRANSACTION_PARAM){
-                        transactions.add(new RefundTransaction(tokens[0], tokens[1], tokens[2], tokens[3]));
-                    }
+                    transactions.add(new RefundTransaction(tokens[0], tokens[1], tokens[2], tokens[3]));
                     break;
             }
         }
         return transactions;
+    }
+
+    private String[] basicTransactionSubstring(String line){
+        int start = CODE_LENGTH + SEPARATOR.length();
+        int mid = start + USERNAME_LENGTH + SEPARATOR.length();
+        int end = mid + TYPE_LENGTH + SEPARATOR.length();
+        String username = line.substring(start, start + USERNAME_LENGTH).strip();
+        String type = line.substring(mid, mid + TYPE_LENGTH);
+        String credit = line.substring(end, end + CREDIT_LENGTH);
+
+        return new String[] {username, type, credit};
+    }
+
+    private String[] buyTransactionSubString(String line){
+        int start = CODE_LENGTH + SEPARATOR.length();
+        int mid = start + TITLE_LENGTH + SEPARATOR.length();
+        int end = mid + USERNAME_LENGTH + SEPARATOR.length();
+        String title = line.substring(start, start + TITLE_LENGTH);
+        String seller = line.substring(mid, mid + USERNAME_LENGTH);
+        String buyer = line.substring(end, end + USERNAME_LENGTH);
+
+        return new String[] {title, seller, buyer};
+    }
+
+    private String[] sellTransactionSubString(String line){
+        int start = CODE_LENGTH + SEPARATOR.length();
+        int mid1 = start + TITLE_LENGTH + SEPARATOR.length();
+        int mid2 = mid1 + USERNAME_LENGTH + SEPARATOR.length();
+        int end = mid2 + DISCOUNT_LENGTH + SEPARATOR.length();
+        String title = line.substring(start, start + TITLE_LENGTH);
+        String seller = line.substring(mid1, mid1 + USERNAME_LENGTH);
+        String discount = line.substring(mid2, mid2 + DISCOUNT_LENGTH);
+        String price = line.substring(end, end + PRICE_LENGTH);
+
+        return new String[] {title, seller, discount, price};
     }
 
     protected ArrayList<String> readFile(String filePath){

@@ -91,11 +91,39 @@ public class Admin extends User{
      * If an auctionsale is already on, this should conclude the auctionsale and disable the discounts
      */
     public void auctionSale(){
-        if (session.getAuctionStatus()){
-            session.setAutionStatus(false);
-        }else {
-            session.setAutionStatus(true);
+        session.setAuctionStatus(!session.getAuctionStatus());
+    }
+
+    /**
+     * Issue a credit from the buyer's account to the seller's account
+     * @param buy_username username of the account to add transfer_amt to
+     * @param sell_username username of the account to remove transer_amt from
+     * @param transfer_amt the amount to be refunded
+     */
+    protected void refund(String buy_username, String sell_username, double transfer_amt){
+        User buyer = session.getUser(buy_username);
+        User seller = session.getUser(sell_username);
+        double buy_crd = buyer.getCredit();
+        double sell_crd = seller.getCredit();
+
+        if (transfer_amt < 0.0){
+            System.out.println("Amount to be refunded cannot be negative!");
         }
+        else if (sell_crd < transfer_amt){
+            System.out.println("Seller doesn't have enough credit. Refund Failed!");
+        }
+        else if (buy_crd + transfer_amt > MAX_ALLOWED_CREDIT){
+            System.out.println("The maximum credit has been exceeded. Refund Failed!");
+        }
+        else if (!session.getUserList().contains(buyer) || !session.getUserList().contains(seller)){
+            System.out.println("Not a current user. Refund Failed!");
+        }
+        else {
+            seller.changeCredit(transfer_amt, "sub");
+            buyer.changeCredit(transfer_amt, "add");
+            System.out.println("Refund completed.");
+        }
+
     }
 
     /**
@@ -124,11 +152,12 @@ public class Admin extends User{
             System.out.println(g);
         }
 
+        Session session = Session.getInstance();
         System.out.println(admin0);
-
-        //dataBase.writeUser(admin0);
-
         admin0.login();
+        data_base dataBase = session.getDataBase(admin0);
+        dataBase.writeUser(admin0);
+
 
         System.out.println(admin0);
 
@@ -143,6 +172,8 @@ public class Admin extends User{
 
         admin0.addCredit(100);
         System.out.println(admin0);
+
+
 
     }
 

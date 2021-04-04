@@ -52,6 +52,7 @@ public class Game {
      */
     protected static Game stringToGame(String gameString){
 
+        System.out.println(gameString);
         String[] gameData = gameString.split(data_base.SEPARATOR);
 
         int titleIndexStart = 0;

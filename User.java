@@ -26,7 +26,6 @@ public abstract class User {
         this.credit = credit;
         this.gameOwned = gameOwned;
         this.loginStatus = false;
-        this.session = Session.getInstance();
     }
 
 
@@ -65,11 +64,15 @@ public abstract class User {
      *
      */
     protected void login(){
+        //Todo: Login user only if he is in the data base
+        this.session = Session.getInstance();
         if (!session.getLoginStatus()){
             this.session.sessionLogin(this);
             this.dataBase = this.session.getDataBase(this);
             this.loginStatus = true;
             this.dataBase.writeBasicTransaction(data_base.logInCode, this.userName, this.type, this.credit);
+            String message = this.userName; // Todo: Complete functions.
+            System.out.println(message);
         }
 
         else {
@@ -82,6 +85,7 @@ public abstract class User {
      *
      */
     protected void logout(){
+        this.session = Session.getInstance();
         if(loginStatus.equals(true)){
             this.loginStatus = false;
             this.session.sessionLogout(this);
@@ -122,6 +126,24 @@ public abstract class User {
     }
 
     /**
+     * Adds or Removes credit from the user object
+     * @param credit amount of credit
+     * @param change string for adding or subtracting the credit
+     */
+    protected void changeCredit(double credit, String change){
+        if (change.equals("add")){
+            this.credit += credit;
+        }
+        else if (change.equals("sub")){
+            this.credit -= credit;
+        }
+        else {
+            System.out.println("Invalid input!");
+        }
+    }
+
+
+    /**
      * Returns the current admin's game inventory.
      *
      * @return an ArrayList of String for the game name the admin own.
@@ -151,6 +173,14 @@ public abstract class User {
      */
     public void addOwnedGame(Game game){
         this.gameOwned.add(game);
+    }
+
+    public void removeGame(Game game){
+        this.gameOwned.remove(game);
+    }
+
+    public Game getGame(String game){
+
     }
 
     /**
@@ -220,10 +250,7 @@ public abstract class User {
      * @return True if sufficient credit is available to buy, false otherwise
      */
     protected boolean canBuy(double price) {
-        if (this.credit - price >= 0.0) {
-            return true;
-        }
-        return false;
+        return this.credit - price >= 0.0;
     }
 
     /**

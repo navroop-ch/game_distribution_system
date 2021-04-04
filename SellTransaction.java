@@ -30,6 +30,7 @@ public class SellTransaction extends Transaction{
         User user = session.getUser(this.transactionUsername);
 
         if (user != null) {
+            // Todo: A game is up for sale the next day according to ReadMe; How do we ensure that?
             user.sell(this.gameTitle, this.salePrice, this.discount);
             return true;
         }

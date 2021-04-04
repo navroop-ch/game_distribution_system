@@ -42,17 +42,18 @@ public class Session {
     // Singleton implementation
     protected static Session getInstance() {
         if (instance == null) {
-            instance = new Session();
-
             // Authentication: generates a new key, stores it, and then passes it for authentication
             generateKey();
             data_base dataBase = data_base.getInstance(dataBaseKey);
             setDataBase(dataBase);
+            instance = new Session();
         }
         return instance;
     }
 
-    protected void setAutionStatus(Boolean autionStatus){this.auctionStatus = autionStatus;}
+
+    protected void setAuctionStatus(Boolean autionStatus){auctionStatus = autionStatus;}
+
     protected Boolean getAuctionStatus(){return auctionStatus;}
 
     protected data_base getDataBase(User user) {
@@ -78,7 +79,7 @@ public class Session {
     }
 
     protected User getUser(String username) {
-        for (User user : this.userList) {
+        for (User user : userList) {
             if (user.getUserName().equals(username)) {
                 return user;
             }
@@ -95,14 +96,16 @@ public class Session {
         return loginStatus;
     }
 
-    private void executeBackend() {
+
+    protected void executeBackend() {
 
         //Get transaction objects from daily.txt
         ArrayList<Transaction> transactions = dataBase.getTransactions();
-        int transIndex = 0;
 
+        int transIndex = 0;
+        //System.out.println("Starting:");
         while (transIndex < transactions.size()) {
-            // Look for a login transaction and login a user
+            // Look for a login transaction and logs in a user
             transIndex = logUserIn(transactions, transIndex);
 
             // Go through valid transactions until the user logs out
@@ -110,7 +113,7 @@ public class Session {
         }
 
         // Todo: call method to save data to database
-        dataBase.updateDataBase();
+        dataBase.updateDataBase(userList);
 
     }
 
@@ -123,7 +126,9 @@ public class Session {
         while (transIndex < transactions.size() && loginStatus) {
 
             Transaction transaction = transactions.get(transIndex);
-            if (transaction.transactionUsername.equals(this.userLoggedIn.getUserName()) && transaction.validTransaction)
+            System.out.println(transaction.validTransaction);
+            if (!transaction.validTransaction){continue;}
+            if (transaction.transactionUsername.equals(this.userLoggedIn.getUserName()))
             {
                 transaction.execute(this);
             }
@@ -133,7 +138,7 @@ public class Session {
     }
 
     private int logUserIn(ArrayList<Transaction> transactions, int transIndex) {
-        while (true) {
+        while (transIndex < transactions.size()) {
             Transaction transaction = transactions.get(transIndex);
             if (transaction.validTransaction) {
                 if (transaction.transactionCode.equals(data_base.logInCode)) {
@@ -147,6 +152,7 @@ public class Session {
         return transIndex;
     }
 
+
     protected String getLoggedInUserName(){
         return this.userLoggedIn.getUserName();
     }
@@ -155,7 +161,7 @@ public class Session {
         return this.userLoggedIn;
     }
 
-    protected void removeFromUserList(User user){
+    protected void removeFromUserList(User user) {
         userList.add(user);
     }
 }
