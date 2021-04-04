@@ -266,7 +266,7 @@ public class data_base{
             BufferedReader reader = new BufferedReader(new FileReader(inputFile));
             String currentLine;
             while ((currentLine = reader.readLine()) != null) {
-                String[] tokens = currentLine.split(SEPARATOR);
+                String[] tokens = currentLine.split(SEPARATOR); //Todo: Manually split
                 if (tokens.length>2 && tokens[0].length() > 1) {
                     usernames.add(tokens[0]);
                 }
@@ -317,7 +317,7 @@ public class data_base{
     protected User getUser(String username) {
         User user = null;
         String[] userData = getUserData(username).split(COMMA_SEPARATOR);
-        String[] profile = userData[0].split(SEPARATOR);
+        String[] profile = userData[0].split(SEPARATOR);   //Todo: manually split
         String[] gamesOwned = userData[1].split(GAME_SEPARATOR);
         if (!profile[0].equals(ERROR_TOKEN)) {
 

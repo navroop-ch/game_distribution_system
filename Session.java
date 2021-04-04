@@ -17,10 +17,6 @@ public class Session {
     private User userLoggedIn = null;
     private boolean loginStatus;
     static boolean auctionStatus = false;
-<<<<<<< HEAD
-    //static Statistics stats = new Statistics(userList);
-=======
->>>>>>> 7cbe9828422389d71a36db978eff1b3aee585654
 
     private Session() {
         // Todo: load users into userList by creating a method for it in data_base.java
@@ -123,7 +119,7 @@ public class Session {
         while (transIndex < transactions.size() && loginStatus) {
 
             Transaction transaction = transactions.get(transIndex);
-            System.out.println(transaction.transactionUsername);
+            System.out.println(transaction.validTransaction);
             if (!transaction.validTransaction){continue;}
             if (transaction.transactionUsername.equals(this.userLoggedIn.getUserName()))
             {
