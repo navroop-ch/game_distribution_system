@@ -192,7 +192,7 @@ public abstract class User {
         User receiver = session.getUser(receiver_uname);
         Game game2 = receiver.owned(title);
 
-        if (this.gameOwned.contains(game1) && game1.getTitle().equals(game2.getTitle())){
+        if (this.gameOwned.contains(game1) && !game1.getTitle().equals(game2.getTitle())){
             this.gameOwned.remove(game1);
             receiver.gameOwned.add(game1);
         }
