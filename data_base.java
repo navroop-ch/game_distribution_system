@@ -265,24 +265,15 @@ public class data_base{
      * @return The array of all usernames
      */
     private ArrayList<String> getUserNames(String filePath) {
-        try {
-            ArrayList<String> usernames = new ArrayList<>();
-            File inputFile = new File(filePath);
-            BufferedReader reader = new BufferedReader(new FileReader(inputFile));
-            String currentLine;
-            while ((currentLine = reader.readLine()) != null) {
-                String[] tokens = currentLine.split(SEPARATOR); //Todo: Manually split
-                if (tokens.length>2 && tokens[0].length() > 1) {
-                    usernames.add(tokens[0]);
+        ArrayList<String> usernames = new ArrayList<>();
+        ArrayList<String> lines = readFile(filePath);
+        for (String currentLine : lines){
+            String[] tokens = currentLine.split(SEPARATOR);
+            if (tokens.length>2 && tokens[0].length() > 1) {
+                usernames.add(tokens[0]);
                 }
             }
-            reader.close();
-            return usernames;
-        }
-        catch (IOException e) {
-            e.printStackTrace();
-        }
-        return null;
+        return usernames;
     }
 
 
