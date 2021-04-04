@@ -114,6 +114,11 @@ public class Session {
 
     }
 
+    protected void addUserList(User user){
+        userList.add(user);
+    }
+
+
     private int executeUserTransactions(ArrayList<Transaction> transactions, int transIndex) {
         while (transIndex < transactions.size() && loginStatus) {
 
@@ -140,6 +145,18 @@ public class Session {
             transIndex++;
         }
         return transIndex;
+    }
+
+    protected String getLoggedInUserName(){
+        return this.userLoggedIn.getUserName();
+    }
+
+    protected User getUserLoggedIn(){
+        return this.userLoggedIn;
+    }
+
+    protected void removeFromUserList(User user){
+        userList.add(user);
     }
 }
 
