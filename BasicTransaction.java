@@ -22,6 +22,7 @@ public class BasicTransaction extends Transaction{
         else this.validTransaction = false;
     }
 
+    // check formatting
     private boolean basicCodeValidation(String code){
         return codeValidation(code) && BasicTransactionCodes.contains(code);
     }
@@ -82,27 +83,34 @@ public class BasicTransaction extends Transaction{
             return false;
         }
     }
-
+    //DO
     private Boolean executeCreateUser(Session session){
-        User user = session.getUser(this.transactionUsername);
-        if (user != null && user.getType().equals(User.ADMIN_USER_TYPE)){
-            Admin admin = (Admin) session.getUser(this.transactionUsername);
+        User toBeCreated = session.getUser(this.transactionUsername);
+        User LoggedInUser = session.getUserLoggedIn();
+        if(toBeCreated==null && LoggedInUser != null && LoggedInUser.getType().equals(User.ADMIN_USER_TYPE)){
 
-            // Todo: admin.createUser(); Where is the new user data!?
-            // just call admin.createUser() and the user data is stored in session (userList).
-
+            Admin admin = (Admin)LoggedInUser;
+            admin.createUser(this.transactionUsername,this.type,this.credit);
             return true;
         }
         else {
-            //Todo: figure out appropriate error return
-            //System.out.println("Error: User does not exist");
+
+            System.out.println("Error: User already exist");
             return false;
         }
     }
+    //DO
+    private Boolean executeDeleteUser(Session session){
+        User toBeDeleted = session.getUser(this.transactionUsername);
+        User LoggedInUser = session.getUserLoggedIn();
+        if(toBeDeleted!=null && LoggedInUser != null && LoggedInUser.getType().equals(User.ADMIN_USER_TYPE)){
+            Admin admin = (Admin)LoggedInUser;
+            admin.deleteUser(this.transactionUsername);
+            return true;
+        }
 
-    private Boolean executeDeleteUser(){
-        // Todo: implement this
-        return null;
+        System.out.println("Error: User does not exist");
+        return false;
     }
 
     protected Boolean transactionValidate(String code, String type, String credit) {

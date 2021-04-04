@@ -51,6 +51,7 @@ public class Session {
         return instance;
     }
 
+
     protected void setAuctionStatus(Boolean autionStatus){auctionStatus = autionStatus;}
 
     protected Boolean getAuctionStatus(){return auctionStatus;}
@@ -95,6 +96,7 @@ public class Session {
         return loginStatus;
     }
 
+
     protected void executeBackend() {
 
         //Get transaction objects from daily.txt
@@ -114,6 +116,11 @@ public class Session {
         dataBase.updateDataBase(userList);
 
     }
+
+    protected void addUserList(User user){
+        userList.add(user);
+    }
+
 
     private int executeUserTransactions(ArrayList<Transaction> transactions, int transIndex) {
         while (transIndex < transactions.size() && loginStatus) {
@@ -145,7 +152,17 @@ public class Session {
         return transIndex;
     }
 
-    public User getUserLoggedIn() {
+
+    protected String getLoggedInUserName(){
+        return this.userLoggedIn.getUserName();
+    }
+
+    protected User getUserLoggedIn(){
         return this.userLoggedIn;
     }
+
+    protected void removeFromUserList(User user) {
+        userList.add(user);
+    }
 }
+
