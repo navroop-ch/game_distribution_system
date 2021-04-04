@@ -17,7 +17,10 @@ public class Session {
     private User userLoggedIn = null;
     private boolean loginStatus;
     static boolean auctionStatus = false;
+<<<<<<< HEAD
     //static Statistics stats = new Statistics(userList);
+=======
+>>>>>>> 7cbe9828422389d71a36db978eff1b3aee585654
 
     private Session() {
         // Todo: load users into userList by creating a method for it in data_base.java
@@ -51,7 +54,7 @@ public class Session {
         }
         return instance;
     }
-    
+
     protected void setAuctionStatus(Boolean autionStatus){auctionStatus = autionStatus;}
 
     protected Boolean getAuctionStatus(){return auctionStatus;}
