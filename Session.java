@@ -102,7 +102,7 @@ public class Session {
         ArrayList<Transaction> transactions = dataBase.getTransactions();
 
         int transIndex = 0;
-
+        //System.out.println("Starting:");
         while (transIndex < transactions.size()) {
             // Look for a login transaction and logs in a user
             transIndex = logUserIn(transactions, transIndex);
@@ -112,7 +112,7 @@ public class Session {
         }
 
         // Todo: call method to save data to database
-        dataBase.updateDataBase();
+        dataBase.updateDataBase(userList);
 
     }
 
@@ -120,7 +120,9 @@ public class Session {
         while (transIndex < transactions.size() && loginStatus) {
 
             Transaction transaction = transactions.get(transIndex);
-            if (transaction.transactionUsername.equals(this.userLoggedIn.getUserName()) && transaction.validTransaction)
+            System.out.println(transaction.transactionUsername);
+            if (!transaction.validTransaction){continue;}
+            if (transaction.transactionUsername.equals(this.userLoggedIn.getUserName()))
             {
                 transaction.execute(this);
             }
@@ -130,7 +132,7 @@ public class Session {
     }
 
     private int logUserIn(ArrayList<Transaction> transactions, int transIndex) {
-        while (true) {
+        while (transIndex < transactions.size()) {
             Transaction transaction = transactions.get(transIndex);
             if (transaction.validTransaction) {
                 if (transaction.transactionCode.equals(data_base.logInCode)) {

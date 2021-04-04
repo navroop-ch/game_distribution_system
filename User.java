@@ -26,7 +26,6 @@ public abstract class User {
         this.credit = credit;
         this.gameOwned = gameOwned;
         this.loginStatus = false;
-        this.session = Session.getInstance();
     }
 
 
@@ -65,11 +64,15 @@ public abstract class User {
      *
      */
     protected void login(){
+        //Todo: Login user only if he is in the data base
+        this.session = Session.getInstance();
         if (!session.getLoginStatus()){
             this.session.sessionLogin(this);
             this.dataBase = this.session.getDataBase(this);
             this.loginStatus = true;
             this.dataBase.writeBasicTransaction(data_base.logInCode, this.userName, this.type, this.credit);
+            String message = this.userName; // Todo: Complete functions.
+            System.out.println(message);
         }
 
         else {
@@ -82,6 +85,7 @@ public abstract class User {
      *
      */
     protected void logout(){
+        this.session = Session.getInstance();
         if(loginStatus.equals(true)){
             this.loginStatus = false;
             this.session.sessionLogout(this);

@@ -152,11 +152,12 @@ public class Admin extends User{
             System.out.println(g);
         }
 
+        Session session = Session.getInstance();
         System.out.println(admin0);
-
-        //dataBase.writeUser(admin0);
-
         admin0.login();
+        data_base dataBase = session.getDataBase(admin0);
+        dataBase.writeUser(admin0);
+
 
         System.out.println(admin0);
 
@@ -171,6 +172,8 @@ public class Admin extends User{
 
         admin0.addCredit(100);
         System.out.println(admin0);
+
+
 
     }
 
