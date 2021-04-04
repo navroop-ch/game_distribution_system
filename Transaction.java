@@ -76,7 +76,4 @@ public abstract class Transaction{
         return true;
     }
 
-    protected boolean typeSatisfiesDatabase(User databaseUser){
-        return databaseUser.getType() == "0";
-    }
 }
