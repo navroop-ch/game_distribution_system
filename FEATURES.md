@@ -41,7 +41,9 @@ execute function which calls the corresponding method from user.
 ### How to run?
 Assuming our data base is not empty
 SessionClient.java executes the backend. It will read command from the text files daily.txt and execute it if it’s valid. To check if it’s valid, the backend will check with userName.txt, a file that stored all our existing user in
-data_base.java where these file paths are fixed. They can be changed manually?
+data_base.java where these file paths are fixed. They can be changed manually.
+Add the daily.txt to a2-a-g-a-n-g and then run the main method for SessionClient.java 
+
 
 
 ### Configure userName.txt (database) -
