@@ -1,6 +1,9 @@
 import java.util.Arrays;
 import java.util.List;
 
+/**
+ * Checks the transaction format for add credit, login, logout, create user and delete user.
+ */
 public class BasicTransaction extends Transaction{
 
     public static final String ERROR_INCONSISTENT_DATA = "Error: Data in transaction does not match data in user database.";
@@ -22,7 +25,11 @@ public class BasicTransaction extends Transaction{
         else this.validTransaction = false;
     }
 
-    // check formatting
+    /**
+     * Tests a string for basic transaction
+     * @param code the string to be checked
+     * @return returns true if the string is valid, otherwise returns false
+     */
     private boolean basicCodeValidation(String code){
         return codeValidation(code) && BasicTransactionCodes.contains(code);
     }
@@ -46,6 +53,11 @@ public class BasicTransaction extends Transaction{
         return false;
     }
 
+    /**
+     * Executes login transaction
+     * @param session session object that keeps track of currently logged in users
+     * @return true if the user was able to login, otherwise return false and print error msg
+     */
     private Boolean executeLogin(Session session) {
 
         User user = session.getUser(this.transactionUsername);
@@ -54,12 +66,16 @@ public class BasicTransaction extends Transaction{
             return true;
         }
         else {
-            //Todo: figure out appropriate error return
             System.out.println("Error: User does not exist");
             return false;
         }
     }
 
+    /**
+     * Executes logout transaction
+     * @param session session object that keeps track of currently logged in users
+     * @return return true if user logs out, otherwise return false and print an error message
+     */
     private Boolean executeLogout(Session session){
         User user = session.getUser(this.transactionUsername);
         if (user != null){
@@ -67,11 +83,16 @@ public class BasicTransaction extends Transaction{
             return true;
         }
         else {
-            //System.out.println("Error: User does not exist");
+            System.out.println("Error: User does not exist");
             return false;
         }
     }
 
+    /**
+     * Executes add credit transaction
+     * @param session session object that keeps track of currently logged in users
+     * @return returns true if user object exists and adds credit to user's account, otherwise return false
+     */
     private Boolean executeAddCredit(Session session){
 
         if(!validTransaction){return false;}
@@ -82,12 +103,16 @@ public class BasicTransaction extends Transaction{
             return true;
         }
         else {
-            //Todo: figure out appropriate error return
-            //System.out.println("Error: User does not exist");
+            System.out.println("Error: User does not exist");
             return false;
         }
     }
 
+    /**
+     * Creates a new user
+     * @param session session object that keeps track of currently logged in users
+     * @return returns true 
+     */
     private Boolean executeCreateUser(Session session){
         System.out.println("\nRead here: \n");
         User toBeCreated = session.getUser(this.transactionUsername);
