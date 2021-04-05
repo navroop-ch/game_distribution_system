@@ -101,7 +101,7 @@ public class Game {
      */
     protected static Game stringToGame(String gameString){
 
-        if (gameString.equals("null")){ return null;}
+        if (gameString.length()<4){ return null;}
         String[] gameData = gameString.split(data_base.SEPARATOR);
 
         int titleIndexStart = 0;
@@ -109,11 +109,16 @@ public class Game {
         int priceIndexStart = data_base.TITLE_LENGTH + 1;
         int priceIndexEnd = priceIndexStart + data_base.PRICE_LENGTH;
 
-        String title = gameString.substring(titleIndexStart, titleIndexEnd).strip();
-        Double price = Double.parseDouble(gameString.substring(priceIndexStart, priceIndexEnd));
-        Boolean forSale = Boolean.parseBoolean(gameData[gameData.length - 1]);
+        try {
+            String title = gameString.substring(titleIndexStart, titleIndexEnd).strip();
+            Double price = Double.parseDouble(gameString.substring(priceIndexStart, priceIndexEnd));
+            Boolean forSale = Boolean.parseBoolean(gameData[gameData.length - 1]);
+            return new Game(title, price, forSale);
+        }
+        catch (Exception e){
+            return null;
+        }
 
-        return new Game(title, price, forSale);
     }
 
     /**

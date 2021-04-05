@@ -27,6 +27,17 @@ public class data_base{
     protected static final int CODE_LENGTH = 2;
     protected static final int TYPE_LENGTH = 2;
 
+    protected static final int BASIC_TRANSACTION_LENGTH = CODE_LENGTH + USERNAME_LENGTH + TYPE_LENGTH + CREDIT_LENGTH
+            + (3*SEPARATOR.length());
+    protected static final int SELL_TRANSACTION_LENGTH = CODE_LENGTH + TITLE_LENGTH + USERNAME_LENGTH + DISCOUNT_LENGTH
+            + PRICE_LENGTH + (4*SEPARATOR.length());
+    protected static final int BUY_TRANSACTION_LENGTH= CODE_LENGTH + TITLE_LENGTH + USERNAME_LENGTH + USERNAME_LENGTH
+            + (3*SEPARATOR.length());
+    protected static final int REFUND_TRANSACTION_LENGTH = CODE_LENGTH + USERNAME_LENGTH + USERNAME_LENGTH
+            + CREDIT_LENGTH + (3*SEPARATOR.length());
+    protected static final int EXTRA_TRANSACTION_LENGTH = CODE_LENGTH + TITLE_LENGTH + USERNAME_LENGTH + USERNAME_LENGTH
+            + (3*SEPARATOR.length());
+
     protected String userData;
     protected String dailyData;
 
@@ -99,7 +110,6 @@ public class data_base{
         username = stringPadding(username, BLANK_CHAR, USERNAME_LENGTH);
         String credit = stringPadding(cred.toString(), ZERO_CHAR, -CREDIT_LENGTH);
         String message = String.join(SEPARATOR, code, username, usertype, credit);
-        System.out.println(message);
         appendData(message, dailyData);
     }
 
@@ -121,7 +131,6 @@ public class data_base{
         buyer = stringPadding(buyer, BLANK_CHAR, USERNAME_LENGTH);
         title = stringPadding(title, BLANK_CHAR, TITLE_LENGTH);
         String message = String.join(SEPARATOR,buyCode, title, seller, buyer);
-        System.out.println(message);
         appendData(message, dailyData);
     }
 
@@ -143,7 +152,6 @@ public class data_base{
         gameReceiver = stringPadding(gameReceiver, BLANK_CHAR, USERNAME_LENGTH);
         gameOwner = stringPadding(gameOwner, BLANK_CHAR, USERNAME_LENGTH);
         String message = String.join(SEPARATOR, giftCode, gameN, gameReceiver, gameOwner);
-        System.out.println(message);
         appendData(message, dailyData);
     }
 
@@ -191,7 +199,6 @@ public class data_base{
         seller = stringPadding(seller, BLANK_CHAR, USERNAME_LENGTH);
         String refund = stringPadding(refundCred.toString(), ZERO_CHAR, -CREDIT_LENGTH);
         String message = String.join(SEPARATOR, refundCode, buyer, seller, refund);
-        System.out.println(message);
         appendData(message, this.dailyData);
     }
 
@@ -280,11 +287,6 @@ public class data_base{
         return users;
     }
 
-    /**
-     * Separates a line into an array of strings with username, type, credit and profile
-     * @param line the current line
-     * @return an array of strings
-     */
     private String[] userSubString(String line){
 
         String[] profile = line.split(COMMA_SEPARATOR);
@@ -424,7 +426,6 @@ public class data_base{
                 case logOutCode:
                 case createCode:
                 case deleteCode:
-                case giftCode:
                 case addCreditCode:
                     String[] subStrings = basicTransactionSubstring(stringTransaction);
                     transactions.add(new BasicTransaction(tokens[0], subStrings[0], subStrings[1], subStrings[2]));
@@ -439,104 +440,94 @@ public class data_base{
                             sellSubStrings[1], sellSubStrings[2], sellSubStrings[3]));
                     break;
                 case refundCode:
-                    transactions.add(new RefundTransaction(tokens[0], tokens[1], tokens[2], tokens[3]));
+                    String[] refundSub = refundTransactionSubString(stringTransaction);
+                    transactions.add(new RefundTransaction(tokens[0], refundSub[0], refundSub[1], refundSub[2]));
                     break;
+
+                case giftCode:
+                case removeGameCode:
+                    String[] extraSub = extraTransactionSubstring(stringTransaction);
+                    transactions.add((new ExtraTransaction(tokens[0], extraSub[0], extraSub[1], extraSub[2])));
+                    break;
+
             }
         }
         return transactions;
     }
 
-    /**
-     * Makes a list of strings that contains username, type and credit from a line.
-     * @param line the current line
-     * @return an array of strings
-     */
     private String[] basicTransactionSubstring(String line){
-        int start = CODE_LENGTH + SEPARATOR.length();
-        int mid = start + USERNAME_LENGTH + SEPARATOR.length();
-        int end = mid + TYPE_LENGTH + SEPARATOR.length();
-        String username = line.substring(start, start + USERNAME_LENGTH);
-        String type = line.substring(mid, mid + TYPE_LENGTH);
-        String credit = line.substring(end, end + CREDIT_LENGTH);
-
-        return new String[] {username, type, credit};
+        String[] subString = new String[] {"a", "a", "a"};
+        if (line.length() == BASIC_TRANSACTION_LENGTH) {
+            int start = CODE_LENGTH + SEPARATOR.length();
+            int mid = start + USERNAME_LENGTH + SEPARATOR.length();
+            int end = mid + TYPE_LENGTH + SEPARATOR.length();
+            String username = line.substring(start, start + USERNAME_LENGTH);
+            String type = line.substring(mid, mid + TYPE_LENGTH);
+            String credit = line.substring(end, end + CREDIT_LENGTH);
+            subString = new String[] {username, type, credit};
+        }
+        return subString;
     }
 
-    /**
-     * Returns a list of strings that contains game's name, seller's username and buyer's username
-     * from a line in buy transaction.
-     * @param line the current line
-     * @return an array of strings
-     */
     private String[] buyTransactionSubString(String line){
-        int start = CODE_LENGTH + SEPARATOR.length();
-        int mid = start + TITLE_LENGTH + SEPARATOR.length();
-        int end = mid + USERNAME_LENGTH + SEPARATOR.length();
-        String title = line.substring(start, start + TITLE_LENGTH);
-        String seller = line.substring(mid, mid + USERNAME_LENGTH);
-        String buyer = line.substring(end, end + USERNAME_LENGTH);
-
-        return new String[] {title, seller, buyer};
+        String[] subString = new String[] {"a", "a", "a"};
+        if (line.length() == BUY_TRANSACTION_LENGTH) {
+            int start = CODE_LENGTH + SEPARATOR.length();
+            int mid = start + TITLE_LENGTH + SEPARATOR.length();
+            int end = mid + USERNAME_LENGTH + SEPARATOR.length();
+            String title = line.substring(start, start + TITLE_LENGTH);
+            String seller = line.substring(mid, mid + USERNAME_LENGTH);
+            String buyer = line.substring(end, end + USERNAME_LENGTH);
+            subString = new String[]{title, seller, buyer};
+        }
+        return subString;
     }
 
-    /**
-     * Returns a list of strings that contains game's name, seller's username, discount on the game and price of the
-     * game in a line in sell transaction.
-     * @param line the current line
-     * @return an array of strings
-     */
     private String[] sellTransactionSubString(String line){
-        int start = CODE_LENGTH + SEPARATOR.length();
-        int mid1 = start + TITLE_LENGTH + SEPARATOR.length();
-        int mid2 = mid1 + USERNAME_LENGTH + SEPARATOR.length();
-        int end = mid2 + DISCOUNT_LENGTH + SEPARATOR.length();
-        String title = line.substring(start, start + TITLE_LENGTH);
-        String seller = line.substring(mid1, mid1 + USERNAME_LENGTH);
-        String discount = line.substring(mid2, mid2 + DISCOUNT_LENGTH);
-        String price = line.substring(end, end + PRICE_LENGTH);
-
-        return new String[] {title, seller, discount, price};
+        String[] subString = new String[] {"a", "a", "a", "a"};
+        if (line.length() == SELL_TRANSACTION_LENGTH) {
+            int start = CODE_LENGTH + SEPARATOR.length();
+            int mid1 = start + TITLE_LENGTH + SEPARATOR.length();
+            int mid2 = mid1 + USERNAME_LENGTH + SEPARATOR.length();
+            int end = mid2 + DISCOUNT_LENGTH + SEPARATOR.length();
+            String title = line.substring(start, start + TITLE_LENGTH);
+            String seller = line.substring(mid1, mid1 + USERNAME_LENGTH);
+            String discount = line.substring(mid2, mid2 + DISCOUNT_LENGTH);
+            String price = line.substring(end, end + PRICE_LENGTH);
+            return new String[]{title, seller, discount, price};
+        }
+        return subString;
     }
 
-    /**
-     * Returns a list of strings that contains buyer's username, seller's username and the refund amount
-     * in a line in refund transaction.
-     * @param line the current line
-     * @return an array of strings
-     */
     private String[] refundTransactionSubString(String line){
-        int start = CODE_LENGTH + SEPARATOR.length();
-        int mid1 = start + USERNAME_LENGTH + SEPARATOR.length();
-        int end = mid1 + USERNAME_LENGTH + SEPARATOR.length();
-        String buyer = line.substring(start, start + USERNAME_LENGTH);
-        String seller = line.substring(mid1, mid1 + USERNAME_LENGTH);
-        String credit = line.substring(end, end + CREDIT_LENGTH);
-
-        return new String[] {buyer, seller, credit};
+        String[] subString = new String[] {"a", "a", "a", "a"};
+        if (line.length() == REFUND_TRANSACTION_LENGTH) {
+            int start = CODE_LENGTH + SEPARATOR.length();
+            int mid1 = start + USERNAME_LENGTH + SEPARATOR.length();
+            int end = mid1 + USERNAME_LENGTH + SEPARATOR.length();
+            String buyer = line.substring(start, start + USERNAME_LENGTH);
+            String seller = line.substring(mid1, mid1 + USERNAME_LENGTH);
+            String credit = line.substring(end, end + CREDIT_LENGTH);
+            subString = new String[] {buyer, seller, credit};
+        }
+        return subString;
     }
 
-    /**
-     * Returns a list of strings that contains game's name, buyer's username, seller's username for remove game and
-     * gift transactions
-     * @param line the current line
-     * @return an array of strings
-     */
+
     private String[] extraTransactionSubstring(String line){
-        int start = CODE_LENGTH + SEPARATOR.length();
-        int mid1 = start + TITLE_LENGTH + SEPARATOR.length();
-        int end = mid1 + USERNAME_LENGTH + SEPARATOR.length();
-        String title = line.substring(start, start + TITLE_LENGTH);
-        String owner = line.substring(mid1, mid1 + USERNAME_LENGTH);
-        String receiver = line.substring(end, end + USERNAME_LENGTH);
-
-        return new String[] {title, owner, receiver};
+        String[] subString = new String[] {"a", "a", "a", "a"};
+        if (line.length() == EXTRA_TRANSACTION_LENGTH) {
+            int start = CODE_LENGTH + SEPARATOR.length();
+            int mid1 = start + TITLE_LENGTH + SEPARATOR.length();
+            int end = mid1 + USERNAME_LENGTH + SEPARATOR.length();
+            String title = line.substring(start, start + TITLE_LENGTH);
+            String owner = line.substring(mid1, mid1 + USERNAME_LENGTH);
+            String receiver = line.substring(end, end + USERNAME_LENGTH);
+            subString = new String[]{title, owner, receiver};
+        }
+        return subString;
     }
 
-    /**
-     * Reads lines from the given filepath
-     * @param filePath the filepath to read from
-     * @return an array of strings
-     */
     protected ArrayList<String> readFile(String filePath){
         ArrayList<String> lines = new ArrayList<>();
         try {
