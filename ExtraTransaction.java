@@ -1,6 +1,9 @@
 import java.util.Arrays;
 import java.util.List;
 
+/**
+ * A class for transactions for removing and gifting a game
+ */
 public class ExtraTransaction extends Transaction {
     protected final List<String> ExtraTransactionCodes = Arrays.asList(
             data_base.giftCode, data_base.removeGameCode);
@@ -30,6 +33,11 @@ public class ExtraTransaction extends Transaction {
         return false;
     }
 
+    /**
+     * Removes a game from the list of games owned for a user
+     * @param session session objects that keeps track of all the logged in users
+     * @return true if a game is removed, false otherwise and print an error msg
+     */
     private Boolean executeRemoveGame(Session session) {
         User loggedIn = session.getUserLoggedIn();
         User receiver = session.getUser(this.gameReceiver);
@@ -46,10 +54,15 @@ public class ExtraTransaction extends Transaction {
         } else if (receiver != null && owner.owned(gameGift).getTitle().equals(gameGift)){
             receiver.removeGame(game);
         }
-        // Todo: Appropriate error return statement
+        System.out.println("Error: User doesn't exist. Remove game transaction Failed !");
         return false;
     }
 
+    /**
+     * Gifts a game to a user
+     * @param session session objects that keeps track of all the logged in users
+     * @return true if gift transaction is executed successfully, false otherwise
+     */
     protected Boolean executeGift(Session session) {
         User loggedIn = session.getUserLoggedIn();
         User owner = session.getUser(this.gameOwner);
@@ -71,14 +84,19 @@ public class ExtraTransaction extends Transaction {
             }
             return true;
         } else {
-            //Todo: figure out appropriate error return
-            System.out.println("Error: User does not exist");
+            System.out.println("Error: User does not exist. Gift game transaction failed !");
             return false;
         }
     }
-
-
-    //check format and correct trans code
+    
+    /**
+     * Checks format and transaction code
+     * @param code user code
+     * @param gameGift name of the game to be gifted
+     * @param gameReceiver username of game's receiver
+     * @param gameOwner username of game's owner
+     * @return true if all the constraints are met, otherwise false
+     */
     protected Boolean transactionValidate(String code, String gameGift, String gameReceiver, String gameOwner) {
         return gameTitleValidation(gameGift) && usernameValidation(gameReceiver) && (code.equals(data_base.giftCode)
                 || code.equals(data_base.removeGameCode));
