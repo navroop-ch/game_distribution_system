@@ -49,7 +49,8 @@ public class BasicTransaction extends Transaction{
     private Boolean executeLogin(Session session) {
 
         User user = session.getUser(this.transactionUsername);
-        if (user != null && dataSatisfiesDatabase(user)){
+        if (user != null){
+            dataSatisfiesDatabase(user);
             user.login();
             return true;
         }
@@ -63,6 +64,7 @@ public class BasicTransaction extends Transaction{
     private Boolean executeLogout(Session session){
         User user = session.getUser(this.transactionUsername);
         if (user != null){
+            dataSatisfiesDatabase(user);
             user.logout();
             return true;
         }
@@ -98,7 +100,7 @@ public class BasicTransaction extends Transaction{
             return true;
         }
         else {
-            System.out.println("Error: User already exist");
+            System.out.println("Error: User already exists");
             return false;
         }
     }
@@ -120,11 +122,9 @@ public class BasicTransaction extends Transaction{
         return typeValidation(type) && creditValidation(credit) && basicCodeValidation(code);
     }
 
-    private boolean dataSatisfiesDatabase(User databaseUser){ //Todo: record errors
+    private void dataSatisfiesDatabase(User databaseUser){ //Todo: record errors
         if (!(databaseUser.getCredit().equals(this.credit) && databaseUser.getType().equals(this.type))){
             System.out.println(ERROR_INCONSISTENT_DATA);
-            return false;
         }
-        return true;
     }
 }

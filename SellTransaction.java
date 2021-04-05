@@ -8,7 +8,7 @@ public class SellTransaction extends Transaction{
         super(username);
         if (transactionValidate(username, code, gameTitle, discount, sale)){
             this.transactionCode = code;
-            this.gameTitle = gameTitle;
+            this.gameTitle = gameTitle.strip();
             this.discount = Double.parseDouble(discount);
             this.salePrice = Double.parseDouble(sale);
             this.validTransaction = true;
@@ -25,17 +25,21 @@ public class SellTransaction extends Transaction{
                 && discountValidation(discount) && salePriceValidation(sale);
     }
 
+
     @Override
     protected Boolean execute(Session session) {
         User user = session.getUser(this.transactionUsername);
 
-        if (user != null) {
-            // Todo: A game is up for sale the next day according to ReadMe; How do we ensure that?
-            user.sell(this.gameTitle, this.salePrice, this.discount);
+        if (user == session.getUserLoggedIn()) {
+            String message = user.sell(this.gameTitle, this.salePrice, this.discount);
+            if (message == null){
+                System.out.printf("%s: %s is up for sale from tomorrow!%n", transactionUsername, gameTitle);
+            }
+            else {System.out.println(message);}
             return true;
         }
         else {
-            //System.out.println("Error: The user does not exist");
+            System.out.printf("Error: %s Invalid username in transaction.", CONSTRAINT_ERROR);
             return false;
         }
 

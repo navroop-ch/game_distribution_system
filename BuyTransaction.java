@@ -7,8 +7,8 @@ public class BuyTransaction extends Transaction{
         super(buyerUsername);
         if (transactionValidate(code, sellerUsername, gameTitle) && validTransaction){
             this.transactionCode = code;
-            this.sellerUsername = sellerUsername;
-            this.gameTitle = gameTitle;
+            this.sellerUsername = sellerUsername.strip();
+            this.gameTitle = gameTitle.strip();
         }
         else this.validTransaction = false;
     }
@@ -24,8 +24,10 @@ public class BuyTransaction extends Transaction{
     @Override
     protected Boolean execute(Session session) {
         User user = session.getUser(this.transactionUsername);
-        if (user != null) {
-            user.buy(this.gameTitle, this.sellerUsername);
+        if (user == session.getUserLoggedIn()) {
+            String message = user.buy(this.gameTitle, this.sellerUsername);
+            if (message == null){System.out.printf("%s: bought %s", this.transactionUsername, this.gameTitle);}
+            else {System.out.println(message);}
             return true;
         }
         else {

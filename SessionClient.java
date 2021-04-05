@@ -16,8 +16,7 @@ public class SessionClient {
 
         /*admin0.login();
         data_base dataBase = session.getDataBase(admin0);
-        dataBase.writeUser(admin0);
-        dataBase.writeUser(u);
+        dataBase.writeBuyTransaction("Fortnite", "Fred", "David");
         admin0.logout();*/
 
         session.executeBackend();

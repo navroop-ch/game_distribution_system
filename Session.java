@@ -8,6 +8,8 @@ import java.util.Arrays;
 
 public class Session {
 
+    protected static final String CONSTRAINT_ERROR = "| Constraint Error | ";
+
     private static Session instance = null; // For singleton
 
     private static byte[] dataBaseKey;
