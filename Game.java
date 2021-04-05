@@ -27,17 +27,58 @@ public class Game {
         this.discount = 0.0;
     }
 
+    /**
+     * Sets price of the game
+     * @param price game's price
+     */
     protected void setPrice(Double price){ this.price = price;}
+
+    /**
+     * Sets the status of forSale
+     * @param forSale boolean parameter which is true for games that are for sale
+     */
     protected void setForSale(Boolean forSale){this.forSale = forSale;}
 
+    /**
+     * Returns game's name
+     * @return title of the game
+     */
     protected String getTitle(){return this.title;}
+
+    /**
+     * Returns price of a game
+     * @return game's price
+     */
     protected Double getPrice(){return this.price;}
+
+    /**
+     * Returns the whether a game is for sale
+     * @return true if a game is for sale, false otherwise
+     */
     protected Boolean isForSale(){return this.forSale;}
 
+    /**
+     * Sets a game's status to bought
+     * @param bought game's status of being bought
+     */
     protected void setBought(boolean bought){this.bought = bought;}
+
+    /**
+     * Returns whether a game is already bought
+     * @return true if a game is bought, false otherwise
+     */
     protected boolean isBought(){return this.bought;}
 
+    /**
+     * Sets the discount on a game
+     * @param discount discount on a game
+     */
     protected void setDiscount(double discount){this.discount = discount;}
+
+    /**
+     * Returns whether a game has a discount
+     * @return true if a discount is applied on a game, false otherwise
+     */
     protected double getDiscount(){return this.discount;}
 
 
