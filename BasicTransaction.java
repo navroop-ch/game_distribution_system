@@ -111,7 +111,7 @@ public class BasicTransaction extends Transaction{
     /**
      * Creates a new user
      * @param session session object that keeps track of currently logged in users
-     * @return returns true 
+     * @return returns true after creating a new user, otherwise false and prints error message
      */
     private Boolean executeCreateUser(Session session){
         System.out.println("\nRead here: \n");
@@ -129,6 +129,11 @@ public class BasicTransaction extends Transaction{
         }
     }
 
+    /**
+     * Deletes a user
+     * @param session session object that keeps track of currently logged in users
+     * @return true if a user is deleted, false otherwise
+     */
     private Boolean executeDeleteUser(Session session){
         User toBeDeleted = session.getUser(this.transactionUsername);
         User LoggedInUser = session.getUserLoggedIn();
@@ -142,11 +147,23 @@ public class BasicTransaction extends Transaction{
         return false;
     }
 
+    /**
+     * Checks the format for transaction code, type of user and credit
+     * @param code transaction code
+     * @param type type of user
+     * @param credit credit amount
+     * @return true if the format of code, type and credit matches, otherwise return false
+     */
     protected Boolean transactionValidate(String code, String type, String credit) {
         return typeValidation(type) && creditValidation(credit) && basicCodeValidation(code);
     }
 
-    private boolean dataSatisfiesDatabase(User databaseUser){ //Todo: record errors
+    /**
+     * Checks the user data for credit and type of user
+     * @param databaseUser user object
+     * @return true if user data matches, otherwise false
+     */
+    private boolean dataSatisfiesDatabase(User databaseUser){
         if (!(databaseUser.getCredit().equals(this.credit) && databaseUser.getType().equals(this.type))){
             System.out.println(ERROR_INCONSISTENT_DATA);
             return false;
