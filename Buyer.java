@@ -1,6 +1,8 @@
 import java.util.ArrayList;
-//cc
 
+/**
+ * A Buyer user class with username, credit and games owned.
+ */
 public class Buyer extends User{
 
     protected Buyer(String username, double credit, ArrayList<Game>gameOwned){
@@ -10,6 +12,6 @@ public class Buyer extends User{
     @Override
     protected void sell(String title, Double price, Double saleDiscount){
         //Todo: Send warning via an exception
-        System.out.println("Your user type is not allowed to sell games!");
+        System.out.println("Error: Your user type is not allowed to sell games!");
     }
 }
