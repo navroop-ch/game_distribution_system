@@ -61,7 +61,8 @@ public class BasicTransaction extends Transaction{
     private Boolean executeLogin(Session session) {
 
         User user = session.getUser(this.transactionUsername);
-        if (user != null && dataSatisfiesDatabase(user)){
+        if (user != null){
+            dataSatisfiesDatabase(user);
             user.login();
             return true;
         }
@@ -79,6 +80,7 @@ public class BasicTransaction extends Transaction{
     private Boolean executeLogout(Session session){
         User user = session.getUser(this.transactionUsername);
         if (user != null){
+            dataSatisfiesDatabase(user);
             user.logout();
             return true;
         }
@@ -114,7 +116,6 @@ public class BasicTransaction extends Transaction{
      * @return returns true after creating a new user, otherwise false and prints error message
      */
     private Boolean executeCreateUser(Session session){
-        System.out.println("\nRead here: \n");
         User toBeCreated = session.getUser(this.transactionUsername);
         User LoggedInUser = session.getUserLoggedIn();
         if(toBeCreated==null && LoggedInUser != null && LoggedInUser.getType().equals(User.ADMIN_USER_TYPE)){
@@ -124,7 +125,7 @@ public class BasicTransaction extends Transaction{
             return true;
         }
         else {
-            System.out.println("Error: User already exist");
+            System.out.println("Error: User already exists");
             return false;
         }
     }
@@ -163,11 +164,11 @@ public class BasicTransaction extends Transaction{
      * @param databaseUser user object
      * @return true if user data matches, otherwise false
      */
-    private boolean dataSatisfiesDatabase(User databaseUser){
+
+    private void dataSatisfiesDatabase(User databaseUser){
+
         if (!(databaseUser.getCredit().equals(this.credit) && databaseUser.getType().equals(this.type))){
             System.out.println(ERROR_INCONSISTENT_DATA);
-            return false;
         }
-        return true;
     }
 }

@@ -15,6 +15,7 @@ public abstract class User {
     protected static final String FULL_USER_TYPE = "FS";
     protected static final String BUYER_USER_TYPE = "BS";
     protected static final String SELLER_USER_TYPE = "SS";
+    protected static final String CONSTRAINT_ERROR = Session.CONSTRAINT_ERROR;
 
     protected Boolean loginStatus;
     protected Session session;
@@ -208,7 +209,7 @@ public abstract class User {
      * @param saleDiscount The discount on the game if there's a sale taking place.
      *                     If there is no sale, then discount is 0.0
      */
-    protected void sell(String title, Double price, Double saleDiscount){
+    protected String sell(String title, Double price, Double saleDiscount){
         // Checks if the game is already in owned games
         Game game = owned(title);
         // Creates a new game if the given game doesn't exist in gameOwned,
@@ -217,17 +218,22 @@ public abstract class User {
             game.setDiscount(saleDiscount);
             game.setForSale(true);
             addOwnedGame(game);
-
+            game.switchPreSale();
+            return null;
         }
-        else {
+        else if (!game.getPreSale() && !game.isForSale()){
             if (!game.isBought()) {
                 game.setForSale(true);
                 game.setDiscount(saleDiscount);
-
+                game.switchPreSale();
+                return null;
             }
             else {
-                System.out.println("Warning: This game can not be sold.");
+                return String.format("Error: %s game can not be sold as it was bought the same day.", CONSTRAINT_ERROR);
             }
+        }
+        else {
+            return String.format("Error: %s This game is already up for sale.", CONSTRAINT_ERROR);
         }
 
     }
@@ -238,26 +244,28 @@ public abstract class User {
      * @param title The title of the game.
      * @param sellerName The username of the seller.
      */
-    protected void buy(String title, String sellerName){
+    protected String buy(String title, String sellerName){
         User seller = session.getUser(sellerName);
         Game game = seller.owned(title);
         // If seller is selling and buyer doesn't own the game.
-        if (game != null && game.isForSale() && this.owned(title) == null) {
+        if (game != null && game.isForSale() && !game.getPreSale() && this.owned(title) == null) {
             double price = game.getPrice();
             if (session.getAuctionStatus())
                 price = game.getPrice() + (game.getPrice() * game.getDiscount());
             if (canBuy(price)) {
                 this.credit -= price;
                 seller.addCredit(price);
+                seller.removeGame(game);
+                this.addOwnedGame(game);
                 game.setBought(true);
+                return null;
             }
             else {
-                System.out.println("Not enough credit to buy game.");
+                return CONSTRAINT_ERROR + " Not enough credit to buy game.";
             }
         }
         else {
-            System.out.println("Game cannot be bought for one of the three reasons;" +
-                    "the game is already owned, not for sale, or does not exist.");
+            return  CONSTRAINT_ERROR + " the game is either already owned, not for sale yet, or does not exist.";
         }
 
     }

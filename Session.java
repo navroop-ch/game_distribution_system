@@ -9,6 +9,8 @@ import java.util.Arrays;
  */
 public class Session {
 
+    protected static final String CONSTRAINT_ERROR = "| Constraint Error | ";
+
     private static Session instance = null; // For singleton
 
     private static byte[] dataBaseKey;
@@ -162,7 +164,6 @@ public class Session {
             // Go through valid transactions until the user logs out
             transIndex = executeUserTransactions(transactions, transIndex);
         }
-        System.out.println(userList);
         dataBase.updateDataBase(userList);
 
     }

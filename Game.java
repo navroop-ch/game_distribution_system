@@ -4,6 +4,7 @@ public class Game {
     private Boolean forSale = false;
     private boolean bought;
     private double discount;
+    private Boolean preSale = false;
 
     /**
      * Constructor class that instantiates a Game using the title only
@@ -81,6 +82,13 @@ public class Game {
      */
     protected double getDiscount(){return this.discount;}
 
+    protected boolean getPreSale(){
+        return this.preSale;
+    }
+
+    protected void switchPreSale(){
+        this.preSale = !preSale;
+    }
 
     /**
      * Takes a string of the format below a returns a game object based on that string
@@ -101,12 +109,11 @@ public class Game {
         int priceIndexStart = data_base.TITLE_LENGTH + 1;
         int priceIndexEnd = priceIndexStart + data_base.PRICE_LENGTH;
 
-        String title = gameString.substring(titleIndexStart, titleIndexEnd);
+        String title = gameString.substring(titleIndexStart, titleIndexEnd).strip();
         Double price = Double.parseDouble(gameString.substring(priceIndexStart, priceIndexEnd));
         Boolean forSale = Boolean.parseBoolean(gameData[gameData.length - 1]);
 
-        Game game = new Game(title, price, forSale);
-        return game;
+        return new Game(title, price, forSale);
     }
 
     /**

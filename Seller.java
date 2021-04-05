@@ -15,7 +15,9 @@ public class Seller extends User{
      * @param sellerName The username of the seller.
      */
     @Override
-    protected void buy(String title, String sellerName){
-        System.out.println("Your user type cannot buy games!");
+    protected String buy(String title, String sellerName){
+        //Todo: Return warning via exception
+        return "Your user type cannot buy games!";
+
     }
 }

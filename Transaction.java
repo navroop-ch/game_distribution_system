@@ -10,6 +10,7 @@ public abstract class Transaction{
     protected static final int SELL_TRANSACTION_PARAM = 5;
     protected static final int BUY_TRANSACTION_PARAM = 4;
     protected static final int REFUND_TRANSACTION_PARAM = 4;
+    protected static final String CONSTRAINT_ERROR = Session.CONSTRAINT_ERROR;
 
     protected String transactionCode;
     protected String transactionUsername;
