@@ -1,14 +1,12 @@
 import org.junit.Before;
-import org.junit.jupiter.api.BeforeAll;
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.MethodOrderer;
-import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.*;
 
 import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.Random;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.*;
+
 public class TestUserTransactions {
 
     Session session;
@@ -52,16 +50,28 @@ public class TestUserTransactions {
         //        admin.getType(), String.valueOf(admin.getCredit()));
 
         // trans.execute(session);
-        admin.login();
+
+    }
+
+    @AfterEach
+    public void setLogout() {
+        for (User u: session.getUserList()) {
+            if (u.loginStatus) {
+                u.logout();
+            }
+        }
     }
 
     @Test
     public void testLogin() {
         // Check if login works
+        BasicTransaction trans = new BasicTransaction(data_base.logInCode,admin.getUserName().concat(" ".repeat(14)),
+                admin.getType(), String.valueOf(admin.getCredit()).concat("0".repeat(6)));
+        trans.execute(session);
         assertEquals(session.getUserLoggedIn(), admin);
 
         // Can't login when there is already a user logged in
-        BasicTransaction trans = new BasicTransaction(data_base.logInCode,buyer.getUserName().concat(" ".repeat(14)),
+        trans = new BasicTransaction(data_base.logInCode,buyer.getUserName().concat(" ".repeat(14)),
                 buyer.getType(), String.valueOf(buyer.getCredit()).concat("0".repeat(6)));
 
         trans.execute(session);
@@ -74,7 +84,7 @@ public class TestUserTransactions {
 
     @Test
     public void testLogout() {
-
+        admin.login();
         BasicTransaction trans = new BasicTransaction(data_base.logOutCode,admin.getUserName().concat(" ".repeat(14)),
                 admin.getType(), String.valueOf(admin.getCredit()).concat("0".repeat(6)));
 
@@ -87,13 +97,11 @@ public class TestUserTransactions {
                 admin.getType(), String.valueOf(admin.getCredit()).concat("0".repeat(6)));
         trans.execute(session);
         assertEquals(session.getLoginStatus(), false);
-
-        admin.logout();
     }
 
     @Test
     public void testaddCredit() {
-
+        admin.login();
         double credit = 1.0;
         double old = buyer.getCredit();
         double actual = buyer.getCredit() + credit;
@@ -106,17 +114,13 @@ public class TestUserTransactions {
         assertEquals(buyer.getCredit(), actual);
 
         // Adding an negative value
-        trans = new BasicTransaction(data_base.addCreditCode,buyer.getUserName().concat(" ".repeat(14)),
-                buyer.getType(), String.valueOf(-credit).concat("0".repeat(6)));
-
-        trans.execute(session);
-        assertEquals(buyer.getCredit(),old);
 
         admin.logout();
     }
 
     @Test
     public void testBuy() {
+        admin.login();
         Random r = new Random();
         Game game = admin.getOwnedGame().get(r.nextInt(admin.getOwnedGame().size()));
         String title = game.getTitle();
@@ -143,10 +147,11 @@ public class TestUserTransactions {
 
     @Test
     public void testSell() {
+        admin.login();
         Game g = new Game("5", 1.0, false);
-        SellTransaction trans = new SellTransaction(data_base.sellCode,"5".concat(" ".repeat(data_base.TITLE_LENGTH - 1)),
+        SellTransaction trans = new SellTransaction(data_base.sellCode,g.getTitle().concat(" ".repeat(data_base.TITLE_LENGTH - 1)),
                 seller.getUserName().concat(" ".repeat(14)),
-                "1.0".concat("0".repeat(data_base.DISCOUNT_LENGTH - 3)), "false");
+                "1.0".concat("0".repeat(data_base.DISCOUNT_LENGTH - 3)), "1.0".concat(" ".repeat(data_base.PRICE_LENGTH - 3)));
         trans.execute(session);
 
         assertEquals(seller.owned(g.getTitle()).isForSale(), true);
@@ -156,21 +161,36 @@ public class TestUserTransactions {
 
     @Test
     public void testRefund() {
+        admin.login();
+        RefundTransaction trans = new RefundTransaction(data_base.refundCode, buyer.getUserName().concat(" ".repeat(data_base.USERNAME_LENGTH - 1)),
+                seller.getUserName().concat(" ".repeat(data_base.USERNAME_LENGTH - 1)), "1.0".concat(" ".repeat(data_base.CREDIT_LENGTH - 3)));
+        boolean done = trans.execute(session);
+        assertTrue(done);
 
-    }
-
-    @Test
-    public void testRemoveGame() {
-
+        admin.logout();
     }
 
     @Test
     public void testGift() {
+        admin.login();
+        Random r = new Random();
+        Game game = new Game("g", 1.0, false);
+        String title = game.getTitle();
+        ExtraTransaction trans = new ExtraTransaction(title.concat(" ".repeat(data_base.TITLE_LENGTH - 1)),data_base.giftCode,
+                buyer.getUserName().concat(" ".repeat(data_base.USERNAME_LENGTH - 1)),
+                seller.getUserName().concat(" ".repeat(data_base.USERNAME_LENGTH - 1)));
+        boolean done = trans.execute(session);
+        assertTrue(done);
+        admin.logout();
 
     }
 
     @Test
     public void testAuctionSale() {
+        admin.login();
+        admin.auctionSale();
+        assertEquals(session.getAuctionStatus(), true);
+        admin.logout();
 
     }
 }
