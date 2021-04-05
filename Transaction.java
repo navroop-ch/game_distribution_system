@@ -3,10 +3,6 @@ import java.util.List;
 
 public abstract class Transaction{
 
-    protected static final int BASIC_TRANSACTION_PARAM = 4;
-    protected static final int SELL_TRANSACTION_PARAM = 5;
-    protected static final int BUY_TRANSACTION_PARAM = 4;
-    protected static final int REFUND_TRANSACTION_PARAM = 4;
     protected static final String CONSTRAINT_ERROR = Session.CONSTRAINT_ERROR;
 
     protected String transactionCode;
@@ -15,8 +11,6 @@ public abstract class Transaction{
     protected List<String> TYPES = Arrays.asList(
             User.ADMIN_USER_TYPE, User.BUYER_USER_TYPE, User.FULL_USER_TYPE, User.SELLER_USER_TYPE);
 
-
-    // reading daily.txt
 
     protected Transaction(String username){
         // checks code length and username length

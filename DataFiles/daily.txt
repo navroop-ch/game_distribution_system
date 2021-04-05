@@ -7,9 +7,5 @@
 00 Johnny Bravo 54 SS 0001100.0
 06 Johnny Bravo 54 SS 0010000.0
 10 Johnny Bravo 54 SS 0010000.0
-00 Fred            AA 0999000.0
-02 Johnny Bravo 54 SS 0000000.0
-03 Fortnite            David           50.00 400.00
-10 Fred            AA 0000000.0
-00 David           FS 0999000.0
-04 Fortnite            Fred            David                  
+00 Fred            FS 998298.66
+09 Fortnit                   Fred            David          

@@ -60,7 +60,7 @@ public class Game {
      */
     protected static Game stringToGame(String gameString){
 
-        if (gameString.equals("null")){ return null;}
+        if (gameString.length() < 4){ return null;}
         String[] gameData = gameString.split(data_base.SEPARATOR);
 
         int titleIndexStart = 0;

@@ -108,7 +108,7 @@ public abstract class User {
      */
     protected void addCredit(double cred){
         if (cred < 0.00){
-            System.out.println("Amount cannot be less than 0!");
+            System.out.printf("Error: %s Amount cannot be less than 0!", CONSTRAINT_ERROR);
         }
         else if(this.addedCredit + cred > 1000.00){
             System.out.println("Daily limit exceeded: A maximum of $1000.00 can be added each day.");
@@ -182,6 +182,15 @@ public abstract class User {
         this.gameOwned.remove(game);
     }
 
+    public String removeGameTrans(Game game){
+        if (!game.getPreSale() && !game.isBought()){
+            this.gameOwned.remove(game);
+            return null;
+        }
+        else {
+            return String.format("Error: %s Cannot remove a game that was purchased or put up to sale on the same day");
+        }
+    }
     /**
      * Gifts a game to another user from user's own inventory.
      *
@@ -255,7 +264,6 @@ public abstract class User {
             if (canBuy(price)) {
                 this.credit -= price;
                 seller.addCredit(price);
-                seller.removeGame(game);
                 this.addOwnedGame(game);
                 game.setBought(true);
                 return null;

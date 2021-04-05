@@ -3,7 +3,6 @@ import java.util.List;
 
 public class BasicTransaction extends Transaction{
 
-    public static final String ERROR_INCONSISTENT_DATA = "Error: Data in transaction does not match data in user database.";
     protected final List<String> BasicTransactionCodes= Arrays.asList(
             data_base.addCreditCode, data_base.logInCode, data_base.logOutCode, data_base.createCode,
             data_base.deleteCode);
@@ -124,7 +123,7 @@ public class BasicTransaction extends Transaction{
 
     private void dataSatisfiesDatabase(User databaseUser){ //Todo: record errors
         if (!(databaseUser.getCredit().equals(this.credit) && databaseUser.getType().equals(this.type))){
-            System.out.println(ERROR_INCONSISTENT_DATA);
+            System.out.printf("Error: %s Data in transaction does not match data in user database.\n", CONSTRAINT_ERROR);
         }
     }
 }

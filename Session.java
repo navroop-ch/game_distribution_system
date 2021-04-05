@@ -127,8 +127,7 @@ public class Session {
         while (transIndex < transactions.size() && loginStatus) {
 
             Transaction transaction = transactions.get(transIndex);
-            if (!transaction.validTransaction){continue;}
-            transaction.execute(this);
+            if (transaction.validTransaction){transaction.execute(this);}
             transIndex++;
         }
         return transIndex;

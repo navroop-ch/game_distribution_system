@@ -5,6 +5,13 @@ public class SessionClient {
     public static void main(String[] args){
 
         Session session = Session.getInstance();
+
+        //createMethod(session);
+
+        session.executeBackend();
+    }
+
+    private static void createMethod(Session session) {
         ArrayList<Game> ownedGames = new ArrayList<Game>();
         ownedGames.add(new Game("Fortnite", 350.34,true));
         ownedGames.add(new Game("R six siege", 550.34,true));
@@ -14,11 +21,9 @@ public class SessionClient {
         FullStandardUser u = new FullStandardUser("David", 999000.0, ownedGames);
 
 
-        /*admin0.login();
+        admin0.login();
         data_base dataBase = session.getDataBase(admin0);
-        dataBase.writeBuyTransaction("Fortnite", "Fred", "David");
-        admin0.logout();*/
-
-        session.executeBackend();
+        dataBase.writeRefundTransaction("Fred", "David", 1000.0);
+        admin0.logout();
     }
 }
