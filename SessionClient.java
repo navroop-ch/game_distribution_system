@@ -1,5 +1,8 @@
 import java.util.ArrayList;
 
+/**
+ * Creates a session instance and execute the backend.
+ */
 public class SessionClient {
 
     public static void main(String[] args){
@@ -12,13 +15,6 @@ public class SessionClient {
         Admin admin0 = new Admin("Fred", 999000, ownedGames);
 
         FullStandardUser u = new FullStandardUser("David", 999000.0, ownedGames);
-
-
-        /*admin0.login();
-        data_base dataBase = session.getDataBase(admin0);
-        dataBase.writeUser(admin0);
-        dataBase.writeUser(u);
-        admin0.logout();*/
 
         session.executeBackend();
     }
