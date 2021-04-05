@@ -2,7 +2,7 @@ import java.util.Arrays;
 import java.util.List;
 
 /**
- * Checks the transaction format for add credit, login, logout, create user and delete user.
+ * A Basic transaction class for adding credit, login, logout, creating user and deleting user.
  */
 public class BasicTransaction extends Transaction{
 

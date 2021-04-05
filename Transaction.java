@@ -1,6 +1,9 @@
 import java.util.Arrays;
 import java.util.List;
 
+/**
+ * A transaction class for executing all the transactions - sell, buy, remove game, gift game, refund game
+ */
 public abstract class Transaction{
 
     protected static final int BASIC_TRANSACTION_PARAM = 4;

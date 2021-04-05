@@ -88,7 +88,7 @@ public class ExtraTransaction extends Transaction {
             return false;
         }
     }
-    
+
     /**
      * Checks format and transaction code
      * @param code user code
