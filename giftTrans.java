@@ -1,5 +1,8 @@
 import java.util.ArrayList;
 
+/**
+ * A transaction class for gifting a game to a user
+ */
 public class giftTrans extends Transaction{
     protected String gameOwner;
     protected String gameReceiver;
@@ -29,14 +32,21 @@ public class giftTrans extends Transaction{
             return true;
         }
         else {
-            //Todo: figure out appropriate error return
-            System.out.println("Error: User does not exist");
+            System.out.println("Error: User does not exist. Gift transaction Failed !");
             return false;
         }
         
     }
 
-    //check format and correct trans code
+
+    /**
+     * Checks if the transaction  is valid by checking its format and transaction code
+     * @param code transaction code
+     * @param gameGift game's title/name
+     * @param gameReceiver username of the game's receiver
+     * @param gameOwner username of the game's owner
+     * @return true if the format of transaction string is correct, false otherwise
+     */
     protected Boolean transactionValidate(String code, String gameGift, String gameReceiver, String gameOwner) {
         return gameTitleValidation(gameGift) && usernameValidation(gameReceiver) && code.equals(data_base.giftCode);
 
