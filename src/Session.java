@@ -1,10 +1,11 @@
-import java.lang.reflect.Array;
+package src;
+
 import java.util.ArrayList;
 import java.security.SecureRandom;
 import java.util.Arrays;
 
 /**
- * A session object that controls exchange of data between User objects and the database. A session must be logged into
+ * A session object that controls exchange of data between src.User objects and the database. A session must be logged into
  * for a user to get access to the database to perform any transactions.
  */
 public class Session {
@@ -85,7 +86,7 @@ public class Session {
     /**
      * Returns the data base for session
      * @param user a user object
-     * @return data_base if the user is logged in, false otherwise
+     * @return src.data_base if the user is logged in, false otherwise
      */
     protected data_base getDataBase(User user) {
         if (this.userLoggedIn == user) {

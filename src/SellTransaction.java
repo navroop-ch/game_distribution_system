@@ -1,3 +1,5 @@
+package src;
+
 /**
  * A transaction class for selling a game
  */

@@ -1,7 +1,6 @@
-import org.junit.Before;
+package src;//import org.junit.jupiter.Before;
 import org.junit.jupiter.api.*;
 
-import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.Random;
 
@@ -46,7 +45,7 @@ public class TestUserTransactions {
         session.getUserList().add(fullst);
 
         // Log in the admin
-        // BasicTransaction trans = new BasicTransaction(data_base.logInCode,admin.getUserName(),
+        // src.BasicTransaction trans = new src.BasicTransaction(src.data_base.logInCode,admin.getUserName(),
         //        admin.getType(), String.valueOf(admin.getCredit()));
 
         // trans.execute(session);

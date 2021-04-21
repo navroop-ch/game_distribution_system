@@ -1,3 +1,5 @@
+package src;
+
 public class RefundTransaction extends Transaction{
 
     /**
@@ -50,7 +52,7 @@ public class RefundTransaction extends Transaction{
             user.refund(this.transactionUsername, this.sellerUsername, this.refundCredit);
             return true;
         } else {
-            System.out.println("Error: User doesn't exist. Refund Failed !");
+            System.out.println("Error: src.User doesn't exist. Refund Failed !");
             return false;
         }
     }

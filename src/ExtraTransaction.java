@@ -1,3 +1,5 @@
+package src;
+
 import java.util.Arrays;
 import java.util.List;
 
@@ -54,7 +56,7 @@ public class ExtraTransaction extends Transaction {
         } else if (receiver != null && owner.owned(gameGift).getTitle().equals(gameGift)){
             receiver.removeGame(game);
         }
-        System.out.println("Error: User doesn't exist. Remove game transaction Failed !");
+        System.out.println("Error: src.User doesn't exist. Remove game transaction Failed !");
         return false;
     }
 
@@ -84,7 +86,7 @@ public class ExtraTransaction extends Transaction {
             }
             return true;
         } else {
-            System.out.println("Error: User does not exist. Gift game transaction failed !");
+            System.out.println("Error: src.User does not exist. Gift game transaction failed !");
             return false;
         }
     }

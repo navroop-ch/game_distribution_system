@@ -1,3 +1,5 @@
+package src;
+
 import java.util.Arrays;
 import java.util.List;
 
@@ -67,7 +69,7 @@ public class BasicTransaction extends Transaction{
             return true;
         }
         else {
-            System.out.println("Error: User does not exist");
+            System.out.println("Error: src.User does not exist");
             return false;
         }
     }
@@ -85,7 +87,7 @@ public class BasicTransaction extends Transaction{
             return true;
         }
         else {
-            System.out.println("Error: User does not exist");
+            System.out.println("Error: src.User does not exist");
             return false;
         }
     }
@@ -105,7 +107,7 @@ public class BasicTransaction extends Transaction{
             return true;
         }
         else {
-            System.out.println("Error: User does not exist");
+            System.out.println("Error: src.User does not exist");
             return false;
         }
     }
@@ -125,7 +127,7 @@ public class BasicTransaction extends Transaction{
             return true;
         }
         else {
-            System.out.println("Error: User already exists");
+            System.out.println("Error: src.User already exists");
             return false;
         }
     }
@@ -144,7 +146,7 @@ public class BasicTransaction extends Transaction{
             return true;
         }
 
-        System.out.println("Error: User does not exist");
+        System.out.println("Error: src.User does not exist");
         return false;
     }
 

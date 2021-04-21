@@ -1,3 +1,5 @@
+package src;
+
 import java.util.Arrays;
 import java.util.List;
 
@@ -47,7 +49,7 @@ public abstract class Transaction{
     /**
      * Validates the code by checking its length and type
      * @param code string to be checked
-     * @return true if the length of code matches the CODE_LENGTH in data_base and code is numeric
+     * @return true if the length of code matches the CODE_LENGTH in src.data_base and code is numeric
      */
     protected boolean codeValidation(String code){
         return code.length() == data_base.CODE_LENGTH && integerValidation(code);

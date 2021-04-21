@@ -1,3 +1,5 @@
+package src;
+
 import java.util.ArrayList;
 
 /**
@@ -32,7 +34,7 @@ public class giftTrans extends Transaction{
             return true;
         }
         else {
-            System.out.println("Error: User does not exist. Gift transaction Failed !");
+            System.out.println("Error: src.User does not exist. Gift transaction Failed !");
             return false;
         }
         

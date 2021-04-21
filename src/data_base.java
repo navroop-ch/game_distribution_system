@@ -1,8 +1,8 @@
+package src;
+
 import java.io.*;
 import java.lang.*;
-import java.text.DecimalFormat;
 import java.util.ArrayList;
-import java.util.Locale;
 
 /**
  * An data base class that handles every interaction with the daily.txt or our userName.txt (database)
@@ -54,8 +54,10 @@ public class data_base{
 
 
     private data_base() {
-        this.userData = "a2-a-2-g-a-n-g" + File.separator + "DataFiles" + File.separator + "userName.txt";
-        this.dailyData = "a2-a-2-g-a-n-g" + File.separator + "DataFiles" + File.separator + "daily.txt";
+//        this.userData = "a2-a-2-g-a-n-g" + File.separator + "src.DataFiles" + File.separator + "userName.txt";
+//        this.dailyData = "a2-a-2-g-a-n-g" + File.separator + "src.DataFiles" + File.separator + "daily.txt";
+        this.userData = "/home/deval/Documents/TA/CSC207_21W/a2-marking/a2-a-2-g-a-n-g/src/DataFiles/userName.txt";
+        this.dailyData = "/home/deval/Documents/TA/CSC207_21W/a2-marking/a2-a-2-g-a-n-g/src/DataFiles/daily.txt";
     }
 
     private data_base(String userPath, String dailyPath){
@@ -64,7 +66,7 @@ public class data_base{
     }
 
     protected static data_base getInstance(byte[] key) {
-        // Authenticates key to verify the Session object has called the function
+        // Authenticates key to verify the src.Session object has called the function
         if (Session.authenticateKey(key)) {
             if (instance == null)
                 instance = new data_base();
@@ -209,7 +211,7 @@ public class data_base{
      *
      *          UUUUUUUUUUUUUUU TT CCCCCCCCC COMMA_SEPARATOR IIIIIIIIIIIIIIIIIII PPPPP
      *
-     * @param user User object
+     * @param user src.User object
      */
     protected void writeUser(User user){
         String profile = String.join(SEPARATOR, stringPadding(user.getUserName(),' ', USERNAME_LENGTH),
@@ -228,7 +230,7 @@ public class data_base{
      * @param filePath In our data base, we have two existing filePath. Either userName.txt or
      *                 daily.txt which has been created as a static String variable in this class.
      *                 <p>
-     *                 To use this function, for example, Admin wants to create user, we will do both
+     *                 To use this function, for example, src.Admin wants to create user, we will do both
      *                 appendData("XX UUUUUUUUUUUUUUU TT CCCCCCCCC", dailyData) <- update daily.txt
      *                 and
      *                 appendData("UserName type credit", userData) <- update our user data base
@@ -321,9 +323,9 @@ public class data_base{
      *                 daily.txt which has been created as a static String variable in this class.
      *                 <p>
      *                 <p>
-     *                 To use this function, for example, Admin wants to know user_1 exist or not
-     *                 we can call data_base.ifUserExist("UserName", userData)
-     *                 or admin can simply call getInfo(String userName) in the Admin class
+     *                 To use this function, for example, src.Admin wants to know user_1 exist or not
+     *                 we can call src.data_base.ifUserExist("UserName", userData)
+     *                 or admin can simply call getInfo(String userName) in the src.Admin class
      */
     protected static boolean ifUserExist(String userName, String filePath) throws IOException {
         File inputFile = new File(filePath);
@@ -340,11 +342,11 @@ public class data_base{
     }
 
     /**
-     * This method returns a User object based on the data associated with the given line in the database. It
+     * This method returns a src.User object based on the data associated with the given line in the database. It
      * processes the data from the database and passes it into generateUser.
      *
      * @param line The current line.
-     * @return User object if the username exists in database otherwise it's null.
+     * @return src.User object if the username exists in database otherwise it's null.
      */
     protected User getUser(String line) {
         User user = null;
@@ -558,8 +560,8 @@ public class data_base{
      * @param filePath In our data base, we have two existing filePath. Either userName.txt or
      *                 daily.txt which has been created as a static String variable in this class.
      *
-     * Admin will call deleteUser() and the deleteUser() will call this function. This function should not be called directly
-     * since Admin is the only type of user that can perform this action.
+     * src.Admin will call deleteUser() and the deleteUser() will call this function. This function should not be called directly
+     * since src.Admin is the only type of user that can perform this action.
      *
      *
      */
@@ -592,7 +594,7 @@ public class data_base{
         dataBase.writeBasicTransaction("05", "Kentucky", "AA", 34.02);
         dataBase.writeBasicTransaction("09", "Kent", "AA", 34.02);*/
 
-        // User user = dataBase.getUser("David");
+        // src.User user = dataBase.getUser("David");
         // System.out.println(user);
 
         String a = "00";

@@ -9,27 +9,27 @@ The program is the backend implementation of a game store web service where user
 perform transactions.
 
 ### Description of Classes -
-- User (abstract class): There are 4 user subclasses that extend this class in our program.
-    1. Admin-type user
+- src.User (abstract class): There are 4 user subclasses that extend this class in our program.
+    1. src.Admin-type user
     2. Full-standard user
-    3. Buyer user
-    4. Seller user
+    3. src.Buyer user
+    4. src.Seller user
 
-- Transaction (abstract class): There are 5 transaction subclasses that are used to store transactions
+- src.Transaction (abstract class): There are 5 transaction subclasses that are used to store transactions
 
 
 read from daily.txt
 
-- data_base: The class that parses through both usernames.txt and daily.txt.
+- src.data_base: The class that parses through both usernames.txt and daily.txt.
 
 
-- Session: A singleton class that holds all users and transaction executes from daily.txt
+- src.Session: A singleton class that holds all users and transaction executes from daily.txt
   There will always only be one session class.
 
-- SessionClient: Creates a Session object and executes the backend.
+- src.SessionClient: Creates a src.Session object and executes the backend.
 
-- TestUserTransactions: Since all the code relies on the session class, the testing
-  is done on the Transaction.execute methods and verifies that they all run correctly.
+- src.TestUserTransactions: Since all the code relies on the session class, the testing
+  is done on the src.Transaction.execute methods and verifies that they all run correctly.
 
 ### Design Patterns and Strategies -
 We designed the session class as a singleton to allow only a single user to be logged
@@ -40,9 +40,9 @@ execute function which calls the corresponding method from user.
 
 ### How to run?
 Assuming our data base is not empty
-SessionClient.java executes the backend. It will read command from the text files daily.txt and execute it if it’s valid. To check if it’s valid, the backend will check with userName.txt, a file that stored all our existing user in
-data_base.java where these file paths are fixed. They can be changed manually.
-Add the daily.txt to a2-a-g-a-n-g and then run the main method for SessionClient.java 
+src.SessionClient.java executes the backend. It will read command from the text files daily.txt and execute it if it’s valid. To check if it’s valid, the backend will check with userName.txt, a file that stored all our existing user in
+src.data_base.java where these file paths are fixed. They can be changed manually.
+Add the daily.txt to a2-a-g-a-n-g and then run the main method for src.SessionClient.java 
 
 
 

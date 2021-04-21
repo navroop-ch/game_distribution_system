@@ -1,10 +1,10 @@
-import java.io.File;
-import java.io.IOException;
+package src;
+
 import java.util.ArrayList;
 
 
 /**
- * An Admin class consist of all the functions that an Admin can do.
+ * An src.Admin class consist of all the functions that an src.Admin can do.
  *
  */
 
@@ -12,7 +12,7 @@ public class Admin extends User{
 
 
     /**
-     * Constructs an Admin that pass in existing admin information
+     * Constructs an src.Admin that pass in existing admin information
      * from data base and allocate memory to it while the admin logged in.
      *
      * All parameters are loaded in from database.
@@ -36,7 +36,7 @@ public class Admin extends User{
      * @param credit The front end will ask for the initial account balance of the new user
      * This information is saved to the daily transaction file and our data base
      *
-     * Since only Admin can call this method, it can only be called by an admin constructor
+     * Since only src.Admin can call this method, it can only be called by an admin constructor
      *
      * NOTE: This method WILL NOT check the following constraints
      *        1. new user name is limited to at most 15 characters
@@ -52,7 +52,7 @@ public class Admin extends User{
             System.out.printf("%s: Created new user %s! \n", this.getUserName(), user.getUserName());
 
         } else{
-            System.out.println("User exists");
+            System.out.println("src.User exists");
         }
     }
 
@@ -60,7 +60,7 @@ public class Admin extends User{
     /**
      * @param userName The front end will ask for the new username
      *
-     * Since only Admin can call this method, it can only be called by an admin constructor
+     * Since only src.Admin can call this method, it can only be called by an admin constructor
      *
      * The user with the corresponding user name will be removed from our data base
      * and this action will be written to the daily.txt
@@ -73,7 +73,7 @@ public class Admin extends User{
             System.out.printf("%s: Deleted user %s! \n", this.getUserName(), userName);
 
         }else {
-            System.out.println("User does not exist");
+            System.out.println("src.User does not exist");
         }
     }
 
@@ -111,7 +111,7 @@ public class Admin extends User{
             System.out.println("Amount to be refunded cannot be negative!");
         }
         else if (sell_crd < transfer_amt){
-            System.out.println("Seller doesn't have enough credit. Refund Failed!");
+            System.out.println("src.Seller doesn't have enough credit. Refund Failed!");
         }
         else if (buy_crd + transfer_amt > MAX_ALLOWED_CREDIT){
             System.out.println("The maximum credit has been exceeded. Refund Failed!");
@@ -128,7 +128,7 @@ public class Admin extends User{
     }
 
     /**
-     * In Admin mode removes a game from owner's and receiver's inventory
+     * In src.Admin mode removes a game from owner's and receiver's inventory
      * @param title name of the game
      * @param owner username of game's owner
      * @param receiver username of game's receiver
@@ -149,7 +149,7 @@ public class Admin extends User{
     }
 
     /**
-     * In Admin mode gifts a game titled 'title' from owner_name to receiver_name
+     * In src.Admin mode gifts a game titled 'title' from owner_name to receiver_name
      * @param title name of the game
      * @param owner_name username of the game's owner
      * @param receiver_name username of the game's receiver

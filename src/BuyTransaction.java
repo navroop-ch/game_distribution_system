@@ -1,3 +1,5 @@
+package src;
+
 public class BuyTransaction extends Transaction{
     /**
      * A Buy transaction class for buying a game from a seller

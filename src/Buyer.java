@@ -1,7 +1,9 @@
+package src;
+
 import java.util.ArrayList;
 
 /**
- * A Buyer user class with username, credit and games owned.
+ * A src.Buyer user class with username, credit and games owned.
  */
 public class Buyer extends User{
 

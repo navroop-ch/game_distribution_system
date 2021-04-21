@@ -1,3 +1,5 @@
+package src;
+
 public class Game {
     private final String title;
     private Double price = 0.00;
@@ -7,7 +9,7 @@ public class Game {
     private Boolean preSale = false;
 
     /**
-     * Constructor class that instantiates a Game using the title only
+     * Constructor class that instantiates a src.Game using the title only
      * @param title name of the game
      */
     public Game(String title){
@@ -15,7 +17,7 @@ public class Game {
     }
 
     /**
-     * Constructor class that instantiates a Game using the title, price and forSale values.
+     * Constructor class that instantiates a src.Game using the title, price and forSale values.
      * @param title name of the game
      * @param price price of the game
      * @param forSale if the game is for sale

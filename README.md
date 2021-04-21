@@ -56,7 +56,7 @@ The Front End is capable of handling the following transactions, which will then
 
 **auctionsale** - change the prices of all games for sale to incorporate a seasonal discount (privileged transaction)
 
-### Transaction Code Details:
+### src.Transaction Code Details:
 
 **login** - start a Front End session
 
@@ -118,7 +118,7 @@ The Front End is capable of handling the following transactions, which will then
 -   The specified amount of credit should be transferred from the seller’s credit balance to the buyer’s credit balance.
 -   This information is saved to the daily transaction file
 -   Constraints:
-    -   Buyer and seller both must be current users
+    -   src.Buyer and seller both must be current users
 
 **addcredit** - add credit into the system for the purchase of accounts
 
@@ -136,7 +136,7 @@ The Front End is capable of handling the following transactions, which will then
 -   Constraints:
     -   privileged transaction - only accepted when logged in as admin user
 
-### Daily Transaction File:
+### Daily src.Transaction File:
 
 At the end of each day, the front end provides a daily transaction file called daily.txt, listing every transaction made in the day.
 Contains variable-length text lines of the following formats:
@@ -231,7 +231,7 @@ Note: Product backlogs change over time. Don't expect to get everything right th
 
 More information about each entry in the backlog:
 
-1. User story: The user stories should specify the user which the task is for (in this case, buyer, seller, both, or admin), and what it is that the user wants to do (follow the example format in the given spreadsheet)
+1. src.User story: The user stories should specify the user which the task is for (in this case, buyer, seller, both, or admin), and what it is that the user wants to do (follow the example format in the given spreadsheet)
 2. Estimation: The estimation should be how much effort you estimate a task will take (for particularly large tasks, break it up into smaller 'sub-tasks' -- you can make their IDs be in the format 1.1, 1.2, ...). Within the Scrum Framework the estimation is usually not actual time estimates - a more abstracted metric to quantify effort is used. For this project, we want you to use sizes like XS (really tiny task), S (small task), M (medium task), L (large task), or XL (very large task).
 3. Priority: Rank each user story to be either "low", "medium" or "high" priority
 

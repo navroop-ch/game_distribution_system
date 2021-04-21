@@ -12,7 +12,7 @@
 
     > Todo: Singleton
 
-    Consider using Singleton design pattern for data_base and session instance as we need to make sure there's only one
+    Consider using Singleton design pattern for src.data_base and session instance as we need to make sure there's only one
     user capable of making changes to file at any one time.
 
     Implementations:

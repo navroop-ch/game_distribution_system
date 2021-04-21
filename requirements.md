@@ -1,12 +1,12 @@
-### User Constraints:
+### src.User Constraints:
 -   Username: At most 15 characters, can not have the same username twice
 -   Credit: min 0, max 999,999
 -   Usernames can have spaces !!!
 
-### Game Constraints:
--   Game Title: At most 25/19? characters, can not have the same game name twice
--   Game Price: At most 999.99
--   Game Discount: At most 90%
+### src.Game Constraints:
+-   src.Game Title: At most 25/19? characters, can not have the same game name twice
+-   src.Game Price: At most 999.99
+-   src.Game Discount: At most 90%
 -   not unique to sellers
 
 ### Txt File Clarifications
@@ -15,7 +15,7 @@
 -   alphabetical values are padded with " "
 -   numeric values are padded with "0"
 
-### Transaction Code Details and Constraints:
+### src.Transaction Code Details and Constraints:
 
 **login** - start a Front End session
 -   Only one user can be logged in at a time.
@@ -41,7 +41,7 @@
 
 **buy** – purchase an available game for sale
 
--   Admin can't buy a game from a user
+-   src.Admin can't buy a game from a user
 -   The game should be added to the buyer's inventory
 -   Semi-privileged transaction - only accepted when logged in any type of account except standard-sell.
 -   game name must be an existing game in the seller's inventory that is available for sale
@@ -53,13 +53,13 @@
 
 -   seller's balance > refund amount
 -   The specified amount of credit should be transferred from the seller’s credit balance to the buyer’s credit balance.
--   Buyer and seller both must be current users
+-   src.Buyer and seller both must be current users
 
 **addcredit** - add credit into the system for the purchase of accounts
 
 -   add credit till the balance of the user maxes out, give warning if the addedcredit > max_user credit
 -   Sell only account can add credit
--   The username has to be an existing username (Admin).
+-   The username has to be an existing username (src.Admin).
 -   A maximum of $1000.00 can be added to an account in a given day.
 
 **auctionsale** - change the prices of all games for sale to incorporate a seasonal discount (privileged transaction)
@@ -72,14 +72,14 @@
 **removegame** - remove a game from a user's inventory or from being sold
 
 -  semi-privileged transaction - Non-admins can only remove their own games.
--  Admin can remove any user's game.
--  Game can be in the owner's inventory/forSale (same thing)
+-  src.Admin can remove any user's game.
+-  src.Game can be in the owner's inventory/forSale (same thing)
 -  cannot remove a game that was purchased or put up to sale on the same day
 
 
 **gift** - give a user a game from another user
 
--   Admin can gift any game to a user
+-   src.Admin can gift any game to a user
 - semi-privileged transaction - Non-admins can only gift their own games to another.
 - Admins can gift from one user to another.
 - game must be in the owner's inventory/forSale
